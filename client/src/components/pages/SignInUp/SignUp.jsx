@@ -16,7 +16,7 @@ const SignUp = () => {
   const matches = useMediaQuery("(max-width:650px)");
 
   return (
-    <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh)" }}>
+    <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh -5.5rem)" }}>
       <Container sx={{ height: "100%" }}>
         <Box
           sx={{
@@ -32,7 +32,7 @@ const SignUp = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              height: "fit-content",
+              height: "90%",
               borderRadius: "2rem",
             }}
           >
