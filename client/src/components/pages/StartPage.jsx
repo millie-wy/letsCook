@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Container,
   createTheme,
   responsiveFontSizes,
@@ -98,8 +99,8 @@ const StartPage = () => {
             ) : null}
           </Box>
           <Box sx={{ textAlign: "center" }}>
-            <button
-              style={{
+            <Button
+              sx={{
                 backgroundColor: "#0B814A",
                 color: "#F1F8F6",
                 fontFamily: "Poppins",
@@ -110,10 +111,16 @@ const StartPage = () => {
                 width: "100%",
                 fontSize: "1.2rem",
                 marginBottom: "1rem",
+                cursor: "pointer",
+                transition: "all .15s ease-in-out",
+                "&:hover": {
+                  background: "#0AA35C",
+                  transform: "scale(1.01)",
+                },
               }}
             >
               Get started
-            </button>
+            </Button>
 
             <Typography sx={{ color: "#989C9C" }}>
               Join over 1 000 000 others
