@@ -17,7 +17,9 @@ const StartPage = () => {
   const matches = useMediaQuery("(max-width:650px)");
 
   return (
-    <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh - 3rem)" }}>
+    <main
+      style={{ backgroundColor: "#F1F8F6", height: "calc(100vh - 5.5rem)" }}
+    >
       <Container sx={{ height: "100%" }}>
         <Box
           sx={{
@@ -82,7 +84,7 @@ const StartPage = () => {
                   }}
                 >
                   Whether you want a meal to impress the royal family of Monaco
-                  or a quick meal for monday after work, we've got you!
+                  or a quick meal for Monday after work, we've got you!
                 </Typography>
               </ThemeProvider>
             </Box>
