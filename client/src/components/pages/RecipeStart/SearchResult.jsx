@@ -1,6 +1,7 @@
 import { Search } from "@mui/icons-material";
 import { Box, Container, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import RecipeCard from "./RecipeCard";
 
 const SearchResult = () => {
   const [search, setSearch] = useState("");
@@ -91,7 +92,7 @@ const SearchResult = () => {
           flexWrap: "wrap",
           gap: ".5rem",
           justifyContent: "center",
-          my: "2rem",
+          my: "3.5rem",
         }}
       >
         <Typography
@@ -109,6 +110,7 @@ const SearchResult = () => {
           {search}
         </Typography>
       </Box>
+      <RecipeCard />
     </Container>
   );
 };
