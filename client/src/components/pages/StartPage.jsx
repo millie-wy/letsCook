@@ -5,11 +5,13 @@ import React from "react";
 const StartPage = () => {
   return (
     <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh - 3rem)" }}>
-      <Container>
+      <Container sx={{ height: "100%" }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
+            height: "100%",
+            justifyContent: "space-evenly",
           }}
         >
           <Box
@@ -63,9 +65,10 @@ const StartPage = () => {
                     paddingTop: "1rem",
                   }}
                 >
-                  Whether you want a meal to impress the <br /> royal family of
-                  Monaco or a quick meal for <br /> monday after work, we've got
-                  you!
+                  Whether you want a meal to impress the royal family of
+                  <br />
+                  Monaco or a quick meal for monday after work,
+                  <br /> we've got you!
                 </Typography>
               </Box>
             </Box>
@@ -74,11 +77,11 @@ const StartPage = () => {
                 // @ts-ignore
                 src={require("../../assets/images/threeFood.png")}
                 alt="food"
-                style={{ height: "30rem" }}
+                style={{ height: "33vw" }}
               />
             </Box>
           </Box>
-          <Box sx={{ textAlign: "center", paddingTop: "5rem" }}>
+          <Box sx={{ textAlign: "center" }}>
             <button
               style={{
                 backgroundColor: "#0B814A",
@@ -90,6 +93,7 @@ const StartPage = () => {
                 height: "4rem",
                 width: "100%",
                 fontSize: "1.2rem",
+                marginBottom: "1rem",
               }}
             >
               Get started
