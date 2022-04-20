@@ -1,8 +1,20 @@
-import { Box, Button, Container, Typography } from "@mui/material";
-import { textAlign } from "@mui/system";
+import {
+  Box,
+  Container,
+  createTheme,
+  responsiveFontSizes,
+  ThemeProvider,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import React from "react";
 
 const StartPage = () => {
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
+
+  const matches = useMediaQuery("(max-width:650px)");
+
   return (
     <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh - 3rem)" }}>
       <Container sx={{ height: "100%" }}>
@@ -21,65 +33,69 @@ const StartPage = () => {
               justifyContent: "space-between",
             }}
           >
-            <Box>
-              <Box>
-                <Typography
-                  sx={{
-                    color: "#2E4739",
-                    fontWeight: "900",
-                    fontSize: "3rem",
-                    transform: "scaleY(1.1)",
-                  }}
-                >
-                  Looking for
-                </Typography>
+            <Box sx={{ paddingRight: "2rem" }}>
+              <ThemeProvider theme={theme}>
+                <Box>
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      color: "#2E4739",
+                      fontWeight: "900",
+                      fontFamily: "Poppins",
+                      textShadow: "0px 1px, 1px 0px, 1px 1px #2E4739",
+                    }}
+                  >
+                    Looking for
+                  </Typography>
+
+                  <Typography
+                    variant="h1"
+                    sx={{
+                      color: "#E5C687",
+                      fontWeight: "900",
+                      fontFamily: "Poppins",
+                      textShadow: "0px 1px, 1px 0px, 1px 1px #E5C687",
+                    }}
+                  >
+                    delicious
+                  </Typography>
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      color: "#2E4739",
+                      fontWeight: "900",
+                      fontFamily: "Poppins",
+                      textShadow: "0px 1px, 1px 0px, 1px 1px #2E4739",
+                    }}
+                  >
+                    recipes?
+                  </Typography>
+                </Box>
 
                 <Typography
-                  sx={{
-                    color: "#E5C687",
-                    fontWeight: "900",
-                    fontStyle: "normal",
-                    fontSize: "5rem",
-                    lineHeight: "1.2",
-                    transform: "scaleY(1.1)",
-                  }}
-                >
-                  delicious
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "#2E4739",
-                    fontWeight: "900",
-                    fontSize: "3rem",
-                    transform: "scaleY(1.1)",
-                  }}
-                >
-                  recipes?
-                </Typography>
-              </Box>
-              <Box>
-                <Typography
+                  variant="subtitle1"
                   sx={{
                     color: "#989C9C",
-                    fontSize: "1.2rem",
                     paddingTop: "1rem",
+                    fontFamily: "Poppins",
                   }}
                 >
-                  Whether you want a meal to impress the royal family of
-                  <br />
-                  Monaco or a quick meal for monday after work,
-                  <br /> we've got you!
+                  Whether you want a meal to impress the royal family of Monaco
+                  or a quick meal for monday after work, we've got you!
                 </Typography>
+              </ThemeProvider>
+            </Box>
+
+            {!matches ? (
+              <Box>
+                <img
+                  // @ts-ignore
+                  src={require("../../assets/images/threeFood.png")}
+                  alt="food"
+                  style={{ height: "33vw" }}
+                />
               </Box>
-            </Box>
-            <Box>
-              <img
-                // @ts-ignore
-                src={require("../../assets/images/threeFood.png")}
-                alt="food"
-                style={{ height: "33vw" }}
-              />
-            </Box>
+            ) : null}
           </Box>
           <Box sx={{ textAlign: "center" }}>
             <button
