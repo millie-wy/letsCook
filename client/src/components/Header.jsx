@@ -85,16 +85,7 @@ const Header = (props) => {
             />
           </Link>
         </Box>
-        <Drawer
-          sx={{
-            width: 240,
-            flexShrink: 0,
-            boxSizing: "border-box",
-          }}
-          variant="persistent"
-          anchor="left"
-          open={openMenu}
-        >
+        <Drawer variant="persistent" anchor="left" open={openMenu}>
           <Box
             sx={{
               background: "#f1f8f6",
@@ -102,6 +93,7 @@ const Header = (props) => {
               alignItems: "center",
               padding: 1,
               justifyContent: "flex-end",
+              minWidth: 160,
             }}
           >
             <IconButton onClick={handleMenuClose}>
@@ -121,10 +113,19 @@ const Header = (props) => {
             <ListItem>
               <Link
                 style={{ textDecoration: "none", color: "#2E4739" }}
-                to="/"
+                to="/start"
                 onClick={handleMenuClose}
               >
-                I dont know where to
+                Inspirations
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link
+                style={{ textDecoration: "none", color: "#2E4739" }}
+                to="/search"
+                onClick={handleMenuClose}
+              >
+                Recipes
               </Link>
             </ListItem>
             <ListItem>
@@ -133,16 +134,7 @@ const Header = (props) => {
                 to="/"
                 onClick={handleMenuClose}
               >
-                One more link
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link
-                style={{ textDecoration: "none", color: "#2E4739" }}
-                to="/"
-                onClick={handleMenuClose}
-              >
-                Bye
+                Contact Us
               </Link>
             </ListItem>
             <ListItem>
