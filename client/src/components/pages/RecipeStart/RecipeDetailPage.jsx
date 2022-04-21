@@ -6,7 +6,9 @@ import data from "../../../data.json";
 
 const RecipeDetailPage = () => {
   const params = useParams();
-  const recipe = data.find((recipe) => recipe.id === params?.id);
+  const recipe = data.find(
+    (recipe) => recipe.title.replaceAll(" ", "-") === params?.recipe
+  );
 
   return (
     <Container sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem" }}>
