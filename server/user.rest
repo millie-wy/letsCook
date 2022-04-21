@@ -1,0 +1,35 @@
+GET http://localhost:3002/api/users
+
+###
+GET http://localhost:3002/api/users/6261593efb9b4ef0c1eb9fc2
+
+###
+
+POST http://localhost:3002/api/users
+Content-Type: application/json
+
+{ 
+"email": "williamsaar@outlook.com",
+"firstName": "William",
+"lastName": "Saar",
+ "password": "1234", 
+ "isAdmin": true }
+
+
+###
+
+PUT http://localhost:3002/api/users/6261593efb9b4ef0c1eb9fc2
+Content-Type: application/json
+
+{
+"email":"milliecheung@outlook.com",
+"firstName": "Millie",
+"lastName": "Cheung",
+"password":"123",
+"isAdmin": false
+}
+
+###
+
+DELETE http://localhost:3002/api/users/62615816203e5a6c258d0f3b
+

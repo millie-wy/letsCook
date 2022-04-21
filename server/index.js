@@ -1,26 +1,25 @@
-import mongoose from "mongoose";
 import express from "express";
+import mongoose from "mongoose";
+import userModel from "./models/user.model.js";
+import recipeModel from "./models/recipe.model.js";
+import userRouter from "./routes/user.js";
 
-// set up express app
+mongoose.connect(
+  "mongodb://localhost:27017/letscookDB",
+  { useNewUrlParser: true },
+  (err) => {
+    console.log("Database is connected!");
+  }
+);
+
 const app = express();
-const PORT = 3001;
 
 app.use(express.json());
 
-const main = async () => {
-  console.log("called ");
-  await mongoose.connect("mongodb://localhost:27017/test");
-  const userSchema = new mongoose.Schema({
-    name: String,
-  });
-  const User = mongoose.model("User", userSchema);
-  const william = new User({ name: "William" });
-  console.log(User);
-  console.log(william.name);
-};
+app.use("/api/users", userRouter);
 
-main().catch((err) => console.log(err));
+app.use((err, req, res, next) => {
+  res.send("Something went wrong with communication to the DB");
+});
 
-app.listen(PORT, () =>
-  console.log(`App is running on port: http://localhost:${PORT}.`)
-);
+app.listen(3002, () => console.log("Server is running on port 3002"));
