@@ -15,7 +15,7 @@ const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<StartPage />} />
           <Route path="/start" element={<RecipeStartPage />} />
-          <Route path="/recipe/:id" element={<RecipeDetailPage />} />
+          <Route path="/recipe/:recipe" element={<RecipeDetailPage />} />
           <Route path="/search" element={<SearchResult />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
