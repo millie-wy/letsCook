@@ -16,13 +16,14 @@ const SignUp = () => {
   const matches = useMediaQuery("(max-width:650px)");
 
   return (
-    <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh -5.5rem)" }}>
+    <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh -5rem)" }}>
       <Container sx={{ height: "100%" }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
+            alignItems: "center",
             height: "100%",
           }}
         >
@@ -34,6 +35,7 @@ const SignUp = () => {
               alignItems: "center",
               height: "90%",
               borderRadius: "2rem",
+              margin: "1rem",
             }}
           >
             {" "}
@@ -82,7 +84,7 @@ const SignUp = () => {
               }}
             >
               <Typography
-                variant="h3"
+                variant="h4"
                 sx={{
                   color: "#989C9C",
                   fontWeight: "900",
@@ -159,7 +161,7 @@ const SignUp = () => {
                   borderRadius: "70px",
                   fontWeight: "bold",
                   border: "none",
-                  height: "4rem",
+                  height: "3rem",
                   width: "100%",
                   fontSize: "1.2rem",
                   marginBottom: "1rem",
@@ -205,6 +207,16 @@ const SignUp = () => {
 };
 
 const formStyling = {
+  "& .MuiInputBase-input": {
+    fontFamily: [
+      "Poppins",
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+    ].join(","),
+    fontWeight: "bold",
+  },
   // For styling input
   "& label.Mui-focused": {
     color: "#0B814A",

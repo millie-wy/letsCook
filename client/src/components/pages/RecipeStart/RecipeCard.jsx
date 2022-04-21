@@ -81,7 +81,7 @@ function ProductCard() {
               }}
             >
               <Link
-                to={`/recipe/${recipe.id}`}
+                to={`/recipe/${recipe.title.replaceAll(" ", "-")}`}
                 style={{ textDecoration: "none" }}
               >
                 <Button

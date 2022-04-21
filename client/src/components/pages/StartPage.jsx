@@ -9,6 +9,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
+import ThreeLines from "../../assets/images/threeFood.png";
 
 const StartPage = () => {
   let theme = createTheme();
@@ -91,12 +92,7 @@ const StartPage = () => {
 
             {!matches ? (
               <Box>
-                <img
-                  // @ts-ignore
-                  src={require("../../assets/images/threeFood.png")}
-                  alt="food"
-                  style={{ height: "33vw" }}
-                />
+                <img src={ThreeLines} alt="food" style={{ height: "33vw" }} />
               </Box>
             ) : null}
           </Box>
