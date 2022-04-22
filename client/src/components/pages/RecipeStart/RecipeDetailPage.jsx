@@ -6,11 +6,14 @@ import portion from "../../../assets/logoAndIcons/portion.svg";
 import time from "../../../assets/logoAndIcons/time.svg";
 import { makeRequest } from "../../../helper.js";
 import StarRatings from "react-star-ratings";
+import { ArrowBackIosNew } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const RecipeDetailPage = () => {
   const [recipe, setRecipe] = useState([]);
   const location = useLocation();
   const { id } = location.state;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,10 +24,32 @@ const RecipeDetailPage = () => {
   }, [id]);
 
   return recipe.length < 1 ? (
-    <Container> Something went wrong. Try refreshing the page. </Container>
+    <Container
+      sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem", textAlign: "center" }}
+    >
+      Something went wrong. Try refreshing the page.
+    </Container>
   ) : (
     <Container sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Container sx={{ background: "white", borderRadius: 5 }}>
+        <Box
+          sx={{
+            color: "#0B814A",
+            display: "flex",
+            gap: "1rem",
+            pt: "2rem",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate(-1)}
+        >
+          <ArrowBackIosNew fontSize="small" />
+          <Typography
+            variant="subtitle1"
+            sx={{ fontFamily: "Poppins", fontWeight: 600, lineHeight: 1.2 }}
+          >
+            Back
+          </Typography>
+        </Box>
         {/* upper section */}
         <Box
           sx={{
