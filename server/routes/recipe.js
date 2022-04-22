@@ -18,6 +18,7 @@ router.get("/:id", async (req, res) => {
     const currentRecipe = await recipeModel.findById(id);
     if (!currentRecipe) {
       res.json("No recipe found with this id");
+      return;
     }
     res.json(currentRecipe);
   } catch (err) {
@@ -87,6 +88,7 @@ router.delete("/:id", async (req, res) => {
     const removedRecipe = await recipeModel.findByIdAndRemove(id);
     if (!removedRecipe) {
       res.json("No recipe found with this id");
+      return;
     }
     res.json(removedRecipe);
   } catch (err) {
