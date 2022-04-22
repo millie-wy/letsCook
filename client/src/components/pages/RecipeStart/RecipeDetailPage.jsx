@@ -34,11 +34,14 @@ const RecipeDetailPage = () => {
       <Container sx={{ background: "white", borderRadius: 5 }}>
         <Box
           sx={{
-            color: "#0B814A",
             display: "flex",
             gap: "1rem",
             pt: "2rem",
             cursor: "pointer",
+            color: "#2E4739",
+            "&:hover": {
+              color: "#E5C687",
+            },
           }}
           onClick={() => navigate(-1)}
         >
@@ -200,6 +203,40 @@ const RecipeDetailPage = () => {
             </ol>
           </Box>
         </Box>
+      </Container>
+      <Container
+        sx={{
+          background: "white",
+          borderRadius: 5,
+          mt: "2rem",
+          textAlign: "center",
+          p: "2rem 1rem",
+        }}
+      >
+        <Typography
+          variant="h4"
+          color="#0B814A"
+          sx={{ fontFamily: "Poppins", fontWeight: 500 }}
+        >
+          What do others say about this recipe?
+        </Typography>
+        {recipe.comments.length < 1 ? (
+          <Container
+            sx={{
+              mt: "2rem",
+              textAlign: "center",
+            }}
+          >
+            No one has commented on this recipe yet.
+          </Container>
+        ) : (
+          // the below is not done
+          recipe.comments.map((comment) => (
+            <Box key={comment} sx={{ mt: "1rem" }}>
+              {comment}
+            </Box>
+          ))
+        )}
       </Container>
     </Container>
   );
