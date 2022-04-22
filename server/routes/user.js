@@ -66,19 +66,24 @@ router.get("/:id", secureWithRole("admin"), async (req, res) => {
 });
 
 // update an user
-/** the password is not encrypted, I guess it causes that once
- * the user detail has been updated the user wont be able to
- * sign in */
 /** for now the put wouldnt show error if an user is not found */
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await userModel.findByIdAndUpdate(id, req.body, {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const updatedUser = {
+      email: req.body.email,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      password: hashedPassword,
+      isAdmin: req.body.isAdmin,
+    };
+    const user = await userModel.findByIdAndUpdate(id, updatedUser, {
       useFindAndModify: false,
     });
     return res.json({
       old: user,
-      new: req.body,
+      new: updatedUser,
     });
   } catch (err) {
     if (err.code == 11000) return res.json("Username already exists");
