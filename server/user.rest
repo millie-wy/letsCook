@@ -1,24 +1,59 @@
+// Get all users (admin use) 
 GET http://localhost:3002/api/users
 
 ###
-GET http://localhost:3002/api/users/6261593efb9b4ef0c1eb9fc2
+// Get one user (admin use)
+GET http://localhost:3002/api/users/626280e3bd6aa838b7b033c2
 
 ###
 
+// Delete an user (admin use) 
+DELETE http://localhost:3002/api/users/626280e3bd6aa838b7b033c2
+
+###
+
+// Create new user 
 POST http://localhost:3002/api/users
 Content-Type: application/json
 
 { 
-"email": "williamsaar@outlook.com",
-"firstName": "William",
-"lastName": "Saar",
- "password": "1234", 
- "isAdmin": true }
+  "email": "user@letscook1.com",
+  "firstName": "New",
+  "lastName": "User",
+  "password": "user", 
+  "isAdmin": false
+}
 
+// some templates for testing
+#  { 
+#  "email": "admin@letscook.com",
+#  "firstName": "David",
+#  "lastName": "Jensen",
+#   "password": "admin", 
+#   "isAdmin": true 
+#  }
+
+#  { 
+#  "email": "admin@letscook.com",
+#   "email": "williamsaar@outlook.com",
+#   "firstName": "William",
+#   "lastName": "Saar",
+#   "password": "1234", 
+#   "isAdmin": true 
+#  }
+
+# { 
+# "email": "milliecheung@outlook.com",
+# "firstName": "Millie",
+# "lastName": "Cheung",
+#  "password": "123", 
+#  "isAdmin": false
+# }
 
 ###
 
-PUT http://localhost:3002/api/users/6261593efb9b4ef0c1eb9fc2
+// Update user details
+PUT http://localhost:3002/api/users/626266f64a45755651dfd8a7
 Content-Type: application/json
 
 {
@@ -31,5 +66,37 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3002/api/users/62615816203e5a6c258d0f3b
+// Login 
+POST http://localhost:3002/api/users/account/login
+Content-Type: application/json
+
+   {
+     "email": "admin@letscook.com", 
+     "password": "admin"
+   }
+
+// some templates for testing
+
+# {
+#     "email": "user@letscook.com", 
+#     "password": "user"
+# }
+
+#   {
+#     "email": "milliecheung@outlook.com", 
+#     "password": "123"
+#   }
+
+#   {
+#     "email": "williamsaar@outlook.com", 
+#     "password": "1234"
+#   }
+
+###
+
+// Logout
+DELETE http://localhost:3002/api/users/account/logout
+
+###
+GET http://localhost:3002/api/users/account/login
 
