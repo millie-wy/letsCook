@@ -1,22 +1,24 @@
 import { Box, Container, Typography } from "@mui/material";
-import React from "react";
-import { useParams } from "react-router-dom";
-// @ts-ignore
-import data from "../../../data.json";
-// @ts-ignore
-import star from "../../../assets/logoAndIcons/star.svg";
-// @ts-ignore
-import time from "../../../assets/logoAndIcons/time.svg";
-// @ts-ignore
-import portion from "../../../assets/logoAndIcons/portion.svg";
-// @ts-ignore
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ingredient from "../../../assets/logoAndIcons/ingredient.svg";
+import portion from "../../../assets/logoAndIcons/portion.svg";
+import star from "../../../assets/logoAndIcons/star.svg";
+import time from "../../../assets/logoAndIcons/time.svg";
+import { makeRequest } from "../../../helper.js";
 
-const RecipeDetailPage = () => {
-  const params = useParams();
-  const recipe = data.find(
-    (recipe) => recipe.title.replaceAll(" ", "-") === params?.recipe
-  );
+const RecipeDetailPage = (props) => {
+  const [recipe, setRecipe] = useState([]);
+  const location = useLocation();
+  const { id } = location.state;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await makeRequest(`/api/recipes/${id}`, "GET");
+      setRecipe(response);
+    };
+    fetchData();
+  }, [id]);
 
   const postStars = () => {
     for (let i = 0; i < 5; i++) {
