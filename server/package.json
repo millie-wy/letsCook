@@ -12,7 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-session": "^2.0.0",
     "express": "^4.17.3",
-    "mongoose": "^6.3.0"
+    "mongoose": "^6.3.0",
+    "uuid": "^8.3.2"
   }
 }
