@@ -17,7 +17,7 @@ POST http://localhost:3002/api/users
 Content-Type: application/json
 
 { 
-  "email": "user@letscook1.com",
+  "email": "user@letscook11.com",
   "firstName": "New",
   "lastName": "User",
   "password": "user", 
@@ -53,14 +53,14 @@ Content-Type: application/json
 ###
 
 // Update user details
-PUT http://localhost:3002/api/users/626266f64a45755651dfd8a7
+PUT http://localhost:3002/api/users/62629bd1d7835660d5953a66
 Content-Type: application/json
 
 {
 "email":"milliecheung@outlook.com",
-"firstName": "Millie",
+"firstName": "Millieeee",
 "lastName": "Cheung",
-"password":"123",
+"password":"1234567",
 "isAdmin": false
 }
 
@@ -70,10 +70,10 @@ Content-Type: application/json
 POST http://localhost:3002/api/users/account/login
 Content-Type: application/json
 
-   {
-     "email": "admin@letscook.com", 
-     "password": "admin"
-   }
+  #  {
+  #    "email": "admin@letscook.com", 
+  #    "password": "admin"
+  #  }
 
 // some templates for testing
 
@@ -82,10 +82,10 @@ Content-Type: application/json
 #     "password": "user"
 # }
 
-#   {
-#     "email": "milliecheung@outlook.com", 
-#     "password": "123"
-#   }
+   {
+     "email": "milliecheung@outlook.com", 
+     "password": "123"
+   }
 
 #   {
 #     "email": "williamsaar@outlook.com", 
