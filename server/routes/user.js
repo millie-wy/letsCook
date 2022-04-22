@@ -18,6 +18,7 @@ router.get("/:id", async (req, res) => {
     const currentUser = await userModel.findById(id);
     if (!currentUser) {
       res.json("No user found with this id");
+      return;
     }
     res.json(currentUser);
   } catch (err) {
@@ -70,6 +71,7 @@ router.delete("/:id", async (req, res) => {
     const removedUser = await userModel.findByIdAndRemove(id);
     if (!removedUser) {
       res.json("No user found with this id");
+      return;
     }
     res.json(removedUser);
   } catch (err) {
