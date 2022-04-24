@@ -26,7 +26,7 @@ const SignUpImage = () => {
         Already have an account?
       </Typography>
       <Link
-        to={"/login"}
+        to={"/signin"}
         style={{
           color: "#0B814A",
           fontWeight: "bolder",
