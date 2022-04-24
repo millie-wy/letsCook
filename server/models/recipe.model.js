@@ -10,7 +10,13 @@ const schema = new mongoose.Schema({
   direction: [{ type: String, required: true }],
   tags: [{ type: String }],
   star: { type: Number },
-  comments: [{ type: String }],
+  comments: [
+    {
+      author: { type: String },
+      content: { type: String },
+      rated: { type: Number },
+    },
+  ],
 });
 
 export default mongoose.model("recipe", schema);
