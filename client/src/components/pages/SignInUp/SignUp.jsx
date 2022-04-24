@@ -1,11 +1,7 @@
 import {
   Box,
-  Button,
-  Checkbox,
   Container,
-  FormControlLabel,
   Paper,
-  TextField,
   Typography,
   useMediaQuery,
 } from "@mui/material";
