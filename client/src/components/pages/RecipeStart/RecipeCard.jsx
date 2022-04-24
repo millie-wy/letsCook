@@ -6,16 +6,23 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// @ts-ignore
 import comment from "../../../assets/logoAndIcons/comment.svg";
-// @ts-ignore
 import star from "../../../assets/logoAndIcons/star.svg";
-// @ts-ignore
-import data from "../../../data.json";
+import { makeRequest } from "../../../helper.js";
 
-function ProductCard() {
+const RecipeCard = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await makeRequest("/api/recipes", "GET");
+      setData(response);
+    };
+    fetchData();
+  }, []);
+
   return (
     <Container
       sx={{
@@ -82,6 +89,7 @@ function ProductCard() {
             >
               <Link
                 to={`/recipe/${recipe.title.replaceAll(" ", "-")}`}
+                state={{ id: recipe._id }}
                 style={{ textDecoration: "none" }}
               >
                 <Button
@@ -165,7 +173,7 @@ function ProductCard() {
       ))}
     </Container>
   );
-}
+};
 
 const cardStyle = {
   width: 250,
@@ -173,4 +181,4 @@ const cardStyle = {
   background: "none",
 };
 
-export default ProductCard;
+export default RecipeCard;

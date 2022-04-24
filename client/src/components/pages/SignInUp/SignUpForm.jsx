@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import * as yup from "yup";
 import SignUp from "./SignUp";
+import { useNavigate } from "react-router-dom";
+import { makeRequest } from "../../../helper";
 
 const validationSchema = yup.object({
   firstName: yup
@@ -41,6 +43,7 @@ const validationSchema = yup.object({
 });
 
 const SignUpForm = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       firstName: "",

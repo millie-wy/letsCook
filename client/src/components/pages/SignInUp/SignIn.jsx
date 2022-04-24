@@ -9,12 +9,28 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
-
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAccount } from "../../context/AccountContext";
+import { makeRequest } from "../../../helper.js";
 
 const SignIn = () => {
   const matches = useMediaQuery("(max-width:650px)");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { setIsLoggedIn } = useAccount();
+
+  const signIn = async () => {
+    const user = { email, password };
+    console.log(user); // to be deleted
+    let result = await makeRequest("/api/users/account/login", "POST", user);
+    alert(result);
+    setTimeout(() => {
+      setIsLoggedIn(true);
+      navigate("/start");
+    }, 1000);
+  };
 
   return (
     <main
@@ -108,7 +124,7 @@ const SignIn = () => {
                     required
                     fullWidth
                     label="Email"
-                    id="fullWidth"
+                    id="email"
                     sx={{
                       "& .MuiInputBase-input": {
                         fontFamily: [
@@ -143,12 +159,13 @@ const SignIn = () => {
                         },
                       },
                     }}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <TextField
                   required
                   fullWidth
-                  id="outlined-password-input"
+                  id="password"
                   label="Password"
                   type="password"
                   autoComplete="current-password"
@@ -175,6 +192,7 @@ const SignIn = () => {
                       },
                     },
                   }}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <FormControlLabel
                   control={<Checkbox color="success" />}
@@ -204,6 +222,7 @@ const SignIn = () => {
                     transform: "scale(1.01)",
                   },
                 }}
+                onClick={signIn}
               >
                 sign in
               </Button>

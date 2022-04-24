@@ -15,13 +15,18 @@ import {
   List,
   ListItem,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-// @ts-ignore // ask David
+import { Link, useNavigate } from "react-router-dom";
+import { useAccount } from "./context/AccountContext";
 import logo from "../assets/logoAndIcons/logo.svg";
+import { makeRequest } from "../helper";
 
 const Header = (props) => {
+  const navigate = useNavigate();
+  const { isLoggedIn, setIsLoggedIn } = useAccount();
+
   const [openMenu, setOpenMenu] = useState(false);
   const handleMenuOpen = () => {
     setOpenMenu(true);
@@ -30,6 +35,15 @@ const Header = (props) => {
   const handleMenuClose = () => {
     setOpenMenu(false);
     props.setMenuIsOpen(false);
+  };
+
+  const logout = async () => {
+    let result = await makeRequest("/api/users/account/logout", "DELETE");
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      setIsLoggedIn(false);
+      navigate("/start");
+    }, 1000);
   };
 
   return (
@@ -61,7 +75,11 @@ const Header = (props) => {
                   flexDirection: "row",
                   marginLeft: -5,
                 }
-              : { display: "flex", gap: "1.5rem", flexDirection: "row" }
+              : {
+                  display: "flex",
+                  gap: { xs: "1rem", sm: "1.5rem" },
+                  flexDirection: "row",
+                }
           }
         >
           <IconButton
@@ -71,7 +89,7 @@ const Header = (props) => {
             aria-haspopup="true"
             onClick={handleMenuOpen}
             sx={
-              openMenu ? { display: "none" } : { color: "#989C9C", width: 45 }
+              openMenu ? { display: "none" } : { color: "#989C9C", width: 50 }
             }
           >
             <MenuIcon />
@@ -79,16 +97,15 @@ const Header = (props) => {
           <Link to="/">
             <Box
               component="img"
-              style={{ height: "35px", margin: "0.3rem 1rem 0 1rem" }}
+              style={{ height: "40px", margin: "0.3rem 1rem 0 1rem" }}
               src={logo}
               alt="LetsCook"
             />
           </Link>
         </Box>
-        <Drawer variant="persistent" anchor="left" open={openMenu}>
+        <Drawer variant="temporary" anchor="left" open={openMenu}>
           <Box
             sx={{
-              background: "#f1f8f6",
               display: "flex",
               alignItems: "center",
               padding: 1,
@@ -100,89 +117,205 @@ const Header = (props) => {
               {openMenu ? <ChevronLeft /> : <ChevronRight />}
             </IconButton>
           </Box>
-          <List sx={{ fontSize: ".9rem" }}>
+          <List>
             <ListItem>
               <Link
-                style={{ textDecoration: "none", color: "#2E4739" }}
+                style={{ textDecoration: "none" }}
                 to="/"
                 onClick={handleMenuClose}
               >
-                Home
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#2E4739",
+                    fontFamily: "Poppins",
+                    fontWeight: 500,
+                    "&:hover": {
+                      color: "#E5C687",
+                    },
+                  }}
+                >
+                  Home
+                </Typography>
               </Link>
             </ListItem>
             <ListItem>
               <Link
-                style={{ textDecoration: "none", color: "#2E4739" }}
+                style={{ textDecoration: "none" }}
                 to="/start"
                 onClick={handleMenuClose}
               >
-                Inspirations
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#2E4739",
+                    fontFamily: "Poppins",
+                    fontWeight: 500,
+                    "&:hover": {
+                      color: "#E5C687",
+                    },
+                  }}
+                >
+                  Inspirations
+                </Typography>
               </Link>
             </ListItem>
             <ListItem>
               <Link
-                style={{ textDecoration: "none", color: "#2E4739" }}
+                style={{ textDecoration: "none" }}
                 to="/search"
                 onClick={handleMenuClose}
               >
-                Recipes
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#2E4739",
+                    fontFamily: "Poppins",
+                    fontWeight: 500,
+                    "&:hover": {
+                      color: "#E5C687",
+                    },
+                  }}
+                >
+                  Recipes
+                </Typography>
               </Link>
             </ListItem>
             <ListItem>
               <Link
-                style={{ textDecoration: "none", color: "#2E4739" }}
+                style={{ textDecoration: "none" }}
                 to="/"
                 onClick={handleMenuClose}
               >
-                Contact Us
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#2E4739",
+                    fontFamily: "Poppins",
+                    fontWeight: 500,
+                    "&:hover": {
+                      color: "#E5C687",
+                    },
+                  }}
+                >
+                  Contact Us
+                </Typography>
               </Link>
             </ListItem>
             <ListItem>
               <Link
-                style={{
-                  textDecoration: "none",
-                  color: "#2E4739",
-                  marginTop: "1rem",
-                }}
-                to="/signup"
+                style={{ textDecoration: "none", marginTop: "1.5rem" }}
+                to="/signin"
                 onClick={handleMenuClose}
               >
-                Sign In / Up
+                {!isLoggedIn ? (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#E5C687",
+                      fontFamily: "Poppins",
+                      fontWeight: 500,
+                      "&:hover": {
+                        color: "#2E4739",
+                      },
+                    }}
+                  >
+                    Sign In
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#E5C687",
+                      fontFamily: "Poppins",
+                      fontWeight: 500,
+                      "&:hover": {
+                        color: "#2E4739",
+                      },
+                    }}
+                    onClick={logout}
+                  >
+                    Logout
+                  </Typography>
+                )}
               </Link>
             </ListItem>
           </List>
         </Drawer>
+
         {/* below is header right  */}
         <Box sx={{ display: "flex", gap: "1.5rem", flexDirection: "row" }}>
-          <Button
-            variant="contained"
-            size="small"
-            sx={{
-              fontFamily: "Poppins",
-              letterSpacing: "none",
-              fontSize: ".7rem",
-              fontWeight: "600",
-              bgcolor: "white",
-              color: "#2E4739",
-              textTransform: "capitalize",
-              borderRadius: 10,
-              boxShadow: "none",
-              paddingX: "1.5rem",
-            }}
+          <Link
+            to={!isLoggedIn ? "/signup" : "/logout"}
+            style={{ textDecoration: "none" }}
           >
-            Sign In/Up
-          </Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                fontFamily: "Poppins",
+                letterSpacing: "none",
+                fontSize: {
+                  xs: ".7rem",
+                  sm: ".7rem",
+                  md: ".8rem",
+                  lg: ".9rem",
+                  xl: ".9rem",
+                },
+                fontWeight: "600",
+                bgcolor: "white",
+                color: "#2E4739",
+                textTransform: "capitalize",
+                borderRadius: 10,
+                boxShadow: "none",
+                paddingX: {
+                  xs: ".5rem",
+                  sm: "1rem",
+                  md: "1.5rem",
+                },
+                "&:hover": {
+                  backgroundColor: "#E5C687",
+                  color: "white",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              {!isLoggedIn ? "Sign Up/In" : "Logout"}
+            </Button>
+          </Link>
           <Box
             sx={{
               color: "#B6D5D5",
               width: "100px",
               display: "flex",
+              placeItems: "center",
               justifyContent: "space-between",
             }}
           >
-            <Instagram />
-            <FacebookRounded />
-            <Twitter />
+            <Instagram
+              sx={{
+                cursor: "pointer",
+                "&:hover": {
+                  color: "#2E4739",
+                },
+              }}
+            />
+            <FacebookRounded
+              sx={{
+                cursor: "pointer",
+                "&:hover": {
+                  color: "#2E4739",
+                },
+              }}
+            />
+            <Twitter
+              sx={{
+                cursor: "pointer",
+                "&:hover": {
+                  color: "#2E4739",
+                },
+              }}
+            />
           </Box>
         </Box>
       </Toolbar>

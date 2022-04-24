@@ -5,10 +5,9 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
 import SignUpForm from "./SignUpForm";
 import SignUpImage from "./SignUpImage";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const matches = useMediaQuery("(max-width:650px)");
@@ -58,7 +57,9 @@ const SignUp = () => {
               >
                 Sign up
               </Typography>
+
               <SignUpForm />
+
               {matches ? (
                 <Box sx={{ textAlign: "center" }}>
                   <Typography
