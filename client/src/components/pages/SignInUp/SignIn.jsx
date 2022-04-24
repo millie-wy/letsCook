@@ -126,7 +126,7 @@ const SignIn = () => {
                     required
                     fullWidth
                     label="Email"
-                    id="fullWidth"
+                    id="email"
                     sx={{
                       "& .MuiInputBase-input": {
                         fontFamily: [
@@ -167,7 +167,7 @@ const SignIn = () => {
                 <TextField
                   required
                   fullWidth
-                  id="outlined-password-input"
+                  id="password"
                   label="Password"
                   type="password"
                   autoComplete="current-password"

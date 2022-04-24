@@ -129,7 +129,7 @@ const SignUp = () => {
                     required
                     fullWidth
                     label="First Name"
-                    id="fullWidth"
+                    id="firstName"
                     sx={formStyling}
                     value={firstName}
                     onChange={(e) => setFirstname(e.target.value)}
@@ -138,7 +138,7 @@ const SignUp = () => {
                     required
                     fullWidth
                     label="Last Name"
-                    id="fullWidth"
+                    id="lastName"
                     sx={formStyling}
                     value={lastName}
                     onChange={(e) => setLastname(e.target.value)}
@@ -147,7 +147,7 @@ const SignUp = () => {
                     required
                     fullWidth
                     label="Email Address"
-                    id="fullWidth"
+                    id="email"
                     sx={formStyling}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -155,7 +155,7 @@ const SignUp = () => {
                   <TextField
                     required
                     fullWidth
-                    id="outlined-password-input"
+                    id="password"
                     label="Password"
                     type="password"
                     autoComplete="current-password"
@@ -166,7 +166,7 @@ const SignUp = () => {
                 <TextField
                   required
                   fullWidth
-                  id="outlined-password-input"
+                  id="confirmPassword"
                   label="Reconfirm Password"
                   type="password"
                   autoComplete="current-password"
