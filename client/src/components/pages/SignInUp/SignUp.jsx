@@ -9,11 +9,33 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowBackIosNew } from "@mui/icons-material";
 
 const SignUp = () => {
   const matches = useMediaQuery("(max-width:650px)");
+  const [firstName, setFirstname] = useState("");
+  const [lastName, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const signUp = async () => {
+    const newUser = { email, firstName, lastName, password, isAdmin: false };
+    console.log(newUser); // to be deleted
+    let result = await fetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify(newUser),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then(navigate("/start"));
+
+    result = await result.json();
+    alert(result); // for now it is showing an alert, change style if we have time!
+  };
 
   return (
     <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh -5rem)" }}>
@@ -109,6 +131,8 @@ const SignUp = () => {
                     label="First Name"
                     id="fullWidth"
                     sx={formStyling}
+                    value={firstName}
+                    onChange={(e) => setFirstname(e.target.value)}
                   />
                   <TextField
                     required
@@ -116,6 +140,8 @@ const SignUp = () => {
                     label="Last Name"
                     id="fullWidth"
                     sx={formStyling}
+                    value={lastName}
+                    onChange={(e) => setLastname(e.target.value)}
                   />
                   <TextField
                     required
@@ -123,6 +149,8 @@ const SignUp = () => {
                     label="Email Address"
                     id="fullWidth"
                     sx={formStyling}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
                     required
@@ -143,6 +171,8 @@ const SignUp = () => {
                   type="password"
                   autoComplete="current-password"
                   sx={formStyling}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <FormControlLabel
                   control={<Checkbox color="success" />}
@@ -154,6 +184,7 @@ const SignUp = () => {
                 />
               </Box>
               <Button
+                onClick={signUp}
                 sx={{
                   backgroundColor: "#0B814A",
                   color: "#F1F8F6",
