@@ -7,8 +7,8 @@ import {
   LinearProgress,
   TextField,
 } from "@mui/material";
-
 import * as yup from "yup";
+import SignUp from "./SignUp";
 
 const validationSchema = yup.object({
   firstName: yup
@@ -51,11 +51,22 @@ const SignUpForm = () => {
       passwordConfirmation: "",
     },
     onSubmit: (values) => {
-      console.log(JSON.stringify(values));
+      SignUp(values);
     },
     validationSchema: validationSchema,
     validateOnMount: true,
   });
+
+  const signUp = async (values) => {
+    const { email, firstName, lastName, password } = values;
+    const newUser = { email, firstName, lastName, password, isAdmin: false };
+    console.log(newUser); // to be deleted
+    let result = await makeRequest("/api/users", "POST", newUser);
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      navigate("/start");
+    }, 1000);
+  };
 
   return (
     <Box>
