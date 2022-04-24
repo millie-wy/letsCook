@@ -9,12 +9,30 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
-
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const matches = useMediaQuery("(max-width:650px)");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const signIn = async () => {
+    const user = { email, password };
+    console.log(user); // to be deleted
+    let result = await fetch("/api/users/account/login", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then(navigate("/start"));
+
+    result = await result.json();
+    alert(result); // for now it is showing an alert, change style or display in another way if we have time!
+  };
 
   return (
     <main
@@ -143,6 +161,7 @@ const SignIn = () => {
                         },
                       },
                     }}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <TextField
@@ -175,6 +194,7 @@ const SignIn = () => {
                       },
                     },
                   }}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <FormControlLabel
                   control={<Checkbox color="success" />}
@@ -204,6 +224,7 @@ const SignIn = () => {
                     transform: "scale(1.01)",
                   },
                 }}
+                onClick={signIn}
               >
                 sign in
               </Button>
