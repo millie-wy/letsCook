@@ -53,7 +53,7 @@ const SignUpForm = () => {
       passwordConfirmation: "",
     },
     onSubmit: (values) => {
-      SignUp(values);
+      signUp(values);
     },
     validationSchema: validationSchema,
     validateOnMount: true,
