@@ -21,7 +21,9 @@ Content-Type: application/json
   "firstName": "New",
   "lastName": "User",
   "password": "user", 
-  "isAdmin": false
+  "isAdmin": false,
+  "profilePc": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
+
 }
 
 // some templates for testing
@@ -30,7 +32,8 @@ Content-Type: application/json
 #  "firstName": "David",
 #  "lastName": "Jensen",
 #   "password": "admin", 
-#   "isAdmin": true 
+#   "isAdmin": true, 
+#   "profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
 #  }
 
 #  { 
@@ -40,6 +43,7 @@ Content-Type: application/json
 #   "lastName": "Saar",
 #   "password": "1234", 
 #   "isAdmin": true 
+#   "profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
 #  }
 
 # { 
@@ -48,6 +52,7 @@ Content-Type: application/json
 # "lastName": "Cheung",
 #  "password": "123", 
 #  "isAdmin": false
+#  "profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
 # }
 
 ###
@@ -61,7 +66,8 @@ Content-Type: application/json
 "firstName": "Millieeee",
 "lastName": "Cheung",
 "password":"1234567",
-"isAdmin": false
+"isAdmin": false,
+"profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
 }
 
 ###
