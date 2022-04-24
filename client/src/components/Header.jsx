@@ -18,10 +18,15 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAccount } from "./context/AccountContext";
 import logo from "../assets/logoAndIcons/logo.svg";
+import { makeRequest } from "../helper";
 
 const Header = (props) => {
+  const navigate = useNavigate();
+  const { isLoggedIn, setIsLoggedIn } = useAccount();
+
   const [openMenu, setOpenMenu] = useState(false);
   const handleMenuOpen = () => {
     setOpenMenu(true);
@@ -30,6 +35,15 @@ const Header = (props) => {
   const handleMenuClose = () => {
     setOpenMenu(false);
     props.setMenuIsOpen(false);
+  };
+
+  const logout = async () => {
+    let result = await makeRequest("/api/users/account/logout", "DELETE");
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      setIsLoggedIn(false);
+      navigate("/start");
+    }, 1000);
   };
 
   return (
@@ -61,7 +75,11 @@ const Header = (props) => {
                   flexDirection: "row",
                   marginLeft: -5,
                 }
-              : { display: "flex", gap: "1.5rem", flexDirection: "row" }
+              : {
+                  display: "flex",
+                  gap: { xs: "1rem", sm: "1.5rem" },
+                  flexDirection: "row",
+                }
           }
         >
           <IconButton
@@ -187,22 +205,39 @@ const Header = (props) => {
             <ListItem>
               <Link
                 style={{ textDecoration: "none", marginTop: "1.5rem" }}
-                to="/signup"
+                to="/signin"
                 onClick={handleMenuClose}
               >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: "#E5C687",
-                    fontFamily: "Poppins",
-                    fontWeight: 500,
-                    "&:hover": {
-                      color: "#2E4739",
-                    },
-                  }}
-                >
-                  Sign In / Up
-                </Typography>
+                {!isLoggedIn ? (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#E5C687",
+                      fontFamily: "Poppins",
+                      fontWeight: 500,
+                      "&:hover": {
+                        color: "#2E4739",
+                      },
+                    }}
+                  >
+                    Sign In
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#E5C687",
+                      fontFamily: "Poppins",
+                      fontWeight: 500,
+                      "&:hover": {
+                        color: "#2E4739",
+                      },
+                    }}
+                    onClick={logout}
+                  >
+                    Logout
+                  </Typography>
+                )}
               </Link>
             </ListItem>
           </List>
@@ -210,29 +245,44 @@ const Header = (props) => {
 
         {/* below is header right  */}
         <Box sx={{ display: "flex", gap: "1.5rem", flexDirection: "row" }}>
-          <Button
-            variant="contained"
-            size="small"
-            sx={{
-              fontFamily: "Poppins",
-              letterSpacing: "none",
-              fontSize: ".9rem",
-              fontWeight: "600",
-              bgcolor: "white",
-              color: "#2E4739",
-              textTransform: "capitalize",
-              borderRadius: 10,
-              boxShadow: "none",
-              paddingX: "1.5rem",
-              "&:hover": {
-                backgroundColor: "#E5C687",
-                color: "white",
-                boxShadow: "none",
-              },
-            }}
+          <Link
+            to={!isLoggedIn ? "/signup" : "/logout"}
+            style={{ textDecoration: "none" }}
           >
-            Sign In/Up
-          </Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                fontFamily: "Poppins",
+                letterSpacing: "none",
+                fontSize: {
+                  xs: ".7rem",
+                  sm: ".7rem",
+                  md: ".8rem",
+                  lg: ".9rem",
+                  xl: ".9rem",
+                },
+                fontWeight: "600",
+                bgcolor: "white",
+                color: "#2E4739",
+                textTransform: "capitalize",
+                borderRadius: 10,
+                boxShadow: "none",
+                paddingX: {
+                  xs: ".5rem",
+                  sm: "1rem",
+                  md: "1.5rem",
+                },
+                "&:hover": {
+                  backgroundColor: "#E5C687",
+                  color: "white",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              {!isLoggedIn ? "Sign Up/In" : "Logout"}
+            </Button>
+          </Link>
           <Box
             sx={{
               color: "#B6D5D5",

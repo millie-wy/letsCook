@@ -9,11 +9,28 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { makeRequest } from "../../../helper";
+import { ArrowBackIosNew } from "@mui/icons-material";
 
 const SignUp = () => {
   const matches = useMediaQuery("(max-width:650px)");
+  const [firstName, setFirstname] = useState("");
+  const [lastName, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const signUp = async () => {
+    const newUser = { email, firstName, lastName, password, isAdmin: false };
+    console.log(newUser); // to be deleted
+    let result = await makeRequest("/api/users", "POST", newUser);
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      navigate("/start");
+    }, 1000);
+  };
 
   return (
     <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh -5rem)" }}>
@@ -63,7 +80,7 @@ const SignUp = () => {
                   Already have an account?
                 </Typography>
                 <Link
-                  to={"/login"}
+                  to={"/signin"}
                   style={{
                     color: "#0B814A",
                     fontWeight: "bolder",
@@ -107,27 +124,33 @@ const SignUp = () => {
                     required
                     fullWidth
                     label="First Name"
-                    id="fullWidth"
+                    id="firstName"
                     sx={formStyling}
+                    value={firstName}
+                    onChange={(e) => setFirstname(e.target.value)}
                   />
                   <TextField
                     required
                     fullWidth
                     label="Last Name"
-                    id="fullWidth"
+                    id="lastName"
                     sx={formStyling}
+                    value={lastName}
+                    onChange={(e) => setLastname(e.target.value)}
                   />
                   <TextField
                     required
                     fullWidth
                     label="Email Address"
-                    id="fullWidth"
+                    id="email"
                     sx={formStyling}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
                     required
                     fullWidth
-                    id="outlined-password-input"
+                    id="password"
                     label="Password"
                     type="password"
                     autoComplete="current-password"
@@ -138,11 +161,13 @@ const SignUp = () => {
                 <TextField
                   required
                   fullWidth
-                  id="outlined-password-input"
+                  id="confirmPassword"
                   label="Reconfirm Password"
                   type="password"
                   autoComplete="current-password"
                   sx={formStyling}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <FormControlLabel
                   control={<Checkbox color="success" />}
@@ -154,6 +179,7 @@ const SignUp = () => {
                 />
               </Box>
               <Button
+                onClick={signUp}
                 sx={{
                   backgroundColor: "#0B814A",
                   color: "#F1F8F6",
