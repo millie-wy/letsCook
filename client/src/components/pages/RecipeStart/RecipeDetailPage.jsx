@@ -15,6 +15,7 @@ const RecipeDetailPage = () => {
   const [recipe, setRecipe] = useState([]);
   const [individualRating, setIndividualRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [disableButton, setDisabledButton] = useState(true);
 
   const location = useLocation();
   const { id, rating } = location.state;
@@ -26,9 +27,13 @@ const RecipeDetailPage = () => {
       setRecipe(response);
     };
     fetchData();
-  }, [id]);
 
-  const sendComment = async (existingComments) => {
+    comment.length > 4 && individualRating >= 1
+      ? setDisabledButton(false)
+      : setDisabledButton(true);
+  }, [comment.length, id, individualRating]);
+
+  const submitComment = async (existingComments) => {
     const allComments = {
       comments: [
         ...existingComments,
@@ -39,8 +44,7 @@ const RecipeDetailPage = () => {
         },
       ],
     };
-    let result = await makeRequest(`/api/recipes/${id}`, "PUT", allComments);
-    console.log(result);
+    await makeRequest(`/api/recipes/${id}`, "PUT", allComments);
     setTimeout(() => {
       window.location.reload(false);
     }, 1000);
@@ -345,7 +349,7 @@ const RecipeDetailPage = () => {
             </Box>
           ))
         )}
-        {isLoggedIn ? (
+        {!isLoggedIn ? (
           <Box
             sx={{
               background: "#F1F8F6",
@@ -429,7 +433,9 @@ const RecipeDetailPage = () => {
               size="small"
               id="comment"
               type="text"
-              InputProps={{ style: { fontSize: "0.8rem", minLength: 5 } }} // to be fixed (min length)
+              InputProps={{
+                style: { fontSize: "0.8rem", minLength: 5 },
+              }}
               onChange={(e) => setComment(e.target.value)}
               sx={{
                 width: "80%",
@@ -499,7 +505,8 @@ const RecipeDetailPage = () => {
                     transform: "scale(1.01)",
                   },
                 }}
-                onClick={(e) => sendComment(recipe.comments, e)}
+                disabled={disableButton}
+                onClick={(e) => submitComment(recipe.comments, e)}
               >
                 Send
               </Button>
