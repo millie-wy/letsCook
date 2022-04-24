@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { makeRequest } from "../../../helper";
 import { ArrowBackIosNew } from "@mui/icons-material";
 
 const SignUp = () => {
@@ -24,17 +25,11 @@ const SignUp = () => {
   const signUp = async () => {
     const newUser = { email, firstName, lastName, password, isAdmin: false };
     console.log(newUser); // to be deleted
-    let result = await fetch("/api/users", {
-      method: "POST",
-      body: JSON.stringify(newUser),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }).then(navigate("/start"));
-
-    result = await result.json();
+    let result = await makeRequest("/api/users", "POST", newUser);
     alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      navigate("/start");
+    }, 1000);
   };
 
   return (

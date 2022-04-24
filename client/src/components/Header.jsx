@@ -19,10 +19,13 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAccount } from "./context/AccountContext";
 import logo from "../assets/logoAndIcons/logo.svg";
+import { makeRequest } from "../helper";
 
 const Header = (props) => {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAccount();
 
   const [openMenu, setOpenMenu] = useState(false);
   const handleMenuOpen = () => {
@@ -35,12 +38,12 @@ const Header = (props) => {
   };
 
   const logout = async () => {
-    let result = await fetch("/api/users/account/logout", {
-      method: "DELETE",
-    }).then(navigate("/start"));
-
-    result = await result.json();
-    alert(result); // for now it is showing an alert, change style or display in another way if we have time!
+    let result = await makeRequest("/api/users/account/logout", "DELETE");
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      setIsLoggedIn(false);
+      navigate("/start");
+    }, 1000);
   };
 
   return (
