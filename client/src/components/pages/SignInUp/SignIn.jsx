@@ -11,27 +11,25 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAccount } from "../../context/AccountContext";
+import { makeRequest } from "../../../helper.js";
 
 const SignIn = () => {
   const matches = useMediaQuery("(max-width:650px)");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAccount();
 
   const signIn = async () => {
     const user = { email, password };
     console.log(user); // to be deleted
-    let result = await fetch("/api/users/account/login", {
-      method: "POST",
-      body: JSON.stringify(user),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }).then(navigate("/start"));
-
-    result = await result.json();
-    alert(result); // for now it is showing an alert, change style or display in another way if we have time!
+    let result = await makeRequest("/api/users/account/login", "POST", user);
+    alert(result);
+    setTimeout(() => {
+      setIsLoggedIn(true);
+      navigate("/start");
+    }, 1000);
   };
 
   return (
