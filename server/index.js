@@ -1,9 +1,8 @@
+import cookieSession from "cookie-session";
 import express from "express";
 import mongoose from "mongoose";
-import userModel from "./models/user.model.js";
-import recipeModel from "./models/recipe.model.js";
-import userRouter from "./routes/user.js";
 import recipeRouter from "./routes/recipe.js";
+import userRouter from "./routes/user.js";
 
 mongoose.connect(
   "mongodb://localhost:27017/letscookDB",
@@ -16,6 +15,16 @@ mongoose.connect(
 const app = express();
 
 app.use(express.json());
+
+app.use(
+  cookieSession({
+    secret: "aVeryS3cr3tK3y",
+    sameSite: "strict",
+    httpOnly: false,
+    secrue: false,
+    maxAge: 1000 * 600, // 10 mins for now
+  })
+);
 
 app.use("/api/users", userRouter);
 app.use("/api/recipes", recipeRouter);
