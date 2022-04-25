@@ -1,28 +1,12 @@
 import bcrypt from "bcrypt";
-import cookieSession from "cookie-session";
 import express from "express";
-import { v4 as uuid } from "uuid";
 import userModel from "../models/user.model.js";
 
 const router = express.Router();
 
-// prepare tamper-proof cookie (currently using http...?)
-router.use(
-  cookieSession({
-    secret: "aVeryS3cr3tK3y", // not sure what this key is
-    sameSite: "strict",
-    httpOnly: false,
-    secrue: false,
-    maxAge: 1000 * 600, // 10 mins for now
-  })
-);
-
 // check if the user is logged in
 export const secure = (req, res, next) => {
-  req.session.user.email
-    ? next()
-    : res.status(403).json("You must log in first.");
-  console.log(req);
+  req.session.user ? next() : res.status(403).json("You must log in first.");
 };
 
 // check the role of a logged in user
@@ -38,8 +22,7 @@ const secureWithRole = (role) => {
 };
 
 // get all users from db (admin only)
-/** !!! add back the secure with role thingy at the end */
-router.get("/", async (req, res) => {
+router.get("/", secureWithRole("admin"), async (req, res) => {
   try {
     const users = await userModel.find({});
     return res.json(users);
@@ -102,13 +85,15 @@ router.delete("/:id", secureWithRole("admin"), async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = new userModel({
+    let user = new userModel({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
       password: hashedPassword,
-      isAdmin: req.body.isAdmin,
     });
+    user.isAdmin = "false";
+    user.profilePic =
+      "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg";
     await user.save();
     return res.json(`New account with email '${user.email}' has been created.`);
   } catch (err) {
