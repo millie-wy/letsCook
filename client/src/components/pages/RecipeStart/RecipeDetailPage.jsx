@@ -58,14 +58,14 @@ const RecipeDetailPage = () => {
     </Container>
   ) : (
     <Container sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem" }}>
-      <Container sx={{ background: "white", borderRadius: 5 }}>
+      <Container sx={{ background: "white", borderRadius: 5, pt: "2rem" }}>
         <Box
           sx={{
             display: "flex",
             gap: "1rem",
-            pt: "2rem",
             cursor: "pointer",
             color: "#2E4739",
+            width: 100,
             "&:hover": {
               color: "#E5C687",
             },
