@@ -4,8 +4,6 @@ import { secure } from "./user.js";
 
 const router = express.Router();
 
-// console.log(req.session) // req.session is not reachable from user.js
-
 router.get("/", async (req, res) => {
   try {
     const recipes = await recipeModel.find({});
@@ -30,18 +28,17 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", secure, async (req, res) => {
-  console.log("called");
-  let {
-    title,
-    description,
-    image,
-    servings,
-    cookingMinute,
-    ingredients,
-    direction,
-    tags,
-  } = req.body;
   try {
+    let {
+      title,
+      description,
+      image,
+      servings,
+      cookingMinute,
+      ingredients,
+      direction,
+      tags,
+    } = req.body;
     const recipe = new recipeModel({
       title,
       description,
@@ -51,10 +48,9 @@ router.post("/", secure, async (req, res) => {
       ingredients,
       direction,
       tags,
-      comments: [""],
     });
     recipe.author = req.session.user;
-    console.log(recipe.author);
+    recipe.comments = [];
     await recipe.save();
     res.json(recipe);
   } catch (err) {
@@ -69,7 +65,7 @@ router.post("/", secure, async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const {
+    let {
       title,
       description,
       image,
@@ -78,8 +74,6 @@ router.put("/:id", async (req, res) => {
       ingredients,
       direction,
       tags,
-      author,
-      comments,
     } = req.body;
     const recipe = await recipeModel.findByIdAndUpdate(id, req.body, {
       useFindAndModify: false,
@@ -92,12 +86,8 @@ router.put("/:id", async (req, res) => {
     if (ingredients) recipe.ingredients = ingredients;
     if (direction) recipe.direction = direction;
     if (tags) recipe.tags = tags;
-    if (author) recipt.author = author;
-    if (comments) recipe.comments = comments;
-    res.json({
-      old: recipe,
-      new: req.body,
-    });
+
+    res.json(`Recipe with title '${recipe.title}' has been updated.`);
   } catch (err) {
     if (err.code == 11000) {
       res.send("Recipe already exists");
@@ -105,18 +95,6 @@ router.put("/:id", async (req, res) => {
     }
     res.send("Other error");
   }
-});
-
-router.patch("/:id", (req, res) => {
-  const { id } = req.params;
-  const { firstName, lastName, age } = req.body;
-
-  const user = users.find((user) => user.id === id);
-  if (firstName) user.firstName = firstName;
-  if (lastName) user.lastName = lastName;
-  if (age) user.age = age;
-
-  res.send(`User with the id ${id} has been updated`);
 });
 
 router.delete("/:id", async (req, res) => {
