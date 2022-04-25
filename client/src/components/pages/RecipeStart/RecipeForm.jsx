@@ -41,32 +41,40 @@ const RecipeForm = () => {
     fetchData();
   }, [id]);
 
+  const regExURL =
+    /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm;
+
   const validationSchema = yup.object({
     title: yup
-      .string("Enter your first name")
+      .string("Enter a title")
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Name can only contain Latin letters."
+        "Title should only contain Latin letters."
       )
-      .max(20, "First name should be of maximum 20 letters")
-      .required("First name is required"),
+      .max(60, "Title should be of maximum 60 letters")
+      .required("Title is required"),
     description: yup
-      .string("Enter your last name")
+      .string("Enter a description")
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Name can only contain Latin letters."
+        "Description should only contain latin letters."
       )
-      .max(20, "Last name should be of maximum 20 letters")
-      .required("Last name is required"),
-    image: yup.string("Enter your image").required("Email is required"),
-    password: yup
-      .string("Enter your password")
-      .min(8, "Password should be of minimum 8 characters length")
-      .required("Password is required"),
-    passwordConfirmation: yup
-      .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password"),
+      .max(200, "Description should be of maximum 200 letters")
+      .required("Description is required"),
+    image: yup
+      .string("Enter an image URL")
+      .matches(regExURL, "Image URL has to be a valid URL")
+      .required("An Image URL is required"),
+    servings: yup
+      .number("Enter amount of servings")
+      .max(999, "Servings should not be more than 3 numbers.")
+      .min(1, "There should be at least 1 serving")
+      .required("Amount of servings is required"),
+    cookingMinute: yup
+      .number("Enter cooking time in minutes")
+      .max(9999, "Cooking time should not be more than 4 numbers.")
+      .min(1, "Cooking time should be at least 1 minute")
+      .required("Cooking time is required"),
   });
 
   const formik = useFormik({
@@ -74,8 +82,8 @@ const RecipeForm = () => {
       title: "",
       description: "",
       image: "",
-      password: "",
-      passwordConfirmation: "",
+      servings: "",
+      cookingMinute: "",
     },
     onSubmit: (values) => {
       console.log(values);
@@ -229,11 +237,15 @@ const RecipeForm = () => {
                     name="servings"
                     label="Amount of Servings"
                     type="number"
-                    //   value={formik.values.image}
-                    //   onChange={formik.handleChange}
-                    //   onBlur={formik.handleBlur}
-                    //   error={formik.touched.image && Boolean(formik.errors.image)}
-                    //   helperText={formik.touched.image && formik.errors.image}
+                    value={formik.values.servings}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.servings && Boolean(formik.errors.servings)
+                    }
+                    helperText={
+                      formik.touched.servings && formik.errors.servings
+                    }
                   />
                   <TextField
                     sx={formStyling}
@@ -241,11 +253,17 @@ const RecipeForm = () => {
                     name="cookingMinute"
                     label="Cooking minutes"
                     type="number"
-                    //   value={formik.values.image}
-                    //   onChange={formik.handleChange}
-                    //   onBlur={formik.handleBlur}
-                    //   error={formik.touched.image && Boolean(formik.errors.image)}
-                    //   helperText={formik.touched.image && formik.errors.image}
+                    value={formik.values.cookingMinute}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.cookingMinute &&
+                      Boolean(formik.errors.cookingMinute)
+                    }
+                    helperText={
+                      formik.touched.cookingMinute &&
+                      formik.errors.cookingMinute
+                    }
                   />
                 </Box>
                 <Box sx={{ p: "1rem 0" }}>
