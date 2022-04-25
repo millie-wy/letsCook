@@ -8,7 +8,7 @@ const Footer = () => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        m: "0 auto 1rem auto",
+        m: "1rem auto 1rem auto",
         color: "#B6D5D5",
       }}
     >

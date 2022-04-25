@@ -23,6 +23,13 @@ const RecipeCard = () => {
     fetchData();
   }, []);
 
+  const getAvgRating = (comments) => {
+    let rated = [];
+    comments.map((comment) => rated.push(comment.rated));
+    let avg = rated.reduce((a, b) => a + b, 0) / comments.length || 0;
+    return avg.toFixed(1);
+  };
+
   return (
     <Container
       sx={{
@@ -89,7 +96,10 @@ const RecipeCard = () => {
             >
               <Link
                 to={`/recipe/${recipe.title.replaceAll(" ", "-")}`}
-                state={{ id: recipe._id }}
+                state={{
+                  id: recipe._id,
+                  rating: getAvgRating(recipe.comments),
+                }}
                 style={{ textDecoration: "none" }}
               >
                 <Button
@@ -136,7 +146,7 @@ const RecipeCard = () => {
                   gutterBottom
                   variant="body2"
                 >
-                  {recipe.star.toFixed(1)}
+                  {getAvgRating(recipe.comments)}
                 </Typography>
               </Box>
               <Box

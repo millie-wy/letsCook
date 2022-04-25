@@ -66,9 +66,31 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    const {
+      title,
+      description,
+      image,
+      servings,
+      cookingMinute,
+      ingredients,
+      direction,
+      tags,
+      star,
+      comments,
+    } = req.body;
     const recipe = await recipeModel.findByIdAndUpdate(id, req.body, {
       useFindAndModify: false,
     });
+    if (title) recipe.title = title;
+    if (description) recipe.description = description;
+    if (image) recipe.image = image;
+    if (servings) recipe.servings = servings;
+    if (cookingMinute) recipe.cookingMinute = cookingMinute;
+    if (ingredients) recipe.ingredients = ingredients;
+    if (direction) recipe.direction = direction;
+    if (tags) recipe.direction = tags;
+    if (star) recipe.star = star;
+    if (comments) recipe.comments = comments;
     res.json({
       old: recipe,
       new: req.body,
@@ -80,6 +102,18 @@ router.put("/:id", async (req, res) => {
     }
     res.send("Other error");
   }
+});
+
+router.patch("/:id", (req, res) => {
+  const { id } = req.params;
+  const { firstName, lastName, age } = req.body;
+
+  const user = users.find((user) => user.id === id);
+  if (firstName) user.firstName = firstName;
+  if (lastName) user.lastName = lastName;
+  if (age) user.age = age;
+
+  res.send(`User with the id ${id} has been updated`);
 });
 
 router.delete("/:id", async (req, res) => {

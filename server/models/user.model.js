@@ -21,6 +21,9 @@ const schema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
   },
+  profilePic: {
+    type: String,
+  },
 });
 
 export default mongoose.model("user", schema);
