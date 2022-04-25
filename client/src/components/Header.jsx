@@ -223,20 +223,38 @@ const Header = (props) => {
                     Sign In
                   </Typography>
                 ) : (
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "#E5C687",
-                      fontFamily: "Poppins",
-                      fontWeight: 500,
-                      "&:hover": {
-                        color: "#2E4739",
-                      },
-                    }}
-                    onClick={logout}
-                  >
-                    Logout
-                  </Typography>
+                  <Box>
+                    <Link to="/account" style={{ textDecoration: "none" }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "#E5C687",
+                          fontFamily: "Poppins",
+                          fontWeight: 500,
+                          mb: ".5rem",
+                          "&:hover": {
+                            color: "#2E4739",
+                          },
+                        }}
+                      >
+                        My Account
+                      </Typography>
+                    </Link>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: "#E5C687",
+                        fontFamily: "Poppins",
+                        fontWeight: 500,
+                        "&:hover": {
+                          color: "#2E4739",
+                        },
+                      }}
+                      onClick={logout}
+                    >
+                      Logout
+                    </Typography>
+                  </Box>
                 )}
               </Link>
             </ListItem>

@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AccountProvider from "./components/context/AccountContext";
 import Layout from "./components/Layout";
+import ProfileOverviewPage from "./components/pages/Profile/ProfileOverviewPage";
 import RecipeDetailPage from "./components/pages/RecipeStart/RecipeDetailPage";
 import RecipeStartPage from "./components/pages/RecipeStart/RecipeStartPage";
 import SearchResult from "./components/pages/RecipeStart/SearchResult";
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/search" element={<SearchResult />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/account" element={<ProfileOverviewPage />} />
           </Route>
         </Routes>
       </AccountProvider>
