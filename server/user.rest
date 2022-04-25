@@ -17,43 +17,11 @@ POST http://localhost:3002/api/users
 Content-Type: application/json
 
 { 
-  "email": "user@letscook11.com",
-  "firstName": "New",
-  "lastName": "User",
-  "password": "user", 
-  "isAdmin": false,
-  "profilePc": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
-
+  "email": "newuser@letscook.com",
+  "firstName": "Sven",
+  "lastName": "Svensson",
+  "password": "qwertyui"
 }
-
-// some templates for testing
-#  { 
-#  "email": "admin@letscook.com",
-#  "firstName": "David",
-#  "lastName": "Jensen",
-#   "password": "admin", 
-#   "isAdmin": true, 
-#   "profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
-#  }
-
-#  { 
-#  "email": "admin@letscook.com",
-#   "email": "williamsaar@outlook.com",
-#   "firstName": "William",
-#   "lastName": "Saar",
-#   "password": "1234", 
-#   "isAdmin": true 
-#   "profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
-#  }
-
-# { 
-# "email": "milliecheung@outlook.com",
-# "firstName": "Millie",
-# "lastName": "Cheung",
-#  "password": "123", 
-#  "isAdmin": false
-#  "profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
-# }
 
 ###
 
@@ -63,7 +31,7 @@ Content-Type: application/json
 
 {
 "email":"milliecheung@outlook.com",
-"firstName": "Millieeee",
+"firstName": "Millie",
 "lastName": "Cheung",
 "password":"1234567",
 "isAdmin": false,
@@ -81,7 +49,7 @@ Content-Type: application/json
   #    "password": "admin"
   #  }
 
-// some templates for testing
+// some templates for testing (to be deleted)
 
 # {
 #     "email": "user@letscook.com", 
@@ -90,7 +58,7 @@ Content-Type: application/json
 
    {
      "email": "milliecheung@outlook.com", 
-     "password": "123"
+     "password": "1234567"
    }
 
 #   {
@@ -104,5 +72,7 @@ Content-Type: application/json
 DELETE http://localhost:3002/api/users/account/logout
 
 ###
+
+// Get cookie session details
 GET http://localhost:3002/api/users/account/login
 
