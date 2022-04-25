@@ -1,7 +1,10 @@
 import express from "express";
 import recipeModel from "../models/recipe.model.js";
+import { secure } from "./user.js";
 
 const router = express.Router();
+
+// console.log(req.session) // req.session is not reachable from user.js
 
 router.get("/", async (req, res) => {
   try {
@@ -15,7 +18,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const currentRecipe = await recipeModel.findById(id);
+    const currentRecipe = await recipeModel.findById(id).populate("author");
     if (!currentRecipe) {
       res.json("No recipe found with this id");
       return;
@@ -26,7 +29,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", secure, async (req, res) => {
+  console.log("called");
   let {
     title,
     description,
@@ -36,22 +40,21 @@ router.post("/", async (req, res) => {
     ingredients,
     direction,
     tags,
-    star,
-    comments,
   } = req.body;
   try {
     const recipe = new recipeModel({
       title,
       description,
-      image: req.body.image,
+      image,
       servings,
       cookingMinute,
       ingredients,
       direction,
       tags,
-      star,
-      comments,
+      comments: [""],
     });
+    recipe.author = req.session.user;
+    console.log(recipe.author);
     await recipe.save();
     res.json(recipe);
   } catch (err) {
@@ -75,7 +78,7 @@ router.put("/:id", async (req, res) => {
       ingredients,
       direction,
       tags,
-      star,
+      author,
       comments,
     } = req.body;
     const recipe = await recipeModel.findByIdAndUpdate(id, req.body, {
@@ -88,8 +91,8 @@ router.put("/:id", async (req, res) => {
     if (cookingMinute) recipe.cookingMinute = cookingMinute;
     if (ingredients) recipe.ingredients = ingredients;
     if (direction) recipe.direction = direction;
-    if (tags) recipe.direction = tags;
-    if (star) recipe.star = star;
+    if (tags) recipe.tags = tags;
+    if (author) recipt.author = author;
     if (comments) recipe.comments = comments;
     res.json({
       old: recipe,

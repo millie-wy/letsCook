@@ -13,21 +13,16 @@ router.use(
     sameSite: "strict",
     httpOnly: false,
     secrue: false,
-    maxAge: 1000 * 10, // 10s for now
+    maxAge: 1000 * 600, // 10 mins for now
   })
 );
 
-// I guess in no situation we will show this?
-// router.all("admin", (req, res, next) => {
-//   if (!req.session.id || req.session.role != "admin") {
-//     return res.status(401).send("You are not permitted here, go away!");
-//   }
-//   next();
-// });
-
 // check if the user is logged in
-const secure = (req, res, next) => {
-  req.session.email ? next() : res.status(403).json("You must log in first.");
+export const secure = (req, res, next) => {
+  req.session.user.email
+    ? next()
+    : res.status(403).json("You must log in first.");
+  console.log(req);
 };
 
 // check the role of a logged in user
@@ -35,7 +30,7 @@ const secureWithRole = (role) => {
   return [
     secure,
     (req, res, next) => {
-      req.session.role == role
+      req.session.user.role == role
         ? next()
         : res.status(403).json("You do not have access to this data.");
     },
@@ -122,28 +117,29 @@ router.post("/", async (req, res) => {
   }
 });
 
-// log in an user
+// log in an user (+password because it is unselected in model)
 router.post("/account/login", async (req, res) => {
-  const user = await userModel.findOne({ email: req.body.email });
-  console.log(user);
+  const user = await userModel
+    .findOne({ email: req.body.email })
+    .select("+password");
   if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-    console.log("req pw: " + req.body.password);
-    console.log("user pw: " + user.password);
-    console.log(Boolean(req.body.password == user.password));
     return res.status(401).send("Wrong email or password");
   }
 
-  // save info about the user to the session (a coookie stored on the client)
-  req.session.id = uuid();
-  req.session.email = req.body.email;
-  req.session.loginDate = new Date();
-  req.session.role = user.isAdmin ? "admin" : "user";
+  // save info about the user to the session (a cookie stored on the client)
+  req.session.user = {
+    id: user.id,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    role: user.isAdmin ? "admin" : "user",
+  };
   res.json("You have logged in!");
 });
 
 // log out an user
 router.delete("/account/logout", (req, res) => {
-  if (!req.session.id)
+  if (!req.session.user.id)
     return res
       .status(401)
       .json("You cannot log out when you are not logged in.");
@@ -153,7 +149,8 @@ router.delete("/account/logout", (req, res) => {
 
 /** return the information stored in the cookie - for testing, will be deleted */
 router.get("/account/login", (req, res) => {
-  if (!req.session.id) return res.status(401).send("You are not logged in.");
+  if (!req.session.user.id)
+    return res.status(401).send("You are not logged in.");
   res.json(req.session);
 });
 
