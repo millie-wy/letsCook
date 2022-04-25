@@ -8,6 +8,7 @@ import SearchResult from "./components/pages/RecipeStart/SearchResult";
 import SignIn from "./components/pages/SignInUp/SignIn";
 import SignUp from "./components/pages/SignInUp/SignUp";
 import StartPage from "./components/pages/StartPage";
+import RecipeForm from "./components/pages/RecipeStart/RecipeForm";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
             <Route index element={<StartPage />} />
             <Route path="/start" element={<RecipeStartPage />} />
             <Route path="/recipe/:recipe" element={<RecipeDetailPage />} />
+            <Route path="/recipe/edit" element={<RecipeForm />} />
             <Route path="/search" element={<SearchResult />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
