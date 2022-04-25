@@ -30,6 +30,7 @@ const RecipeForm = () => {
   const { id } = location.state;
   const [recipe, setRecipe] = useState([]);
   const [amountOfIngredients, setAmountOfIngredients] = useState([1, 2]);
+  const [amountOfInstructions, setAmountOfInstructions] = useState([1]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -362,6 +363,130 @@ const RecipeForm = () => {
                           }}
                         >
                           <Remove /> Remove Ingredient <Box />
+                        </Box>
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box sx={{ p: "1rem 0" }}>
+                  <Typography
+                    variant="h5"
+                    color="#0B814A"
+                    sx={{ fontFamily: "Poppins", fontWeight: 500 }}
+                  >
+                    General
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                  {amountOfInstructions.map((instruction) => (
+                    <TextField
+                      fullWidth
+                      multiline
+                      minRows={2}
+                      key={instruction}
+                      sx={formStyling}
+                      id={"instruction " + instruction}
+                      name={"instruction " + instruction}
+                      label={"Instruction " + instruction}
+                      //   value={formik.values.image}
+                      //   onChange={formik.handleChange}
+                      //   onBlur={formik.handleBlur}
+                      //   error={formik.touched.image && Boolean(formik.errors.image)}
+                      //   helperText={formik.touched.image && formik.errors.image}
+                    />
+                  ))}
+                  <Box sx={{ width: "100%" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <Button
+                        onClick={() =>
+                          setAmountOfInstructions([
+                            ...amountOfInstructions,
+                            Math.max(...amountOfInstructions) + 1,
+                          ])
+                        }
+                        sx={{
+                          backgroundColor: "#FFFFFF",
+                          textTransform: "capitalize",
+                          color: "#0B814A",
+                          fontFamily: "Poppins",
+                          borderRadius: "70px",
+                          fontWeight: "500",
+                          border: "2px solid #0B814A",
+                          height: "3rem",
+                          width: "40%",
+                          minWidth: "15rem",
+                          fontSize: "1rem",
+                          cursor: "pointer",
+                          transition: "all .15s ease-in-out",
+                          "&:hover": {
+                            background: "#0B814A",
+                            color: "#ffffff",
+                          },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            width: "80%",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Add /> Add instruction <Box />
+                        </Box>
+                      </Button>
+                      <Button
+                        disabled={amountOfInstructions.length === 1}
+                        onClick={() => {
+                          const newArray = amountOfInstructions.slice(0, -1);
+                          setAmountOfInstructions([...newArray]);
+                        }}
+                        sx={{
+                          backgroundColor: "#FFFFFF",
+                          textTransform: "capitalize",
+                          color: "#0B814A",
+                          fontFamily: "Poppins",
+                          borderRadius: "70px",
+                          fontWeight: "500",
+                          border: "2px solid #0B814A",
+                          height: "3rem",
+                          width: "40%",
+                          minWidth: "15rem",
+
+                          fontSize: "1rem",
+                          cursor: "pointer",
+                          transition: "all .15s ease-in-out",
+                          "&:hover": {
+                            background: "#FF5858",
+                            border: "2px solid #FF5858",
+                            color: "#ffffff",
+                          },
+                          "&&&": {
+                            " &.Mui-disabled": {
+                              color: "#F1F8F6",
+                              border: "none",
+                              background: "#94DAB9",
+                            },
+                          },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            width: "80%",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            lineHeight: "1rem",
+                          }}
+                        >
+                          <Remove /> Remove Instruction <Box />
                         </Box>
                       </Button>
                     </Box>
