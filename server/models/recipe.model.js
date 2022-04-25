@@ -9,7 +9,11 @@ const schema = new mongoose.Schema({
   ingredients: [{ type: String, required: true }],
   direction: [{ type: String, required: true }],
   tags: [{ type: String }],
-  star: { type: Number },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
   comments: [
     {
       author: { type: String },
