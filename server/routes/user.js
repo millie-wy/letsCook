@@ -31,8 +31,8 @@ router.get("/", secureWithRole("admin"), async (req, res) => {
   }
 });
 
-// get one user from db (admin only)
-router.get("/:id", secureWithRole("admin"), async (req, res) => {
+// get one user from db
+router.get("/:id", secure, async (req, res) => {
   try {
     const { id } = req.params;
     const currentUser = await userModel.findById(id);
@@ -55,6 +55,8 @@ router.put("/:id", async (req, res) => {
       lastName: req.body.lastName,
       password: hashedPassword,
       isAdmin: req.body.isAdmin,
+      profilePic: req.body.profilePic,
+      bio: req.body.bio,
     };
     const user = await userModel.findByIdAndUpdate(id, updatedUser, {
       useFindAndModify: false,
@@ -94,6 +96,7 @@ router.post("/", async (req, res) => {
     user.isAdmin = "false";
     user.profilePic =
       "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg";
+    user.bio = "";
     await user.save();
     return res.json(`New account with email '${user.email}' has been created.`);
   } catch (err) {

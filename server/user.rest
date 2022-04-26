@@ -2,7 +2,7 @@
 GET http://localhost:3002/api/users
 
 ###
-// Get one user (admin use)
+// Get one user
 GET http://localhost:3002/api/users/626280e3bd6aa838b7b033c2
 
 ###
@@ -35,7 +35,8 @@ Content-Type: application/json
 "lastName": "Cheung",
 "password":"1234567",
 "isAdmin": false,
-"profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
+"profilePic": "https://avatars.githubusercontent.com/u/89253350?v=4",
+"bio": "Hello from the other side"
 }
 
 ###
