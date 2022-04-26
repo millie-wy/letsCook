@@ -18,14 +18,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAccount } from "./context/AccountContext";
+import { Link } from "react-router-dom";
 import logo from "../assets/logoAndIcons/logo.svg";
-import { makeRequest } from "../helper";
+import { useAccount } from "./context/AccountContext";
 
 const Header = (props) => {
-  const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn } = useAccount();
+  const { isLoggedIn, signOut } = useAccount();
 
   const [openMenu, setOpenMenu] = useState(false);
   const handleMenuOpen = () => {
@@ -35,15 +33,6 @@ const Header = (props) => {
   const handleMenuClose = () => {
     setOpenMenu(false);
     props.setMenuIsOpen(false);
-  };
-
-  const logout = async () => {
-    let result = await makeRequest("/api/users/account/logout", "DELETE");
-    alert(result); // for now it is showing an alert, change style if we have time!
-    setTimeout(() => {
-      setIsLoggedIn(false);
-      navigate("/start");
-    }, 1000);
   };
 
   return (
@@ -203,12 +192,12 @@ const Header = (props) => {
               </Link>
             </ListItem>
             <ListItem>
-              <Link
-                style={{ textDecoration: "none", marginTop: "1.5rem" }}
-                to="/signin"
-                onClick={handleMenuClose}
-              >
-                {!isLoggedIn ? (
+              {!isLoggedIn ? (
+                <Link
+                  style={{ textDecoration: "none", marginTop: "1.5rem" }}
+                  to="/signin"
+                  onClick={handleMenuClose}
+                >
                   <Typography
                     variant="body2"
                     sx={{
@@ -222,41 +211,41 @@ const Header = (props) => {
                   >
                     Sign In
                   </Typography>
-                ) : (
-                  <Box>
-                    <Link to="/account" style={{ textDecoration: "none" }}>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "#E5C687",
-                          fontFamily: "Poppins",
-                          fontWeight: 500,
-                          mb: ".5rem",
-                          "&:hover": {
-                            color: "#2E4739",
-                          },
-                        }}
-                      >
-                        My Account
-                      </Typography>
-                    </Link>
+                </Link>
+              ) : (
+                <Box sx={{ mt: "1.5rem" }}>
+                  <Link to="/account" style={{ textDecoration: "none" }}>
                     <Typography
                       variant="body2"
                       sx={{
                         color: "#E5C687",
                         fontFamily: "Poppins",
                         fontWeight: 500,
+                        mb: ".5rem",
                         "&:hover": {
                           color: "#2E4739",
                         },
                       }}
-                      onClick={logout}
                     >
-                      Logout
+                      My Account
                     </Typography>
-                  </Box>
-                )}
-              </Link>
+                  </Link>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#E5C687",
+                      fontFamily: "Poppins",
+                      fontWeight: 500,
+                      "&:hover": {
+                        color: "#2E4739",
+                      },
+                    }}
+                    onClick={signOut}
+                  >
+                    Logout
+                  </Typography>
+                </Box>
+              )}
             </ListItem>
           </List>
         </Drawer>
@@ -264,7 +253,7 @@ const Header = (props) => {
         {/* below is header right  */}
         <Box sx={{ display: "flex", gap: "1.5rem", flexDirection: "row" }}>
           <Link
-            to={!isLoggedIn ? "/signup" : "/logout"}
+            to={!isLoggedIn ? "/signup" : "/"}
             style={{ textDecoration: "none" }}
           >
             <Button
@@ -297,6 +286,7 @@ const Header = (props) => {
                   boxShadow: "none",
                 },
               }}
+              onClick={!isLoggedIn ? null : signOut}
             >
               {!isLoggedIn ? "Sign Up/In" : "Logout"}
             </Button>
