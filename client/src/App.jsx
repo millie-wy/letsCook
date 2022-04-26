@@ -10,6 +10,7 @@ import SignIn from "./components/pages/SignInUp/SignIn";
 import SignUp from "./components/pages/SignInUp/SignUp";
 import StartPage from "./components/pages/StartPage";
 import RecipeForm from "./components/pages/RecipeStart/RecipeForm";
+import CreateRecipe from "./components/pages/RecipeStart/CreateRecipe";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/start" element={<RecipeStartPage />} />
             <Route path="/recipe/:recipe" element={<RecipeDetailPage />} />
             <Route path="/recipe/edit" element={<RecipeForm />} />
+            <Route path="/recipe/create" element={<CreateRecipe />} />
             <Route path="/search" element={<SearchResult />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
