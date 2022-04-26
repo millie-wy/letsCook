@@ -1,5 +1,12 @@
-import { ArrowBackIosNew } from "@mui/icons-material";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { ArrowBackIosNew, Edit, Delete } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
@@ -102,12 +109,41 @@ const RecipeDetailPage = () => {
 
           {/* upper: intro */}
           <Box sx={{ padding: "1rem" }}>
-            <Typography
-              variant="h5"
-              sx={{ fontFamily: "Poppins", fontWeight: 600, mb: "1rem" }}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                columnGap: "1rem",
+                flexWrap: "wrap",
+                minHeight: "4.063",
+              }}
             >
-              {recipe.title}
-            </Typography>
+              <Typography
+                variant="h5"
+                sx={{ fontFamily: "Poppins", fontWeight: 600 }}
+              >
+                {recipe.title}
+              </Typography>
+              <Box>
+                <IconButton aria-label="delete" size="large">
+                  {" "}
+                  <Link
+                    to={"/recipe/edit"}
+                    state={{
+                      id: id,
+                    }}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Edit fontSize="large" sx={{ color: "#2E4739" }} />
+                  </Link>
+                </IconButton>
+
+                <IconButton aria-label="delete" size="large">
+                  <Delete fontSize="large" sx={{ color: "#FF5858" }} />
+                </IconButton>
+              </Box>
+            </Box>
             <StarRatings
               rating={parseInt(rating)}
               starDimension="35px"
@@ -115,7 +151,7 @@ const RecipeDetailPage = () => {
               starRatedColor="#E5C687"
               starEmptyColor="#B6D5D5"
               svgIconPath="M15.0979 1.8541C15.6966 0.011476 18.3034 0.0114803 18.9021 1.8541L21.4903 9.81966C21.758 10.6437 22.5259 11.2016 23.3924 11.2016H31.7679C33.7053 11.2016 34.5109 13.6809 32.9434 14.8197L26.1675 19.7426C25.4666 20.2519 25.1732 21.1547 25.441 21.9787L28.0292 29.9443C28.6279 31.7869 26.5189 33.3191 24.9515 32.1803L18.1756 27.2574C17.4746 26.7481 16.5254 26.7481 15.8244 27.2574L9.04852 32.1803C7.48109 33.3191 5.37213 31.7869 5.97084 29.9443L8.559 21.9787C8.82675 21.1547 8.53344 20.2519 7.83246 19.7426L1.05655 14.8197C-0.510878 13.6809 0.294677 11.2016 2.23212 11.2016H10.6076C11.4741 11.2016 12.242 10.6437 12.5097 9.81966L15.0979 1.8541Z"
-            />
+            />{" "}
             <Typography
               variant="subtitle1"
               sx={{ my: "2rem", fontFamily: "Poppins" }}
