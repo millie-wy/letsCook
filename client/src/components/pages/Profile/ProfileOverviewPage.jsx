@@ -202,9 +202,42 @@ const ProfileOverviewPage = () => {
                 Liked Recipes
               </Typography>
             </Button>
+            <Button
+              disableRipple
+              key="three"
+              sx={{
+                textTransform: "capitalize",
+                color: selectedContent === "account" ? "#0B814A" : "#989C9C",
+                "&:hover": {
+                  color: "#0B814A",
+                  background: "none",
+                },
+              }}
+              onClick={() => setSelectedContent("account")}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontFamily: "Poppins",
+                  lineHeight: 1.5,
+                  fontWeight: 600,
+                  mx: ".5rem",
+                  borderBottom:
+                    selectedContent === "account" ? "2px solid " : "none",
+                }}
+              >
+                Manage Account
+              </Typography>
+            </Button>
           </ButtonGroup>
           <Box width={1} sx={{ pt: ".5rem" }}>
-            {selectedContent === "liked" ? <RecipeLiked /> : <ProfilePosts />}
+            {selectedContent === "liked" ? (
+              <RecipeLiked />
+            ) : selectedContent === "account" ? (
+              <p>Manage account</p>
+            ) : (
+              <ProfilePosts />
+            )}
           </Box>
         </Box>
       </Box>
