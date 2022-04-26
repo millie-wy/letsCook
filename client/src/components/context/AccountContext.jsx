@@ -1,30 +1,59 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { makeRequest } from "../../helper";
 
 export const AccountContext = createContext({});
 
 const AccountProvider = (props) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState();
-
   const isLoggedIn = Boolean(user);
 
-  console.log(isLoggedIn); // to be deleted
-
   useEffect(() => {
-    // fetch GET /api/user
-    // setUser
-  });
+    const getCookieSession = async () => {
+      try {
+        let result = await makeRequest("/api/users/account/login", "GET");
+        setUser(result);
+      } catch (error) {
+        return;
+      }
+    };
+    getCookieSession();
+  }, []);
 
-  const login = (username, password) => {
-    // fetch
-    // setUser
+  const signIn = async (email, password) => {
+    const user = { email, password };
+    console.log(user); // to be deleted
+    let result = await makeRequest("/api/users/account/login", "POST", user);
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      navigate("/start");
+      window.location.reload(false);
+    }, 1000);
   };
 
-  const signup = (user) => {
-    // fetch
+  const signUp = async (user) => {
+    const { email, firstName, lastName, password } = user;
+    const newUser = { email, firstName, lastName, password };
+    console.log(newUser); // to be deleted
+    let result = await makeRequest("/api/users", "POST", newUser);
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      navigate("/start");
+    }, 1000);
+  };
+
+  const signOut = async () => {
+    let result = await makeRequest("/api/users/account/logout", "DELETE");
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      navigate("/start");
+      window.location.reload(false);
+    }, 1000);
   };
 
   return (
-    <AccountContext.Provider value={{ isLoggedIn, login }}>
+    <AccountContext.Provider value={{ isLoggedIn, signIn, signUp, signOut }}>
       {props.children}
     </AccountContext.Provider>
   );
