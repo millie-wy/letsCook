@@ -94,8 +94,7 @@ router.post("/", async (req, res) => {
       password: hashedPassword,
     });
     user.isAdmin = "false";
-    user.profilePic =
-      "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg";
+    user.profilePic = "";
     user.bio = "";
     await user.save();
     return res.json(`New account with email '${user.email}' has been created.`);
