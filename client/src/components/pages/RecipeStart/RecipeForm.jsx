@@ -25,6 +25,7 @@ const RecipeForm = () => {
     servings: "",
     cookingMinute: "",
     ingredients: [],
+    direction: [],
   });
   const [amountOfIngredients, setAmountOfIngredients] = useState([1, 2]);
   const [amountOfInstructions, setAmountOfInstructions] = useState([1]);
@@ -283,7 +284,7 @@ const RecipeForm = () => {
                         sx={formStyling}
                         id={"ingredient" + "[" + index + "]"}
                         name={"ingredient" + "[" + index + "]"}
-                        label={"Ingredient " + index}
+                        label={"Ingredient " + (index + 1)}
                         value={formik.values.ingredients[index]}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -299,10 +300,10 @@ const RecipeForm = () => {
                     >
                       <Button
                         onClick={() =>
-                          setAmountOfIngredients([
-                            ...amountOfIngredients,
-                            Math.max(...amountOfIngredients) + 1,
-                          ])
+                          setRecipe(
+                            recipe,
+                            recipe.ingredients.push("Empty ingredient")
+                          )
                         }
                         sx={{
                           backgroundColor: "#FFFFFF",
@@ -396,23 +397,19 @@ const RecipeForm = () => {
                 </Box>
 
                 <Box sx={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-                  {amountOfInstructions.map((instruction) => (
-                    <TextField
-                      fullWidth
-                      multiline
-                      minRows={2}
-                      key={instruction}
-                      sx={formStyling}
-                      id={"instruction " + instruction}
-                      name={"instruction " + instruction}
-                      label={"Instruction " + instruction}
-                      //   value={formik.values.image}
-                      //   onChange={formik.handleChange}
-                      //   onBlur={formik.handleBlur}
-                      //   error={formik.touched.image && Boolean(formik.errors.image)}
-                      //   helperText={formik.touched.image && formik.errors.image}
-                    />
-                  ))}
+                  {recipe.direction.length &&
+                    recipe.direction.map((direcive, index) => (
+                      <TextField
+                        key={direcive}
+                        sx={formStyling}
+                        id={"direction" + "[" + index + "]"}
+                        name={"direction" + "[" + index + "]"}
+                        label={"Direction " + (index + 1)}
+                        value={formik.values.direction[index]}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                    ))}
                   <Box sx={{ width: "100%" }}>
                     <Box
                       sx={{
