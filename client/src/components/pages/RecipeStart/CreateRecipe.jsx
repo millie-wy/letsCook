@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 
 const CreateRecipe = () => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAccount();
   const location = useLocation();
   const [recipe, setRecipe] = useState({
     title: "",
@@ -93,11 +94,11 @@ const CreateRecipe = () => {
     }, 1000);
   };
 
-  return !recipe ? (
+  return !isLoggedIn ? (
     <Container
       sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem", textAlign: "center" }}
     >
-      Something went wrong. Try refreshing the page.
+      You have to be logged in to create a recipe.
     </Container>
   ) : (
     <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh -5rem)" }}>
