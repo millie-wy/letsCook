@@ -32,7 +32,7 @@ router.get("/", secureWithRole("admin"), async (req, res) => {
 });
 
 // get one user from db (admin only)
-router.get("/:id", secureWithRole("admin"), async (req, res) => {
+router.get("/:id", secure, async (req, res) => {
   try {
     const { id } = req.params;
     const currentUser = await userModel.findById(id);

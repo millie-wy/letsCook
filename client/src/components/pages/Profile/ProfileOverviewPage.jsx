@@ -1,14 +1,55 @@
-import { Box, Container, Typography, Button, ButtonGroup } from "@mui/material";
-import userIcon from "../../../assets/logoAndIcons/usericon.svg";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  CircularProgress,
+  Container,
+  LinearProgress,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import userIcon from "../../../assets/logoAndIcons/usericon.svg";
+import { useAccount } from "../../context/AccountContext";
 import ProfilePosts from "./ProfilePosts";
 import RecipeLiked from "./RecipeLiked";
+import { makeRequest } from "../../../helper";
 
 const ProfileOverviewPage = () => {
   const [selectedContent, setSelectedContent] = useState("recipes");
+  const { currentUser } = useAccount();
+  const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState();
+  console.log(currentUser);
 
-  return (
+  useEffect(() => {
+    if (currentUser === undefined) {
+      setIsLoading(true);
+    } else {
+      const fetchUser = async () => {
+        let result = await makeRequest(`/api/users/${currentUser.id}`, "GET");
+        setUser(result);
+        setIsLoading(false);
+        console.log(result);
+      };
+      fetchUser();
+    }
+  }, [currentUser]);
+
+  return isLoading ? (
+    <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    </Container>
+  ) : (
     <Container sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Box
         sx={{ display: "flex", flexDirection: "row", gap: ".5rem", px: "1rem" }}
@@ -19,7 +60,7 @@ const ProfileOverviewPage = () => {
           variant="h4"
           sx={{ fontFamily: "Poppins", fontWeight: 800 }}
         >
-          My <span style={{ color: "#2E4739" }}>Profile</span>
+          {user.firstName} <span style={{ color: "#2E4739" }}>Profile</span>
         </Typography>
       </Box>
 
@@ -84,18 +125,16 @@ const ProfileOverviewPage = () => {
                   fontFamily: "Poppins",
                   fontWeight: 600,
                   lineHeight: 1.2,
-                  mb: "1rem",
+                  mb: "1.5rem",
                 }}
               >
-                William Saar
+                {user.firstName} {user.lastName}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ fontFamily: "Poppins", lineHeight: 1.2 }}
+                sx={{ fontFamily: "Poppins", lineHeight: 1.5 }}
               >
-                Welcome to my profile! I am a self taught cook who specialies in
-                fast food. I hope you’ll like my recipes, and if not, feel free
-                to comment!
+                {user.bio}
               </Typography>
             </Box>
             <Box>
