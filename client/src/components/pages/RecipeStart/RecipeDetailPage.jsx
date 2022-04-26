@@ -6,6 +6,7 @@ import {
   TextField,
   Typography,
   IconButton,
+  Avatar,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ import ingredient from "../../../assets/logoAndIcons/ingredient.svg";
 import portion from "../../../assets/logoAndIcons/portion.svg";
 import time from "../../../assets/logoAndIcons/time.svg";
 import userIcon from "../../../assets/logoAndIcons/usericon.svg";
+import avatarpic from "../../../assets/images/avatarpic.png";
 import { makeRequest } from "../../../helper.js";
 import { useAccount } from "../../context/AccountContext";
 
@@ -23,6 +25,9 @@ const RecipeDetailPage = () => {
   const [individualRating, setIndividualRating] = useState(0);
   const [comment, setComment] = useState("");
   const [disableButton, setDisabledButton] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState();
+  const [canEdit, setCanEdit] = useState(false);
 
   const location = useLocation();
   const { id, rating } = location.state;
@@ -32,6 +37,7 @@ const RecipeDetailPage = () => {
     const fetchData = async () => {
       let response = await makeRequest(`/api/recipes/${id}`, "GET");
       setRecipe(response);
+      setIsLoading(false);
     };
     fetchData();
 
@@ -39,6 +45,26 @@ const RecipeDetailPage = () => {
       ? setDisabledButton(false)
       : setDisabledButton(true);
   }, [comment.length, id, individualRating]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (recipe.author.length < 1) {
+        setIsLoading(false);
+        return;
+      } else {
+        const fetchUser = async () => {
+          let result = await makeRequest(
+            `/api/users/${recipe.author.id}`,
+            "GET"
+          );
+          setUser(result);
+          setIsLoading(false);
+          console.log(result);
+        };
+        fetchUser();
+      }
+    }
+  }, [recipe]);
 
   const submitComment = async (existingComments) => {
     const allComments = {
@@ -121,28 +147,32 @@ const RecipeDetailPage = () => {
             >
               <Typography
                 variant="h5"
-                sx={{ fontFamily: "Poppins", fontWeight: 600 }}
+                sx={{ fontFamily: "Poppins", fontWeight: 600, mb: "1rem" }}
               >
                 {recipe.title}
               </Typography>
-              <Box>
-                <IconButton aria-label="delete" size="large">
-                  {" "}
-                  <Link
-                    to={"/recipe/edit"}
-                    state={{
-                      id: id,
-                    }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Edit fontSize="large" sx={{ color: "#2E4739" }} />
-                  </Link>
-                </IconButton>
+              {currentUser !== undefined
+                ? currentUser.role === "admin" && (
+                    <Box>
+                      <IconButton aria-label="delete" size="large">
+                        {" "}
+                        <Link
+                          to={"/recipe/edit"}
+                          state={{
+                            id: id,
+                          }}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Edit fontSize="large" sx={{ color: "#2E4739" }} />
+                        </Link>
+                      </IconButton>
 
-                <IconButton aria-label="delete" size="large">
-                  <Delete fontSize="large" sx={{ color: "#FF5858" }} />
-                </IconButton>
-              </Box>
+                      <IconButton aria-label="delete" size="large">
+                        <Delete fontSize="large" sx={{ color: "#FF5858" }} />
+                      </IconButton>
+                    </Box>
+                  )
+                : null}
             </Box>
             <StarRatings
               rating={parseInt(rating)}
@@ -244,6 +274,63 @@ const RecipeDetailPage = () => {
                 {ingredient}
               </Box>
             ))}
+            {!user ? (
+              <Box
+                sx={{
+                  p: "1rem 0",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar
+                  alt="William Saar"
+                  src={avatarpic}
+                  sx={{ bgcolor: "#B6D5D5", width: 70, height: 70 }}
+                />
+                <Box sx={{ p: "0 1rem" }}>
+                  <Typography variant="h6" sx={{ color: "#0B814A" }}>
+                    William Saar
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#0B814A",
+                      fontSize: ".8rem",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Pro chef
+                  </Typography>
+                </Box>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  p: "1rem 0",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar
+                  alt={user.firstName + " " + user.Lastname}
+                  src={user.profilePic}
+                  sx={{ bgcolor: "#B6D5D5", width: 70, height: 70 }}
+                />
+                <Box sx={{ p: "0 1rem" }}>
+                  <Typography variant="h6" sx={{ color: "#0B814A" }}>
+                    {user.firstName + " " + user.Lastname}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#0B814A",
+                      fontSize: ".8rem",
+                      fontWeight: "600",
+                    }}
+                  >
+                    User
+                  </Typography>
+                </Box>
+              </Box>
+            )}
           </Box>
 
           {/* middle: directions */}
