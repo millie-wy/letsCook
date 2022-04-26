@@ -38,7 +38,7 @@ const RecipeForm = () => {
   }, [id]);
 
   const regExURL =
-    /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm;
+    "^(?:(?:http(?:s)?|ftp)://)(?:\\S+(?::(?:\\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\\d){2,5})?(?:/(?:\\S)*)?$";
 
   const validationSchema = yup.object({
     title: yup
@@ -51,10 +51,6 @@ const RecipeForm = () => {
       .required("Title is required"),
     description: yup
       .string("Enter a description")
-      .matches(
-        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Description should only contain latin letters."
-      )
       .max(200, "Description should be of maximum 200 letters")
       .required("Description is required"),
     image: yup
