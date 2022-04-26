@@ -13,7 +13,6 @@ const RecipeLiked = () => {
         placeItems: "center",
       }}
     >
-      {/* profile recipe card - delete the second card and fetch and map to be used here */}
       <Typography
         variant="subtitle1"
         sx={{
