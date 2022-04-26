@@ -69,7 +69,7 @@ const RecipeForm = () => {
     enableReinitialize: true,
     initialValues: recipe,
     onSubmit: (values) => {
-      console.log(values);
+      updateRecipe(values);
     },
     validationSchema: validationSchema,
     validateOnMount: true,
@@ -92,11 +92,9 @@ const RecipeForm = () => {
     formik.setValues(recipe);
   };
 
-  const signUp = async (values) => {
-    const { image, title, description, password } = values;
-    const newUser = { image, title, description, password, isAdmin: false };
-    console.log(newUser); // to be deleted
-    let result = await makeRequest("/api/users", "POST", newUser);
+  const updateRecipe = async (values) => {
+    console.log(values); // to be deleted
+    let result = await makeRequest(`/api/recipes/${id}`, "PUT", values);
     alert(result); // for now it is showing an alert, change style if we have time!
     setTimeout(() => {
       navigate("/start");
@@ -289,8 +287,8 @@ const RecipeForm = () => {
                       <TextField
                         key={index}
                         sx={formStyling}
-                        id={"ingredient" + "[" + index + "]"}
-                        name={"ingredient" + "[" + index + "]"}
+                        id={"ingredients" + "[" + index + "]"}
+                        name={"ingredients" + "[" + index + "]"}
                         label={"Ingredient " + (index + 1)}
                         value={formik.values.ingredients[index]}
                         onChange={formik.handleChange}
@@ -393,7 +391,7 @@ const RecipeForm = () => {
                     color="#0B814A"
                     sx={{ fontFamily: "Poppins", fontWeight: 500 }}
                   >
-                    instructions
+                    Instructions
                   </Typography>
                 </Box>
 
