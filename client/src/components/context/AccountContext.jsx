@@ -53,7 +53,9 @@ const AccountProvider = (props) => {
   };
 
   return (
-    <AccountContext.Provider value={{ isLoggedIn, signIn, signUp, signOut }}>
+    <AccountContext.Provider
+      value={{ isLoggedIn, signIn, signUp, signOut, user }}
+    >
       {props.children}
     </AccountContext.Provider>
   );
