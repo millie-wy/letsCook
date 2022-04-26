@@ -27,8 +27,6 @@ const RecipeForm = () => {
     ingredients: [],
     direction: [],
   });
-  const [amountOfIngredients, setAmountOfIngredients] = useState([1, 2]);
-  const [amountOfInstructions, setAmountOfInstructions] = useState([1]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,6 +82,23 @@ const RecipeForm = () => {
     validationSchema: validationSchema,
     validateOnMount: true,
   });
+
+  const addIngredient = () => {
+    setRecipe(recipe, recipe.ingredients.push("Empty ingredient"));
+    formik.setValues(recipe);
+  };
+  const removeIngredient = () => {
+    setRecipe(recipe, recipe.ingredients.pop());
+    formik.setValues(recipe);
+  };
+  const addDirection = () => {
+    setRecipe(recipe, recipe.direction.push("Empty instruction"));
+    formik.setValues(recipe);
+  };
+  const removeDirection = () => {
+    setRecipe(recipe, recipe.direction.pop());
+    formik.setValues(recipe);
+  };
 
   const signUp = async (values) => {
     const { image, title, description, password } = values;
@@ -280,7 +295,7 @@ const RecipeForm = () => {
                   {recipe.ingredients.length &&
                     recipe.ingredients.map((ingredient, index) => (
                       <TextField
-                        key={ingredient}
+                        key={index}
                         sx={formStyling}
                         id={"ingredient" + "[" + index + "]"}
                         name={"ingredient" + "[" + index + "]"}
@@ -299,12 +314,7 @@ const RecipeForm = () => {
                       }}
                     >
                       <Button
-                        onClick={() =>
-                          setRecipe(
-                            recipe,
-                            recipe.ingredients.push("Empty ingredient")
-                          )
-                        }
+                        onClick={() => addIngredient()}
                         sx={{
                           backgroundColor: "#FFFFFF",
                           textTransform: "capitalize",
@@ -337,10 +347,9 @@ const RecipeForm = () => {
                         </Box>
                       </Button>
                       <Button
-                        disabled={amountOfIngredients.length === 1}
+                        disabled={recipe.ingredients.length === 1}
                         onClick={() => {
-                          const newArray = amountOfIngredients.slice(0, -1);
-                          setAmountOfIngredients([...newArray]);
+                          removeIngredient();
                         }}
                         sx={{
                           backgroundColor: "#FFFFFF",
@@ -392,7 +401,7 @@ const RecipeForm = () => {
                     color="#0B814A"
                     sx={{ fontFamily: "Poppins", fontWeight: 500 }}
                   >
-                    General
+                    instructions
                   </Typography>
                 </Box>
 
@@ -400,7 +409,7 @@ const RecipeForm = () => {
                   {recipe.direction.length &&
                     recipe.direction.map((direcive, index) => (
                       <TextField
-                        key={direcive}
+                        key={index}
                         sx={formStyling}
                         id={"direction" + "[" + index + "]"}
                         name={"direction" + "[" + index + "]"}
@@ -419,12 +428,7 @@ const RecipeForm = () => {
                       }}
                     >
                       <Button
-                        onClick={() =>
-                          setAmountOfInstructions([
-                            ...amountOfInstructions,
-                            Math.max(...amountOfInstructions) + 1,
-                          ])
-                        }
+                        onClick={() => addDirection()}
                         sx={{
                           backgroundColor: "#FFFFFF",
                           textTransform: "capitalize",
@@ -457,10 +461,9 @@ const RecipeForm = () => {
                         </Box>
                       </Button>
                       <Button
-                        disabled={amountOfInstructions.length === 1}
+                        disabled={recipe.direction.length === 1}
                         onClick={() => {
-                          const newArray = amountOfInstructions.slice(0, -1);
-                          setAmountOfInstructions([...newArray]);
+                          removeDirection();
                         }}
                         sx={{
                           backgroundColor: "#FFFFFF",
