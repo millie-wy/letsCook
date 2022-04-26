@@ -203,7 +203,7 @@ const ProfileOverviewPage = () => {
               </Typography>
             </Button>
           </ButtonGroup>
-          <Box sx={{ pt: ".5rem" }}>
+          <Box width={1} sx={{ pt: ".5rem" }}>
             {selectedContent === "liked" ? <RecipeLiked /> : <ProfilePosts />}
           </Box>
         </Box>
