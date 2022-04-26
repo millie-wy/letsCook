@@ -1,25 +1,30 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { makeRequest } from "../../helper";
+import { useLocation } from "react-router-dom";
 
 export const AccountContext = createContext({});
 
 const AccountProvider = (props) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState();
-  const isLoggedIn = Boolean(user);
+  const [currentUser, setCurrentUser] = useState();
+  const isLoggedIn = Boolean(currentUser);
+  const location = useLocation();
 
   useEffect(() => {
     const getCookieSession = async () => {
       try {
         let result = await makeRequest("/api/users/account/login", "GET");
-        setUser(result);
+        const { user } = result;
+        setCurrentUser(user);
+        console.log("use effect ran");
       } catch (error) {
+        console.log("not logged in");
         return;
       }
     };
     getCookieSession();
-  }, []);
+  }, [location]);
 
   const signIn = async (email, password) => {
     const user = { email, password };
@@ -54,7 +59,7 @@ const AccountProvider = (props) => {
 
   return (
     <AccountContext.Provider
-      value={{ isLoggedIn, signIn, signUp, signOut, user }}
+      value={{ isLoggedIn, signIn, signUp, signOut, currentUser }}
     >
       {props.children}
     </AccountContext.Provider>
