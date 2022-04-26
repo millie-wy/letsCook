@@ -1,14 +1,55 @@
-import { Box, Container, Typography, Button, ButtonGroup } from "@mui/material";
-import userIcon from "../../../assets/logoAndIcons/usericon.svg";
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  CircularProgress,
+  Container,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { makeRequest } from "../../../helper";
+import { useAccount } from "../../context/AccountContext";
+import ManageAccount from "./ManageAccount";
 import ProfilePosts from "./ProfilePosts";
 import RecipeLiked from "./RecipeLiked";
 
 const ProfileOverviewPage = () => {
   const [selectedContent, setSelectedContent] = useState("recipes");
+  const { currentUser } = useAccount();
+  const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState();
+  console.log(currentUser);
 
-  return (
+  useEffect(() => {
+    if (currentUser === undefined) {
+      setIsLoading(true);
+    } else {
+      const fetchUser = async () => {
+        let result = await makeRequest(`/api/users/${currentUser.id}`, "GET");
+        setUser(result);
+        setIsLoading(false);
+        console.log(result);
+      };
+      fetchUser();
+    }
+  }, [currentUser]);
+
+  return isLoading ? (
+    <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    </Container>
+  ) : (
     <Container sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Box
         sx={{ display: "flex", flexDirection: "row", gap: ".5rem", px: "1rem" }}
@@ -19,7 +60,8 @@ const ProfileOverviewPage = () => {
           variant="h4"
           sx={{ fontFamily: "Poppins", fontWeight: 800 }}
         >
-          My <span style={{ color: "#2E4739" }}>Profile</span>
+          {user.firstName}
+          <span style={{ color: "#2E4739" }}>'s Profile</span>
         </Typography>
       </Box>
 
@@ -43,26 +85,19 @@ const ProfileOverviewPage = () => {
             minHeight: { xs: "fit-content", sm: "fit-content", md: 500 },
           }}
         >
-          <Box
+          <Avatar
+            alt="William Saar"
+            src=""
             sx={{
-              background: "white",
-              borderRadius: 50,
+              bgcolor: "#B6D5D5",
               width: 120,
               height: 120,
-              overflow: "hidden",
               position: "absolute",
               left: "50%",
               top: "-50px",
               transform: "translateX(-50%)",
             }}
-          >
-            <Box
-              component="img"
-              style={{ height: "120px" }}
-              src={userIcon}
-              alt="LetsCook"
-            />
-          </Box>
+          />{" "}
           <Box
             sx={{
               height: "90%",
@@ -84,18 +119,16 @@ const ProfileOverviewPage = () => {
                   fontFamily: "Poppins",
                   fontWeight: 600,
                   lineHeight: 1.2,
-                  mb: "1rem",
+                  mb: "1.5rem",
                 }}
               >
-                William Saar
+                {user.firstName} {user.lastName}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ fontFamily: "Poppins", lineHeight: 1.2 }}
+                sx={{ fontFamily: "Poppins", lineHeight: 1.5 }}
               >
-                Welcome to my profile! I am a self taught cook who specialies in
-                fast food. I hope you’ll like my recipes, and if not, feel free
-                to comment!
+                {user.bio}
               </Typography>
             </Box>
             <Box>
@@ -234,7 +267,7 @@ const ProfileOverviewPage = () => {
             {selectedContent === "liked" ? (
               <RecipeLiked />
             ) : selectedContent === "account" ? (
-              <p>Manage account</p>
+              <ManageAccount />
             ) : (
               <ProfilePosts />
             )}
