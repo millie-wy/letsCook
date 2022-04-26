@@ -1,5 +1,6 @@
 import express from "express";
 import recipeModel from "../models/recipe.model.js";
+import { secure } from "./user.js";
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const currentRecipe = await recipeModel.findById(id);
+    const currentRecipe = await recipeModel.findById(id).populate("author");
     if (!currentRecipe) {
       res.json("No recipe found with this id");
       return;
@@ -26,32 +27,30 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  let {
-    title,
-    description,
-    image,
-    servings,
-    cookingMinute,
-    ingredients,
-    direction,
-    tags,
-    star,
-    comments,
-  } = req.body;
+router.post("/", secure, async (req, res) => {
   try {
-    const recipe = new recipeModel({
+    let {
       title,
       description,
-      image: req.body.image,
+      image,
       servings,
       cookingMinute,
       ingredients,
       direction,
       tags,
-      star,
-      comments,
+    } = req.body;
+    const recipe = new recipeModel({
+      title,
+      description,
+      image,
+      servings,
+      cookingMinute,
+      ingredients,
+      direction,
+      tags,
     });
+    recipe.author = req.session.user;
+    recipe.comments = [];
     await recipe.save();
     res.json(recipe);
   } catch (err) {
@@ -66,7 +65,7 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const {
+    let {
       title,
       description,
       image,
@@ -75,8 +74,6 @@ router.put("/:id", async (req, res) => {
       ingredients,
       direction,
       tags,
-      star,
-      comments,
     } = req.body;
     const recipe = await recipeModel.findByIdAndUpdate(id, req.body, {
       useFindAndModify: false,
@@ -88,13 +85,9 @@ router.put("/:id", async (req, res) => {
     if (cookingMinute) recipe.cookingMinute = cookingMinute;
     if (ingredients) recipe.ingredients = ingredients;
     if (direction) recipe.direction = direction;
-    if (tags) recipe.direction = tags;
-    if (star) recipe.star = star;
-    if (comments) recipe.comments = comments;
-    res.json({
-      old: recipe,
-      new: req.body,
-    });
+    if (tags) recipe.tags = tags;
+
+    res.json(`Recipe with title '${recipe.title}' has been updated.`);
   } catch (err) {
     if (err.code == 11000) {
       res.send("Recipe already exists");
@@ -102,18 +95,6 @@ router.put("/:id", async (req, res) => {
     }
     res.send("Other error");
   }
-});
-
-router.patch("/:id", (req, res) => {
-  const { id } = req.params;
-  const { firstName, lastName, age } = req.body;
-
-  const user = users.find((user) => user.id === id);
-  if (firstName) user.firstName = firstName;
-  if (lastName) user.lastName = lastName;
-  if (age) user.age = age;
-
-  res.send(`User with the id ${id} has been updated`);
 });
 
 router.delete("/:id", async (req, res) => {

@@ -1,13 +1,30 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const AccountContext = createContext({});
 
 const AccountProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState();
+
+  const isLoggedIn = Boolean(user);
+
   console.log(isLoggedIn); // to be deleted
 
+  useEffect(() => {
+    // fetch GET /api/user
+    // setUser
+  });
+
+  const login = (username, password) => {
+    // fetch
+    // setUser
+  };
+
+  const signup = (user) => {
+    // fetch
+  };
+
   return (
-    <AccountContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AccountContext.Provider value={{ isLoggedIn, login }}>
       {props.children}
     </AccountContext.Provider>
   );
