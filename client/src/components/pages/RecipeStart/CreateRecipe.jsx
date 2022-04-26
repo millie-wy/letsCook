@@ -60,34 +60,31 @@ const CreateRecipe = () => {
     enableReinitialize: true,
     initialValues: recipe,
     onSubmit: (values) => {
-      console.log(values);
+      publishRecipe(values);
     },
     validationSchema: validationSchema,
     validateOnMount: true,
   });
 
   const addIngredient = () => {
-    setRecipe(recipe, recipe.ingredients.push(""));
-    formik.setValues(recipe);
+    setRecipe(formik.values, formik.values.ingredients.push(""));
+    formik.setValues(formik.values);
   };
   const removeIngredient = () => {
-    setRecipe(recipe, recipe.ingredients.pop());
-    formik.setValues(recipe);
+    setRecipe(formik.values, formik.values.ingredients.pop());
+    formik.setValues(formik.values);
   };
   const addDirection = () => {
-    setRecipe(recipe, recipe.direction.push(""));
-    formik.setValues(recipe);
+    setRecipe(formik.values, formik.values.direction.push(""));
+    formik.setValues(formik.values);
   };
   const removeDirection = () => {
-    setRecipe(recipe, recipe.direction.pop());
-    formik.setValues(recipe);
+    setRecipe(formik.values, formik.values.direction.pop());
+    formik.setValues(formik.values);
   };
 
-  const signUp = async (values) => {
-    const { image, title, description, password } = values;
-    const newUser = { image, title, description, password, isAdmin: false };
-    console.log(newUser); // to be deleted
-    let result = await makeRequest("/api/users", "POST", newUser);
+  const publishRecipe = async (values) => {
+    let result = await makeRequest("/api/recipes", "POST", values);
     alert(result); // for now it is showing an alert, change style if we have time!
     setTimeout(() => {
       navigate("/start");
@@ -280,8 +277,8 @@ const CreateRecipe = () => {
                       <TextField
                         key={index}
                         sx={formStyling}
-                        id={"ingredient" + "[" + index + "]"}
-                        name={"ingredient" + "[" + index + "]"}
+                        id={"ingredients" + "[" + index + "]"}
+                        name={"ingredients" + "[" + index + "]"}
                         label={"Ingredient " + (index + 1)}
                         value={formik.values.ingredients[index]}
                         onChange={formik.handleChange}
