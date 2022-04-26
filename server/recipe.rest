@@ -1,0 +1,46 @@
+// Get all recipes
+GET http://localhost:3002/api/recipes
+
+###
+
+// Get a specfic recipe
+GET http://localhost:3002/api/recipes/6262649e8b7985b020a1491e
+
+###
+
+// Create a new recipe
+POST http://localhost:3002/api/recipes
+Content-Type: application/json
+
+{ 
+    "title": "Beef Burrito",
+    "description": "Just yummy",
+    "image": "https://lh3.googleusercontent.com/a1FUe7odNdUogd5FUfRqCqmyMXdu7l1FCtXAwiZuWEZrSlSPLAmrmb6dP6gqbk0JFcv--H0xGqaUf8p1ahOQfA=s320-c-rw-v1-e365",
+    "servings": 6,
+    "cookingMinute": 25,
+    "ingredients": ["1", "2", "3", "4", "5"],
+    "direction": ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5", "Done"],
+    "tags": ["Main Dishes", "Burrito", "Browning"]
+}
+
+###
+
+// Update a recipe
+PUT http://localhost:3002/api/recipes/6266d9aaeb69caee264900c3
+Content-Type: application/json
+
+{ 
+    "title": "Pizza",
+    "description": "Delicious and comforting, we show you how to make Eggplant Rollatini in this easy step-by step recipe with eggplant, sweetpotato and spinach!",
+    "image": "https://lh3.googleusercontent.com/cKFMscy0nPuWC-EiEmEiuY17SfvIALbfiACen-SArCMLBMhrIRx753rXj4IrM07xItTDZMgR2k0-5VjZ0gw8PZxQEwiQrWhx4C39=s640-c-rw-v1-e365",
+    "servings": 8,
+    "cookingMinute": 90,
+    "ingredients": ["2 eggplants", "2 tsp. salt", "1/4 cup extra virgin olive oil", "2 cups marinara sauce", "1 1/2 cups shredded mozzarella cheese", "1 cup sweet potato", "6 oz. spinach", "1 cup ricotta", "1/2 cup shredded mozzarella cheese", "1/4 cup grated Parmesan", "2 eggs (beaten)"],
+    "direction": ["Slice the egg plants a 1/4” thick and place on paper towels. Sprinkle with salt and allow the moisture to release, about 20 minutes.", "Once the moisture has released, wipe the slices down and spread olive oil on each piece, on both sides.", "Place the baking sheet in a 375 oven and bake for about 8 minutes.", "Scoop out a cup of baked sweetpotato flesh and set aside.", "Wilt down 6 oz. of fresh spinach in a little bit of olive oil.", "Place all the filling ingredients into a bowl and stir until thoroughly combined.", "Place a large dollop of filling and spread it to about halfway on the eggplant slice.", "Roll the eggplant, leaving the loose end underneath to secure.", "Place all the eggplant rolls into a baking dish with marinara on the bottom.", "Top with more marinara and cheese and bake for 30 minutes."],
+    "tags": ["Main Dishes", "Low Sugar", "Baking", "Low Carb", "Low Calorie", "High Fiber"]
+}
+
+###
+
+// Delete a recipe
+DELETE http://localhost:3002/api/recipes/6266d38f3ed1aaa51641759f
