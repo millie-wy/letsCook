@@ -43,10 +43,6 @@ const RecipeForm = () => {
   const validationSchema = yup.object({
     title: yup
       .string("Enter a title")
-      .matches(
-        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Title should only contain Latin letters."
-      )
       .max(60, "Title should be of maximum 60 letters")
       .required("Title is required"),
     description: yup
