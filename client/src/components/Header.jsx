@@ -214,7 +214,11 @@ const Header = (props) => {
                 </Link>
               ) : (
                 <Box sx={{ mt: "1.5rem" }}>
-                  <Link to="/account" style={{ textDecoration: "none" }}>
+                  <Link
+                    to="/account"
+                    style={{ textDecoration: "none" }}
+                    onClick={handleMenuClose}
+                  >
                     <Typography
                       variant="body2"
                       sx={{
