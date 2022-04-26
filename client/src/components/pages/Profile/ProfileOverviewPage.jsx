@@ -24,7 +24,12 @@ const ProfileOverviewPage = () => {
       </Box>
 
       <Box
-        sx={{ mt: "4rem", display: "flex", flexDirection: "row", gap: "1rem" }}
+        sx={{
+          mt: "4rem",
+          display: "flex",
+          flexDirection: { xs: "column", sm: "column", md: "row" },
+          gap: "1rem",
+        }}
       >
         {/* left - user details  */}
         <Container
@@ -32,9 +37,10 @@ const ProfileOverviewPage = () => {
             background: "white",
             borderRadius: 5,
             pt: "2rem",
-            width: 300,
+            mx: { xs: "1rem", sm: "1rem", md: 0 },
+            width: { xs: "auto", sm: "auto", md: 300 },
             position: "relative",
-            minHeight: 500,
+            minHeight: { xs: "fit-content", sm: "fit-content", md: 500 },
           }}
         >
           <Box
@@ -60,7 +66,7 @@ const ProfileOverviewPage = () => {
           <Box
             sx={{
               height: "90%",
-              py: "1rem",
+              pb: "1rem",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -112,6 +118,11 @@ const ProfileOverviewPage = () => {
                     textTransform: "capitalize",
                     borderRadius: 10,
                     boxShadow: "none",
+                    mt: {
+                      xs: "2rem",
+                      sm: "2rem",
+                      md: 0,
+                    },
                   }}
                 >
                   To recipe
@@ -122,7 +133,14 @@ const ProfileOverviewPage = () => {
         </Container>
 
         {/* right - user contents  */}
-        <Box sx={{ display: "flex", flexDirection: "column", width: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: 1,
+            alignItems: { xs: "center", sm: "center", md: "start" },
+          }}
+        >
           <ButtonGroup
             value={selectedContent}
             orientation="horizontal"
@@ -185,9 +203,9 @@ const ProfileOverviewPage = () => {
               </Typography>
             </Button>
           </ButtonGroup>
-          <Container sx={{ pt: ".5rem" }}>
+          <Box sx={{ pt: ".5rem" }}>
             {selectedContent === "liked" ? <RecipeLiked /> : <ProfilePosts />}
-          </Container>
+          </Box>
         </Box>
       </Box>
     </Container>
