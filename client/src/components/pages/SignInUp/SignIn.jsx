@@ -10,27 +10,14 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAccount } from "../../context/AccountContext";
-import { makeRequest } from "../../../helper.js";
 
 const SignIn = () => {
   const matches = useMediaQuery("(max-width:650px)");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const { setIsLoggedIn } = useAccount();
-
-  const signIn = async () => {
-    const user = { email, password };
-    console.log(user); // to be deleted
-    let result = await makeRequest("/api/users/account/login", "POST", user);
-    alert(result);
-    setTimeout(() => {
-      setIsLoggedIn(true);
-      navigate("/start");
-    }, 1000);
-  };
+  const { signIn } = useAccount();
 
   return (
     <main
@@ -222,7 +209,7 @@ const SignIn = () => {
                     transform: "scale(1.01)",
                   },
                 }}
-                onClick={signIn}
+                onClick={() => signIn(email, password)}
               >
                 sign in
               </Button>
