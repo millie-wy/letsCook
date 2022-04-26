@@ -1,5 +1,12 @@
-import { ArrowBackIosNew, Edit } from "@mui/icons-material";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { ArrowBackIosNew, Edit, Delete } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
@@ -102,22 +109,40 @@ const RecipeDetailPage = () => {
 
           {/* upper: intro */}
           <Box sx={{ padding: "1rem" }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                columnGap: "1rem",
+                flexWrap: "wrap",
+                minHeight: "4.063",
+              }}
+            >
               <Typography
                 variant="h5"
-                sx={{ fontFamily: "Poppins", fontWeight: 600, mb: "1rem" }}
+                sx={{ fontFamily: "Poppins", fontWeight: 600 }}
               >
                 {recipe.title}
               </Typography>
-              <Link
-                to={"/recipe/edit"}
-                state={{
-                  id: id,
-                }}
-                style={{ textDecoration: "none" }}
-              >
-                <Edit sx={{ color: "#2E4739", fontSize: "2rem" }} />
-              </Link>
+              <Box>
+                <IconButton aria-label="delete" size="large">
+                  {" "}
+                  <Link
+                    to={"/recipe/edit"}
+                    state={{
+                      id: id,
+                    }}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Edit fontSize="large" sx={{ color: "#2E4739" }} />
+                  </Link>
+                </IconButton>
+
+                <IconButton aria-label="delete" size="large">
+                  <Delete fontSize="large" sx={{ color: "#FF5858" }} />
+                </IconButton>
+              </Box>
             </Box>
             <StarRatings
               rating={parseInt(rating)}
