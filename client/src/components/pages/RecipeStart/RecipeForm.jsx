@@ -1,10 +1,4 @@
-import {
-  Add,
-  ArrowBackIosNew,
-  HdrPlus,
-  PlusOne,
-  Remove,
-} from "@mui/icons-material";
+import { Add, ArrowBackIosNew, Remove } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -14,10 +8,6 @@ import {
   Paper,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import ingredient from "../../../assets/logoAndIcons/ingredient.svg";
-import portion from "../../../assets/logoAndIcons/portion.svg";
-import time from "../../../assets/logoAndIcons/time.svg";
-import userIcon from "../../../assets/logoAndIcons/usericon.svg";
 import { makeRequest } from "../../../helper.js";
 import { useAccount } from "../../context/AccountContext";
 import * as yup from "yup";
@@ -78,12 +68,13 @@ const RecipeForm = () => {
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: "",
-      description: "",
-      image: "",
-      servings: "",
-      cookingMinute: "",
+      title: recipe?.title || "",
+      description: recipe?.description || "",
+      image: recipe?.image || "",
+      servings: recipe?.servings || "",
+      cookingMinute: recipe?.cookingMinute || "",
     },
     onSubmit: (values) => {
       console.log(values);
@@ -103,7 +94,13 @@ const RecipeForm = () => {
     }, 1000);
   };
 
-  return (
+  return recipe.length < 1 ? (
+    <Container
+      sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem", textAlign: "center" }}
+    >
+      Something went wrong. Try refreshing the page.
+    </Container>
+  ) : (
     <main style={{ backgroundColor: "#F1F8F6", height: "calc(100vh -5rem)" }}>
       <Container sx={{ height: "100%" }}>
         <Box
@@ -203,6 +200,8 @@ const RecipeForm = () => {
                 />
                 <TextField
                   fullWidth
+                  multiline
+                  minRows={2}
                   sx={formStyling}
                   id="description"
                   name="description"
