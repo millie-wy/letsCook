@@ -16,9 +16,7 @@ const AccountProvider = (props) => {
         let result = await makeRequest("/api/users/account/login", "GET");
         const { user } = result;
         setCurrentUser(user);
-        console.log("use effect ran");
       } catch (error) {
-        console.log("not logged in");
         return;
       }
     };
@@ -51,8 +49,7 @@ const AccountProvider = (props) => {
 
   /** Sign out an user */
   const signOut = async () => {
-    let result = await makeRequest("/api/users/account/logout", "DELETE");
-    alert(result); // for now it is showing an alert, change style if we have time!
+    await makeRequest("/api/users/account/logout", "DELETE");
     setTimeout(() => {
       navigate("/start");
       window.location.reload(false);
