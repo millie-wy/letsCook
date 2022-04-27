@@ -34,6 +34,8 @@ const RecipeDetailPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchData = async () => {
       let response = await makeRequest(`/api/recipes/${id}`, "GET");
       setRecipe(response);
