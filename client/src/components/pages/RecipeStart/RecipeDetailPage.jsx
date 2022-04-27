@@ -533,7 +533,7 @@ const RecipeDetailPage = () => {
           <Box
             sx={{
               background: "#F1F8F6",
-              maxWidth: "60%",
+              maxWidth: { xs: "100%", sm: "100%", md: "60%" },
               m: "1rem auto",
               borderRadius: "15px",
               p: ".5rem",
