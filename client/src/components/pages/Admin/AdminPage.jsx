@@ -24,7 +24,7 @@ const AdminPage = () => {
   const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {
-    if (currentUser === undefined) {
+    if (currentUser === undefined || currentUser.isAdmin === false) {
       setIsLoading(true);
     } else {
       const fetchUser = async () => {
@@ -33,13 +33,6 @@ const AdminPage = () => {
         setIsLoading(false);
       };
       fetchUser();
-
-      const fetchUsersRecipes = async () => {
-        let response = await makeRequest("/api/recipes", "GET");
-        let author = response.map((recipe) => recipe.author);
-        console.log(author);
-      };
-      fetchUsersRecipes();
     }
   }, [currentUser]);
 
