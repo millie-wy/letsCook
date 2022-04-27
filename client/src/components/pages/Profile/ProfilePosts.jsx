@@ -48,6 +48,52 @@ const ProfilePosts = () => {
         <CircularProgress />
       </Box>
     </Container>
+  ) : myPosts.length < 1 ? (
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+        minHeight: 200,
+        placeContent: "center",
+        placeItems: "center",
+      }}
+    >
+      <Typography
+        variant="subtitle1"
+        sx={{
+          fontFamily: "Poppins",
+          fontWeight: 500,
+        }}
+      >
+        You have not created any recipes yet.
+      </Typography>
+      <Link to="/recipe/create" style={{ textDecoration: "none" }}>
+        <Button
+          sx={{
+            backgroundColor: "#0B814A",
+            color: "#F1F8F6",
+            fontFamily: "Poppins",
+            borderRadius: "70px",
+            border: "none",
+            width: "fit-content",
+            fontSize: ".7rem",
+            marginBottom: "1rem",
+            px: "1rem",
+            transition: "all .15s ease-in-out",
+            textTransform: "none",
+            alignSelf: "end",
+            "&:hover": {
+              background: "#0AA35C",
+              transform: "scale(1.01)",
+            },
+          }}
+        >
+          <Add fontSize="small" sx={{ mr: ".2rem" }} />
+          Create new recipe
+        </Button>
+      </Link>
+    </Container>
   ) : (
     <Container sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       {myPosts.map((recipe) => (
@@ -195,29 +241,31 @@ const ProfilePosts = () => {
         </Container>
       ))}
       {/* create recipe button  */}
-      <Button
-        sx={{
-          backgroundColor: "#0B814A",
-          color: "#F1F8F6",
-          fontFamily: "Poppins",
-          borderRadius: "70px",
-          border: "none",
-          width: "fit-content",
-          fontSize: ".7rem",
-          marginBottom: "1rem",
-          px: "1rem",
-          transition: "all .15s ease-in-out",
-          textTransform: "none",
-          alignSelf: "end",
-          "&:hover": {
-            background: "#0AA35C",
-            transform: "scale(1.01)",
-          },
-        }}
-      >
-        <Add fontSize="small" sx={{ mr: ".2rem" }} />
-        Create new recipe
-      </Button>
+      <Link to="/recipe/create" style={{ textDecoration: "none" }}>
+        <Button
+          sx={{
+            backgroundColor: "#0B814A",
+            color: "#F1F8F6",
+            fontFamily: "Poppins",
+            borderRadius: "70px",
+            border: "none",
+            width: "fit-content",
+            fontSize: ".7rem",
+            marginBottom: "1rem",
+            px: "1rem",
+            transition: "all .15s ease-in-out",
+            textTransform: "none",
+            alignSelf: "end",
+            "&:hover": {
+              background: "#0AA35C",
+              transform: "scale(1.01)",
+            },
+          }}
+        >
+          <Add fontSize="small" sx={{ mr: ".2rem" }} />
+          Create new recipe
+        </Button>
+      </Link>
     </Container>
   );
 };

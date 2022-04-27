@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import threeFood from "../../../assets/images/threeFood.png";
 import { useAccount } from "../../context/AccountContext";
 
 const SignIn = () => {
@@ -38,8 +39,8 @@ const SignIn = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              height: "80%",
               borderRadius: "2rem",
+              height: "auto",
             }}
           >
             {" "}
@@ -51,12 +52,7 @@ const SignIn = () => {
                   paddingRight: "6rem",
                 }}
               >
-                <img
-                  // @ts-ignore
-                  src={require("../../../assets/images/threeFood.png")}
-                  alt="food"
-                  style={{ height: "25vw" }}
-                />
+                <img src={threeFood} alt="food" style={{ height: "25vw" }} />
                 <Typography
                   sx={{
                     color: "#2E4739",
