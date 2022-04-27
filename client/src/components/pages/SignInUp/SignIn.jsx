@@ -39,8 +39,8 @@ const SignIn = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              height: "80%",
               borderRadius: "2rem",
+              height: "auto",
             }}
           >
             {" "}
