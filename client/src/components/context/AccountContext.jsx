@@ -39,11 +39,13 @@ const AccountProvider = (props) => {
   const signUp = async (user) => {
     const { email, firstName, lastName, password } = user;
     const newUser = { email, firstName, lastName, password };
+    const logIn = { email, password };
     let result = await makeRequest("/api/users", "POST", newUser);
     alert(result);
+    await makeRequest("/api/users/account/login", "POST", logIn);
     setTimeout(() => {
-      window.location.reload(false);
       navigate("/start");
+      window.location.reload(false);
     }, 1000);
   };
 
