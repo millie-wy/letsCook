@@ -7,9 +7,6 @@ const SearchResult = () => {
   const [search, setSearch] = useState("");
   const searchInput = (e) => setSearch(e.target.value);
 
-  // not sure if we need this function?
-  const performSearch = () => console.log("clicked");
-
   return (
     <Container sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Box
@@ -48,7 +45,6 @@ const SearchResult = () => {
             }}
           />
           <Search
-            onClick={performSearch}
             sx={{
               position: "absolute",
               color: "#989C9C",
