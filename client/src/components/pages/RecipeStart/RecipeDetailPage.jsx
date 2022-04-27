@@ -1,10 +1,14 @@
 import { ArrowBackIosNew, Delete, Edit } from "@mui/icons-material";
 import {
   Avatar,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Container,
+  Fade,
   IconButton,
+  Modal,
   TextField,
   Typography,
 } from "@mui/material";
@@ -27,6 +31,7 @@ const RecipeDetailPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState();
   const [canEdit, setCanEdit] = useState(false);
+  const [isDeletingRecipe, setIsDeletingRecipe] = useState(false);
 
   const location = useLocation();
   const { id, rating } = location.state;
@@ -92,6 +97,40 @@ const RecipeDetailPage = () => {
       window.location.reload(false);
     }, 1000);
   };
+
+  const deleteRecipe = async (id, title) => {
+    setIsDeletingRecipe(true);
+    let response = await makeRequest(`/api/recipes/${id}`, "DELETE");
+    setTimeout(() => {
+      alert(`Recipe ${title} has been deleted`);
+
+      setIsDeletingRecipe(false);
+      handleClose();
+      navigate("/start");
+    }, 1000);
+  };
+
+  // modal
+
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    display: "flex",
+    flexDirection: "column",
+    rowGap: "1rem",
+    textAlign: "center",
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return recipe.length < 1 ? (
     <Container
@@ -178,7 +217,11 @@ const RecipeDetailPage = () => {
                         </Link>
                       </IconButton>
 
-                      <IconButton aria-label="delete" size="large">
+                      <IconButton
+                        onClick={handleOpen}
+                        aria-label="delete"
+                        size="large"
+                      >
                         <Delete fontSize="large" sx={{ color: "#FF5858" }} />
                       </IconButton>
                     </Box>
@@ -642,6 +685,100 @@ const RecipeDetailPage = () => {
           </Box>
         )}
       </Container>
+      {!isDeletingRecipe ? (
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={open}>
+            <Box sx={modalStyle}>
+              <Typography
+                sx={{ fontFamily: "Poppins" }}
+                id="transition-modal-title"
+                variant="h6"
+                component="h3"
+              >
+                Delete this recipe?
+              </Typography>
+
+              <Button
+                sx={{
+                  borderRadius: "1rem",
+                  fontFamily: "Poppins",
+                  backgroundColor: "#FF5858",
+                  transition: "all .15s ease-in-out",
+                  textTransform: "capitalize",
+                  color: "#fff",
+                  "&:hover": {
+                    background: "#DC1919",
+                  },
+                }}
+                onClick={() => deleteRecipe(recipe._id, recipe.title)}
+              >
+                Yes
+              </Button>
+              <Button
+                sx={{
+                  borderRadius: "1rem",
+                  fontFamily: "Poppins",
+                  backgroundColor: "#C4C4C4",
+                  transition: "all .15s ease-in-out",
+                  textTransform: "capitalize",
+                  color: "#fff",
+                  "&:hover": {
+                    background: "#9C9999",
+                  },
+                }}
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+            </Box>
+          </Fade>
+        </Modal>
+      ) : (
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={open}>
+            <Box sx={modalStyle}>
+              <Typography
+                sx={{ fontFamily: "Poppins" }}
+                id="transition-modal-title"
+                variant="h6"
+                component="h3"
+              >
+                Deleting recipe...
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            </Box>
+          </Fade>
+        </Modal>
+      )}
     </Container>
   );
 };
