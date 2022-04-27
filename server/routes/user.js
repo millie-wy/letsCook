@@ -49,7 +49,7 @@ router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const updatedUser = {
+    let updatedUser = {
       email: req.body.email,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -61,13 +61,24 @@ router.put("/:id", async (req, res) => {
     const user = await userModel.findByIdAndUpdate(id, updatedUser, {
       useFindAndModify: false,
     });
-    return res.json({
+    if (updatedUser.email) user.email = updatedUser.email;
+    if (updatedUser.firstName) user.firstName = updatedUser.firstName;
+    if (updatedUser.lastName) user.lastName = updatedUser.lastName;
+    if (updatedUser.password) user.password = updatedUser.password;
+    if (updatedUser.isAdmin) user.isAdmin = updatedUser.isAdmin;
+    if (updatedUser.profilePic) user.profilePic = updatedUser.profilePic;
+    if (updatedUser.bio) user.bio = updatedUser.bio;
+
+    res.json({
       old: user,
       new: updatedUser,
     });
   } catch (err) {
-    if (err.code == 11000) return res.json("Username already exists");
-    res.json("Other error");
+    if (err.code == 11000) {
+      res.send("Email already exists");
+      return;
+    }
+    res.send("Other error");
   }
 });
 
