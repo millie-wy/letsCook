@@ -14,6 +14,7 @@ import { useAccount } from "../../context/AccountContext";
 import ManageAccount from "./ManageAccount";
 import ProfilePosts from "./ProfilePosts";
 import RecipeLiked from "./RecipeLiked";
+import { makeRequest } from "../../../helper";
 
 const ProfileOverviewPage = () => {
   const [selectedContent, setSelectedContent] = useState("recipes");
@@ -35,7 +36,6 @@ const ProfileOverviewPage = () => {
       fetchUser();
     }
   }, [currentUser]);
-
   return isLoading ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Box
