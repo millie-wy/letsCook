@@ -19,8 +19,8 @@ const EditAccountForm = () => {
     lastName: "",
     email: "",
     profilePic: "",
-    password: "" || null,
-    passwordConfirmation: "" || null,
+    password: "",
+    passwordConfirmation: "",
     bio: "",
   });
   const [passwordChanged, setPasswordChanged] = useState("" || undefined);
@@ -64,15 +64,15 @@ const EditAccountForm = () => {
       .min(8, "Password should be of minimum 8 characters length"),
     // .required("Password is required"),
     passwordConfirmation: yup.lazy(() => {
-      if (passwordChanged !== "") {
+      if (passwordChanged === undefined || passwordChanged === "") {
+        return yup.string();
+      } else {
         return yup
           .string()
           .required("Confirm Password")
           .oneOf([yup.ref("password"), null], "Passwords must match");
       }
-      return yup.string();
     }),
-
     profilePic: yup.string("URL of your profile picture"),
     bio: yup
       .string("Tell about yourself")
@@ -83,11 +83,35 @@ const EditAccountForm = () => {
     enableReinitialize: true,
     initialValues: profile,
     onSubmit: (values) => {
-      console.log(values);
+      updateProfile(values);
     },
     validationSchema: validationSchema,
     validateOnMount: true,
   });
+
+  const updateProfile = async (values) => {
+    const pw = !values.password ? "99999999" : values.password;
+    const isAdmin = currentUser.role === "user" ? false : true;
+    const body = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      password: pw,
+      porfilePic: values.profilePic,
+      bio: values.bio,
+      isAdmin: isAdmin,
+    };
+    console.log(body);
+    let response = await makeRequest(
+      `/api/users/${currentUser.id}`,
+      "PUT",
+      body
+    );
+    console.log(response);
+    // setTimeout(() => {
+    //   window.location.reload(false);
+    // }, 1000);
+  };
 
   return isLoading ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
@@ -172,7 +196,7 @@ const EditAccountForm = () => {
         />
         <TextField
           fullWidth
-          disabled={passwordChanged === ""}
+          disabled={passwordChanged === undefined || passwordChanged === ""}
           size="small"
           type="password"
           sx={formStyling}
