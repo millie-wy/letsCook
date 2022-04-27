@@ -17,13 +17,13 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logoAndIcons/logo.svg";
 import { useAccount } from "./context/AccountContext";
 
 const Header = (props) => {
-  const { isLoggedIn, signOut } = useAccount();
+  const { isLoggedIn, signOut, currentUser } = useAccount();
 
   const [openMenu, setOpenMenu] = useState(false);
   const handleMenuOpen = () => {
@@ -191,6 +191,29 @@ const Header = (props) => {
                 </Typography>
               </Link>
             </ListItem>
+            {isLoggedIn && currentUser.role === "admin" && (
+              <ListItem>
+                <Link
+                  style={{ textDecoration: "none" }}
+                  to="/admin"
+                  onClick={handleMenuClose}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: "#2E4739",
+                      fontFamily: "Poppins",
+                      fontWeight: 500,
+                      "&:hover": {
+                        color: "#E5C687",
+                      },
+                    }}
+                  >
+                    Admin
+                  </Typography>
+                </Link>
+              </ListItem>
+            )}
             <ListItem>
               {!isLoggedIn ? (
                 <Link
