@@ -381,7 +381,7 @@ const CreateRecipe = () => {
                     color="#0B814A"
                     sx={{ fontFamily: "Poppins", fontWeight: 500 }}
                   >
-                    instructions
+                    Instructions
                   </Typography>
                 </Box>
 
