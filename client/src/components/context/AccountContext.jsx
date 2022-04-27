@@ -23,28 +23,26 @@ const AccountProvider = (props) => {
     getCookieSession();
   }, [location]);
 
+  console.log(isLoggedIn);
   /** Sign in an user */
   const signIn = async (email, password) => {
     const user = { email, password };
-    console.log(user); // to be deleted
     let result = await makeRequest("/api/users/account/login", "POST", user);
-    alert(result); // for now it is showing an alert, change style if we have time!
-    if (isLoggedIn) {
-      setTimeout(() => {
-        navigate("/start");
-        window.location.reload(false);
-      }, 1000);
-    }
+    alert(result);
+    setTimeout(() => {
+      navigate("/start");
+      window.location.reload(false);
+    }, 1000);
   };
 
   /** Create a new user account */
   const signUp = async (user) => {
     const { email, firstName, lastName, password } = user;
     const newUser = { email, firstName, lastName, password };
-    console.log(newUser); // to be deleted
     let result = await makeRequest("/api/users", "POST", newUser);
-    alert(result); // for now it is showing an alert, change style if we have time!
+    alert(result);
     setTimeout(() => {
+      window.location.reload(false);
       navigate("/start");
     }, 1000);
   };
