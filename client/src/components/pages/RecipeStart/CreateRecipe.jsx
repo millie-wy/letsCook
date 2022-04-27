@@ -381,7 +381,7 @@ const CreateRecipe = () => {
                     color="#0B814A"
                     sx={{ fontFamily: "Poppins", fontWeight: 500 }}
                   >
-                    instructions
+                    Instructions
                   </Typography>
                 </Box>
 
@@ -389,6 +389,9 @@ const CreateRecipe = () => {
                   {recipe.direction.length &&
                     recipe.direction.map((direcive, index) => (
                       <TextField
+                        fullWidth
+                        multiline
+                        minRows={2}
                         key={index}
                         sx={formStyling}
                         id={"direction" + "[" + index + "]"}
