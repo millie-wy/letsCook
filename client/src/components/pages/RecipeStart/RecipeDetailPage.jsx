@@ -162,7 +162,8 @@ const RecipeDetailPage = () => {
                 {recipe.title}
               </Typography>
               {currentUser !== undefined
-                ? currentUser.role === "admin" && (
+                ? currentUser.role === "admin" ||
+                  (currentUser.id === recipe.author.id && (
                     <Box>
                       <IconButton aria-label="delete" size="large">
                         {" "}
@@ -181,7 +182,7 @@ const RecipeDetailPage = () => {
                         <Delete fontSize="large" sx={{ color: "#FF5858" }} />
                       </IconButton>
                     </Box>
-                  )
+                  ))
                 : null}
             </Box>
             <StarRatings
