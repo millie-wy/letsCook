@@ -97,7 +97,7 @@ const EditAccountForm = () => {
       lastName: values.lastName,
       email: values.email,
       password: pw,
-      porfilePic: values.profilePic,
+      profilePic: values.profilePic,
       bio: values.bio,
       isAdmin: isAdmin,
     };
