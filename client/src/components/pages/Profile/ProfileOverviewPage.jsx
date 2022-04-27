@@ -14,7 +14,6 @@ import { useAccount } from "../../context/AccountContext";
 import ManageAccount from "./ManageAccount";
 import ProfilePosts from "./ProfilePosts";
 import RecipeLiked from "./RecipeLiked";
-import { makeRequest } from "../../../helper";
 
 const ProfileOverviewPage = () => {
   const [selectedContent, setSelectedContent] = useState("recipes");
