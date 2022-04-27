@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import comment from "../../../assets/logoAndIcons/comment.svg";
 import star from "../../../assets/logoAndIcons/star.svg";
-import { makeRequest } from "../../../helper.js";
+import { makeRequest, getAvgRating } from "../../../helper.js";
 
 const RandomRecipeCard = () => {
   const [recipe, setRecipe] = useState();
@@ -30,15 +30,6 @@ const RandomRecipeCard = () => {
     fetchRandomRecipe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const getAvgRating = (comments) => {
-    let rated = [];
-    comments.map((comment) => rated.push(comment.rated));
-    let avg = rated.reduce((a, b) => a + b, 0) / comments.length || 0;
-    return avg.toFixed(1);
-  };
-
-  console.log(recipe);
 
   return isLoading ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>

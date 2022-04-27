@@ -48,12 +48,11 @@ router.get("/:id", secure, async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const updatedUser = {
+    let updatedUser = {
       email: req.body.email,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      password: hashedPassword,
+      password: req.body.password,
       isAdmin: req.body.isAdmin,
       profilePic: req.body.profilePic,
       bio: req.body.bio,
@@ -61,13 +60,22 @@ router.put("/:id", async (req, res) => {
     const user = await userModel.findByIdAndUpdate(id, updatedUser, {
       useFindAndModify: false,
     });
-    return res.json({
-      old: user,
-      new: updatedUser,
-    });
+    if (updatedUser.email) user.email = updatedUser.email;
+    if (updatedUser.firstName) user.firstName = updatedUser.firstName;
+    if (updatedUser.lastName) user.lastName = updatedUser.lastName;
+    if (updatedUser.password)
+      user.password = await bcrypt.hash(updatedUser.password, 10);
+    if (updatedUser.isAdmin) user.isAdmin = updatedUser.isAdmin;
+    if (updatedUser.profilePic) user.profilePic = updatedUser.profilePic;
+    if (updatedUser.bio) user.bio = updatedUser.bio;
+
+    return res.json("Your profile has been updated!");
   } catch (err) {
-    if (err.code == 11000) return res.json("Username already exists");
-    res.json("Other error");
+    if (err.code == 11000) {
+      res.send("Email already exists");
+      return;
+    }
+    res.send("Other error", err);
   }
 });
 

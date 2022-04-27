@@ -1,71 +1,140 @@
-import { Box, Button, TextField } from "@mui/material";
-import { useFormik } from "formik";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  TextField,
+} from "@mui/material";
+import { Form, Formik, useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
+import { makeRequest } from "../../../helper";
 import { useAccount } from "../../context/AccountContext";
 
-const validationSchema = yup.object({
-  firstName: yup
-    .string("Enter your first name")
-    .matches(
-      /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-      "Name can only contain Latin letters."
-    )
-    .max(20, "First name should be of maximum 20 letters")
-    .required("First name is required"),
-  lastName: yup
-    .string("Enter your last name")
-    .matches(
-      /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-      "Name can only contain Latin letters."
-    )
-    .max(20, "Last name should be of maximum 20 letters")
-    .required("Last name is required"),
-  email: yup
-    .string("Enter your email")
-    .email("Enter a valid email")
-    .required("Email is required"),
-  password: yup
-    .string("Enter your password")
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Password is required"),
-  passwordConfirmation: yup
-    .string()
-    .oneOf([yup.ref("password"), null], "Passwords must match")
-    .required("Confirm Password"),
-  profilePic: yup.string("URL of your profile picture"),
-  bio: yup
-    .string("Tell about yourself")
-    .max(500, "Bio should be of maximum 500 letters"),
-});
-
 const EditAccountForm = () => {
-  const { updateProfile } = useAccount();
+  const { currentUser } = useAccount();
+  const [isLoading, setIsLoading] = useState();
+  const [profile, setProfile] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    profilePic: "",
+    password: "",
+    passwordConfirmation: "",
+    bio: "",
+  });
+  const [passwordChanged, setPasswordChanged] = useState("" || undefined);
+
+  useEffect(() => {
+    if (currentUser === undefined) {
+      setIsLoading(true);
+    } else {
+      const fetchUser = async () => {
+        let result = await makeRequest(`/api/users/${currentUser.id}`, "GET");
+        setProfile(result);
+        setIsLoading(false);
+      };
+      fetchUser();
+    }
+  }, [currentUser]);
+
+  const validationSchema = yup.object().shape({
+    firstName: yup
+      .string("Enter your first name")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "Name can only contain Latin letters."
+      )
+      .max(20, "First name should be of maximum 20 letters")
+      .required("First name is required"),
+    lastName: yup
+      .string("Enter your last name")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "Name can only contain Latin letters."
+      )
+      .max(20, "Last name should be of maximum 20 letters")
+      .required("Last name is required"),
+    email: yup
+      .string("Enter your email")
+      .email("Enter a valid email")
+      .required("Email is required"),
+    password: yup
+      .string("Enter your password")
+      .min(8, "Password should be of minimum 8 characters length"),
+    // .required("Password is required"),
+    passwordConfirmation: yup.lazy(() => {
+      if (passwordChanged === undefined || passwordChanged === "") {
+        return yup.string();
+      } else {
+        return yup
+          .string()
+          .required("Confirm Password")
+          .oneOf([yup.ref("password"), null], "Passwords must match");
+      }
+    }),
+    profilePic: yup.string("URL of your profile picture"),
+    bio: yup
+      .string("Tell about yourself")
+      .max(500, "Bio should be of maximum 500 letters"),
+  });
 
   const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
-      profilePic: "",
-      bio: "",
-    },
+    enableReinitialize: true,
+    initialValues: profile,
     onSubmit: (values) => {
-      console.log(values);
+      updateProfile(values);
     },
     validationSchema: validationSchema,
     validateOnMount: true,
   });
 
-  return (
-    <Box sx={{ margin: "auto" }}>
-      <form
+  const updateProfile = async (values) => {
+    const pw = !values.password ? "99999999" : values.password;
+    const isAdmin = currentUser.role === "user" ? false : true;
+    const body = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      password: pw,
+      porfilePic: values.profilePic,
+      bio: values.bio,
+      isAdmin: isAdmin,
+    };
+    console.log(body);
+    let response = await makeRequest(
+      `/api/users/${currentUser.id}`,
+      "PUT",
+      body
+    );
+    console.log(response);
+    // setTimeout(() => {
+    //   window.location.reload(false);
+    // }, 1000);
+  };
+
+  return isLoading ? (
+    <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    </Container>
+  ) : (
+    <Formik sx={{ margin: "auto" }}>
+      <Form
         style={{
           display: "flex",
           flexDirection: "column",
           rowGap: ".8rem",
           width: "500px",
+          alignSelf: "center",
         }}
         onSubmit={formik.handleSubmit}
       >
@@ -117,13 +186,17 @@ const EditAccountForm = () => {
           name="password"
           label="Password"
           value={formik.values.password}
-          onChange={formik.handleChange}
+          onChange={(e) => {
+            formik.handleChange(e);
+            setPasswordChanged(e.currentTarget.value);
+          }}
           onBlur={formik.handleBlur}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
         <TextField
           fullWidth
+          disabled={passwordChanged === undefined || passwordChanged === ""}
           size="small"
           type="password"
           sx={formStyling}
@@ -198,8 +271,8 @@ const EditAccountForm = () => {
         >
           Update Profile
         </Button>
-      </form>
-    </Box>
+      </Form>
+    </Formik>
   );
 };
 

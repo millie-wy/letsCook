@@ -25,6 +25,7 @@ const schema = new mongoose.Schema({
       author: { type: String },
       content: { type: String },
       rated: { type: Number },
+      profilePic: { type: String },
     },
   ],
 });
