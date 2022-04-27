@@ -57,17 +57,23 @@ router.put("/:id", async (req, res) => {
       profilePic: req.body.profilePic,
       bio: req.body.bio,
     };
-    const user = await userModel.findByIdAndUpdate(id, updatedUser, {
+    let updates;
+    if (!req.body.password) {
+      updates = updatedUser;
+    } else {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      updates = { ...updatedUser, password: hashedPassword };
+    }
+    const user = await userModel.findByIdAndUpdate(id, updates, {
       useFindAndModify: false,
     });
-    if (updatedUser.email) user.email = updatedUser.email;
-    if (updatedUser.firstName) user.firstName = updatedUser.firstName;
-    if (updatedUser.lastName) user.lastName = updatedUser.lastName;
-    if (updatedUser.password)
-      user.password = await bcrypt.hash(updatedUser.password, 10);
-    if (updatedUser.isAdmin) user.isAdmin = updatedUser.isAdmin;
-    if (updatedUser.profilePic) user.profilePic = updatedUser.profilePic;
-    if (updatedUser.bio) user.bio = updatedUser.bio;
+    if (updates.email) user.email = updates.email;
+    if (updates.firstName) user.firstName = updates.firstName;
+    if (updates.lastName) user.lastName = updates.lastName;
+    if (updates.password) user.lastName = updates.password;
+    if (updates.isAdmin) user.isAdmin = updates.isAdmin;
+    if (updates.profilePic) user.profilePic = updates.profilePic;
+    if (updates.bio) user.bio = updates.bio;
 
     return res.json("Your profile has been updated!");
   } catch (err) {
@@ -107,7 +113,8 @@ router.post("/", async (req, res) => {
     await user.save();
     return res.json(`New account with email '${user.email}' has been created.`);
   } catch (err) {
-    if (err.code == 11000) return res.json("Email already exists");
+    if (err.code == 11000)
+      return res.json("Email already exists. Try sign in instead?");
     res.json("Other error");
   }
 });
@@ -118,7 +125,9 @@ router.post("/account/login", async (req, res) => {
     .findOne({ email: req.body.email })
     .select("+password");
   if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-    return res.status(401).send("Wrong email or password");
+    return res
+      .status(401)
+      .json("You have entered either an incorrect email or password.");
   }
 
   // save info about the user to the session (a cookie stored on the client)
