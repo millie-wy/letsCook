@@ -1,19 +1,19 @@
 import {
+  Avatar,
   Box,
   Button,
   ButtonGroup,
   CircularProgress,
   Container,
-  LinearProgress,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import userIcon from "../../../assets/logoAndIcons/usericon.svg";
+import { makeRequest } from "../../../helper";
 import { useAccount } from "../../context/AccountContext";
+import ManageAccount from "./ManageAccount";
 import ProfilePosts from "./ProfilePosts";
 import RecipeLiked from "./RecipeLiked";
-import { makeRequest } from "../../../helper";
 
 const ProfileOverviewPage = () => {
   const [selectedContent, setSelectedContent] = useState("recipes");
@@ -35,7 +35,6 @@ const ProfileOverviewPage = () => {
       fetchUser();
     }
   }, [currentUser]);
-
   return isLoading ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Box
@@ -60,7 +59,8 @@ const ProfileOverviewPage = () => {
           variant="h4"
           sx={{ fontFamily: "Poppins", fontWeight: 800 }}
         >
-          {user.firstName} <span style={{ color: "#2E4739" }}>Profile</span>
+          {user.firstName}
+          <span style={{ color: "#2E4739" }}>'s Profile</span>
         </Typography>
       </Box>
 
@@ -84,26 +84,19 @@ const ProfileOverviewPage = () => {
             minHeight: { xs: "fit-content", sm: "fit-content", md: 500 },
           }}
         >
-          <Box
+          <Avatar
+            alt="William Saar"
+            src=""
             sx={{
-              background: "white",
-              borderRadius: 50,
+              bgcolor: "#B6D5D5",
               width: 120,
               height: 120,
-              overflow: "hidden",
               position: "absolute",
               left: "50%",
               top: "-50px",
               transform: "translateX(-50%)",
             }}
-          >
-            <Box
-              component="img"
-              style={{ height: "120px" }}
-              src={userIcon}
-              alt="LetsCook"
-            />
-          </Box>
+          />{" "}
           <Box
             sx={{
               height: "90%",
@@ -273,7 +266,7 @@ const ProfileOverviewPage = () => {
             {selectedContent === "liked" ? (
               <RecipeLiked />
             ) : selectedContent === "account" ? (
-              <p>Manage account</p>
+              <ManageAccount />
             ) : (
               <ProfilePosts />
             )}
