@@ -32,6 +32,15 @@ const AdminUsers = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [userInFocus, setUserInFocus] = useState({});
+
+  const [promoteOpen, setPromoteOpen] = React.useState(false);
+  const handlePromoteOpen = () => setPromoteOpen(true);
+  const handlePromoteClose = () => setPromoteOpen(false);
+
+  const [demoteOpen, setDemoteOpen] = React.useState(false);
+  const handleDemoteOpen = () => setDemoteOpen(true);
+  const handleDemoteClose = () => setDemoteOpen(false);
 
   useEffect(() => {
     if (currentUser === undefined) {
@@ -47,21 +56,54 @@ const AdminUsers = () => {
     } else return;
   }, [currentUser]);
 
-  const promoteAdmin = (id) => {
-    console.log("User with id: " + id + " has been promoted to admin.");
-  };
-  const deleteAdmin = (id) => {
-    console.log("User with id: " + id + " is no longer admin.");
+  const prepareUser = (id, firstName, lastName, assignment) => {
+    setUserInFocus({ id, firstName, lastName });
+
+    if (assignment === "removeUser") {
+      handleOpen();
+    } else if (assignment === "promoteUser") {
+      handlePromoteOpen();
+    } else if (assignment === "demoteUser") {
+      handleDemoteOpen();
+    }
   };
 
   const deleteUser = async (id, firstName, lastName) => {
     setIsUpdating(true);
     let response = await makeRequest(`/api/users/${id}`, "DELETE");
     setTimeout(() => {
-      alert(`User: ${firstName} {$lastName} has been deleted`);
+      alert(`User: ${firstName} ${lastName} has been deleted`);
 
       setIsUpdating(false);
       handleClose();
+      navigate("/admin");
+    }, 1000);
+  };
+
+  const promoteUser = async (id, firstName, lastName) => {
+    setIsUpdating(true);
+
+    let adminObject = { isAdmin: true };
+    let response = await makeRequest(`/api/users/${id}`, "PUT", adminObject);
+    setTimeout(() => {
+      alert(`User: ${firstName} ${lastName} has been promoted to admin`);
+
+      setIsUpdating(false);
+      handlePromoteClose();
+      navigate("/admin");
+    }, 1000);
+  };
+
+  const demoteUser = async (id, firstName, lastName) => {
+    setIsUpdating(true);
+
+    let adminObject = { isAdmin: false };
+    let response = await makeRequest(`/api/users/${id}`, "PUT", adminObject);
+    setTimeout(() => {
+      alert(`User: ${firstName} ${lastName} has been demoted to admin`);
+
+      setIsUpdating(false);
+      handleDemoteClose();
       navigate("/admin");
     }, 1000);
   };
@@ -156,7 +198,14 @@ const AdminUsers = () => {
                 <IconButton
                   aria-label="removeAdmin"
                   size="large"
-                  onClick={() => deleteAdmin(user._id)}
+                  onClick={() =>
+                    prepareUser(
+                      user._id,
+                      user.firstName,
+                      user.lastName,
+                      "demoteUser"
+                    )
+                  }
                 >
                   <RemoveModerator fontSize="large" sx={{ color: "#0B814A" }} />
                 </IconButton>
@@ -164,115 +213,339 @@ const AdminUsers = () => {
                 <IconButton
                   aria-label="promoteAdmin"
                   size="large"
-                  onClick={() => promoteAdmin(user._id)}
+                  onClick={() =>
+                    prepareUser(
+                      user._id,
+                      user.firstName,
+                      user.lastName,
+                      "promoteUser"
+                    )
+                  }
                 >
                   <AddModerator fontSize="large" sx={{ color: "#0B814A" }} />
                 </IconButton>
               )}
-              <IconButton aria-label="delete" size="large" onClick={handleOpen}>
+              <IconButton
+                aria-label="delete"
+                size="large"
+                onClick={() =>
+                  prepareUser(
+                    user._id,
+                    user.firstName,
+                    user.lastName,
+                    "removeUser"
+                  )
+                }
+              >
                 <Delete fontSize="large" sx={{ color: "#FF5858" }} />
               </IconButton>
             </Box>
-            {!isUpdating ? (
-              <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                  timeout: 500,
-                }}
-              >
-                <Fade in={open}>
-                  <Box sx={modalStyle}>
-                    <Typography
-                      sx={{ fontFamily: "Poppins" }}
-                      id="transition-modal-title"
-                      variant="h6"
-                      component="h3"
-                    >
-                      Delete this user?
-                    </Typography>
-
-                    <Button
-                      sx={{
-                        borderRadius: "1rem",
-                        fontFamily: "Poppins",
-                        backgroundColor: "#FF5858",
-                        transition: "all .15s ease-in-out",
-                        textTransform: "capitalize",
-                        color: "#fff",
-                        "&:hover": {
-                          background: "#DC1919",
-                        },
-                      }}
-                      onClick={() =>
-                        deleteUser(user._id, user.firstName, user.lastName)
-                      }
-                    >
-                      Yes
-                    </Button>
-                    <Button
-                      sx={{
-                        borderRadius: "1rem",
-                        fontFamily: "Poppins",
-                        backgroundColor: "#C4C4C4",
-                        transition: "all .15s ease-in-out",
-                        textTransform: "capitalize",
-                        color: "#fff",
-                        "&:hover": {
-                          background: "#9C9999",
-                        },
-                      }}
-                      onClick={handleClose}
-                    >
-                      Cancel
-                    </Button>
-                  </Box>
-                </Fade>
-              </Modal>
-            ) : (
-              <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                  timeout: 500,
-                }}
-              >
-                <Fade in={open}>
-                  <Box sx={modalStyle}>
-                    <Typography
-                      sx={{ fontFamily: "Poppins" }}
-                      id="transition-modal-title"
-                      variant="h6"
-                      component="h3"
-                    >
-                      Deleting user...
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                      }}
-                    >
-                      <CircularProgress />
-                    </Box>
-                  </Box>
-                </Fade>
-              </Modal>
-            )}
           </Container>
         ))}
+        {/* delete user modal */}
+        {!isUpdating ? (
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={open}>
+              <Box sx={modalStyle}>
+                <Typography
+                  sx={{ fontFamily: "Poppins" }}
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h3"
+                >
+                  Delete {userInFocus.firstName} user?
+                </Typography>
+
+                <Button
+                  sx={{
+                    borderRadius: "1rem",
+                    fontFamily: "Poppins",
+                    backgroundColor: "#FF5858",
+                    transition: "all .15s ease-in-out",
+                    textTransform: "capitalize",
+                    color: "#fff",
+                    "&:hover": {
+                      background: "#DC1919",
+                    },
+                  }}
+                  onClick={() =>
+                    deleteUser(
+                      userInFocus.id,
+                      userInFocus.firstName,
+                      userInFocus.lastName
+                    )
+                  }
+                >
+                  Yes
+                </Button>
+                <Button
+                  sx={{
+                    borderRadius: "1rem",
+                    fontFamily: "Poppins",
+                    backgroundColor: "#C4C4C4",
+                    transition: "all .15s ease-in-out",
+                    textTransform: "capitalize",
+                    color: "#fff",
+                    "&:hover": {
+                      background: "#9C9999",
+                    },
+                  }}
+                  onClick={handleClose}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </Fade>
+          </Modal>
+        ) : (
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={open}>
+              <Box sx={modalStyle}>
+                <Typography
+                  sx={{ fontFamily: "Poppins" }}
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h3"
+                >
+                  Deleting user...
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              </Box>
+            </Fade>
+          </Modal>
+        )}{" "}
+        {!isUpdating ? (
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={promoteOpen}
+            onClose={handlePromoteClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={promoteOpen}>
+              <Box sx={modalStyle}>
+                <Typography
+                  sx={{ fontFamily: "Poppins" }}
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h3"
+                >
+                  Promote {userInFocus.firstName} to admin?
+                </Typography>
+
+                <Button
+                  sx={{
+                    borderRadius: "1rem",
+                    fontFamily: "Poppins",
+                    backgroundColor: "#FF5858",
+                    transition: "all .15s ease-in-out",
+                    textTransform: "capitalize",
+                    color: "#fff",
+                    "&:hover": {
+                      background: "#DC1919",
+                    },
+                  }}
+                  onClick={() =>
+                    promoteUser(
+                      userInFocus.id,
+                      userInFocus.firstName,
+                      userInFocus.lastName
+                    )
+                  }
+                >
+                  Yes
+                </Button>
+                <Button
+                  sx={{
+                    borderRadius: "1rem",
+                    fontFamily: "Poppins",
+                    backgroundColor: "#C4C4C4",
+                    transition: "all .15s ease-in-out",
+                    textTransform: "capitalize",
+                    color: "#fff",
+                    "&:hover": {
+                      background: "#9C9999",
+                    },
+                  }}
+                  onClick={handlePromoteClose}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </Fade>
+          </Modal>
+        ) : (
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={promoteOpen}
+            onClose={handlePromoteClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={promoteOpen}>
+              <Box sx={modalStyle}>
+                <Typography
+                  sx={{ fontFamily: "Poppins" }}
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h3"
+                >
+                  Promoting user...
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              </Box>
+            </Fade>
+          </Modal>
+        )}
+        {!isUpdating ? (
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={demoteOpen}
+            onClose={handleDemoteClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={demoteOpen}>
+              <Box sx={modalStyle}>
+                <Typography
+                  sx={{ fontFamily: "Poppins" }}
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h3"
+                >
+                  Demote {userInFocus.firstName} to user?
+                </Typography>
+
+                <Button
+                  sx={{
+                    borderRadius: "1rem",
+                    fontFamily: "Poppins",
+                    backgroundColor: "#FF5858",
+                    transition: "all .15s ease-in-out",
+                    textTransform: "capitalize",
+                    color: "#fff",
+                    "&:hover": {
+                      background: "#DC1919",
+                    },
+                  }}
+                  onClick={() =>
+                    demoteUser(
+                      userInFocus.id,
+                      userInFocus.firstName,
+                      userInFocus.lastName
+                    )
+                  }
+                >
+                  Yes
+                </Button>
+                <Button
+                  sx={{
+                    borderRadius: "1rem",
+                    fontFamily: "Poppins",
+                    backgroundColor: "#C4C4C4",
+                    transition: "all .15s ease-in-out",
+                    textTransform: "capitalize",
+                    color: "#fff",
+                    "&:hover": {
+                      background: "#9C9999",
+                    },
+                  }}
+                  onClick={handleDemoteClose}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </Fade>
+          </Modal>
+        ) : (
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={demoteOpen}
+            onClose={handleDemoteClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={demoteOpen}>
+              <Box sx={modalStyle}>
+                <Typography
+                  sx={{ fontFamily: "Poppins" }}
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h3"
+                >
+                  Demoting user...
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              </Box>
+            </Fade>
+          </Modal>
+        )}
       </Container>
       <Button
+        onClick={() => navigate("/admin")}
         sx={{
           backgroundColor: "#0B814A",
           color: "#F1F8F6",
