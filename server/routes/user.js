@@ -118,7 +118,9 @@ router.post("/account/login", async (req, res) => {
     .findOne({ email: req.body.email })
     .select("+password");
   if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-    return res.status(401).send("Wrong email or password");
+    return res
+      .status(401)
+      .json("You have entered either an incorrect email or password.");
   }
 
   // save info about the user to the session (a cookie stored on the client)

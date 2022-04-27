@@ -29,10 +29,12 @@ const AccountProvider = (props) => {
     console.log(user); // to be deleted
     let result = await makeRequest("/api/users/account/login", "POST", user);
     alert(result); // for now it is showing an alert, change style if we have time!
-    setTimeout(() => {
-      navigate("/start");
-      window.location.reload(false);
-    }, 1000);
+    if (isLoggedIn) {
+      setTimeout(() => {
+        navigate("/start");
+        window.location.reload(false);
+      }, 1000);
+    }
   };
 
   /** Create a new user account */
