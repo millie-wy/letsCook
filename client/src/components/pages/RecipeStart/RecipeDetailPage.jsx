@@ -46,9 +46,19 @@ const RecipeDetailPage = () => {
       : setDisabledButton(true);
   }, [comment.length, id, individualRating]);
 
+  function isObjectEmpty(object) {
+    var isEmpty = true;
+    for (let keys in object) {
+      isEmpty = false;
+      break; // exiting since we found that the object is not empty
+    }
+    return isEmpty;
+  }
+
   useEffect(() => {
     if (!isLoading) {
-      if (recipe.author.length < 1) {
+      // Since the mocked data doesn't have an author, we have to check if the autor object is empty
+      if (isObjectEmpty(recipe.author)) {
         setIsLoading(false);
         return;
       } else {
