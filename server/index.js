@@ -22,7 +22,7 @@ app.use(
     sameSite: "strict",
     httpOnly: false,
     secrue: false,
-    maxAge: 1000 * 600, // 10 mins for now
+    maxAge: 1000 * 60000, // 1000 mins for now
   })
 );
 

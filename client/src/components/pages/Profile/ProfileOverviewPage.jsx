@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { makeRequest } from "../../../helper";
 import { useAccount } from "../../context/AccountContext";
 import ManageAccount from "./ManageAccount";
@@ -19,8 +18,8 @@ const ProfileOverviewPage = () => {
   const [selectedContent, setSelectedContent] = useState("recipes");
   const { currentUser } = useAccount();
   const [user, setUser] = useState({});
+  const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState();
-  console.log(currentUser);
 
   useEffect(() => {
     if (currentUser === undefined) {
@@ -30,11 +29,18 @@ const ProfileOverviewPage = () => {
         let result = await makeRequest(`/api/users/${currentUser.id}`, "GET");
         setUser(result);
         setIsLoading(false);
-        console.log(result);
       };
       fetchUser();
+
+      const fetchUsersRecipes = async () => {
+        let response = await makeRequest("/api/recipes", "GET");
+        let author = response.map((recipe) => recipe.author);
+        console.log(author);
+      };
+      fetchUsersRecipes();
     }
   }, [currentUser]);
+
   return isLoading ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Box
@@ -81,12 +87,12 @@ const ProfileOverviewPage = () => {
             mx: { xs: "1rem", sm: "1rem", md: 0 },
             width: { xs: "auto", sm: "auto", md: 300 },
             position: "relative",
-            minHeight: { xs: "fit-content", sm: "fit-content", md: 500 },
+            minHeight: { xs: "fit-content", sm: "fit-content", md: 400 },
           }}
         >
           <Avatar
-            alt="William Saar"
-            src=""
+            alt={user.firstName}
+            src={user.profilePic}
             sx={{
               bgcolor: "#B6D5D5",
               width: 120,
@@ -96,7 +102,7 @@ const ProfileOverviewPage = () => {
               top: "-50px",
               transform: "translateX(-50%)",
             }}
-          />{" "}
+          />
           <Box
             sx={{
               height: "90%",
@@ -129,37 +135,6 @@ const ProfileOverviewPage = () => {
               >
                 {user.bio}
               </Typography>
-            </Box>
-            <Box>
-              <Link
-                to="/"
-                // to={`/recipe/${recipe.title.replaceAll(" ", "-")}`} // to be adjusted
-                style={{ textDecoration: "none" }}
-              >
-                <Button
-                  variant="outlined"
-                  size="small"
-                  sx={{
-                    fontFamily: "Poppins",
-                    letterSpacing: "none",
-                    fontSize: ".7rem",
-                    fontWeight: "600",
-                    bgcolor: "white",
-                    color: "#0B814A",
-                    border: "1.2px solid #0B814A",
-                    textTransform: "capitalize",
-                    borderRadius: 10,
-                    boxShadow: "none",
-                    mt: {
-                      xs: "2rem",
-                      sm: "2rem",
-                      md: 0,
-                    },
-                  }}
-                >
-                  To recipe
-                </Button>
-              </Link>
             </Box>
           </Box>
         </Container>
