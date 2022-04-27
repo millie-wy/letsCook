@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { makeRequest } from "../../helper";
-import { useLocation } from "react-router-dom";
 
 export const AccountContext = createContext({});
 
@@ -26,6 +25,7 @@ const AccountProvider = (props) => {
     getCookieSession();
   }, [location]);
 
+  /** Sign in an user */
   const signIn = async (email, password) => {
     const user = { email, password };
     console.log(user); // to be deleted
@@ -37,6 +37,7 @@ const AccountProvider = (props) => {
     }, 1000);
   };
 
+  /** Create a new user account */
   const signUp = async (user) => {
     const { email, firstName, lastName, password } = user;
     const newUser = { email, firstName, lastName, password };
@@ -48,6 +49,7 @@ const AccountProvider = (props) => {
     }, 1000);
   };
 
+  /** Sign out an user */
   const signOut = async () => {
     let result = await makeRequest("/api/users/account/logout", "DELETE");
     alert(result); // for now it is showing an alert, change style if we have time!
@@ -57,9 +59,61 @@ const AccountProvider = (props) => {
     }, 1000);
   };
 
+  /** Delete a user */
+  const deleteUser = async () => {
+    let result = await makeRequest(`/api/users/${currentUser.id}`, "DELETE");
+    alert(result); // for now it is showing an alert, change style if we have time!
+    setTimeout(() => {
+      signOut();
+      navigate("/start");
+      window.location.reload(false);
+    }, 1000);
+  };
+
+  /** Update user profile */
+  const updateProfile = async (updates) => {
+    const isAdmin = currentUser.role === "user" ? false : true;
+    let body;
+    !Boolean(updates.password)
+      ? (body = {
+          firstName: updates.firstName,
+          lastName: updates.lastName,
+          email: updates.email,
+          porfilePic: updates.profilePic,
+          bio: updates.bio,
+          isAdmin: isAdmin,
+        })
+      : (body = {
+          firstName: updates.firstName,
+          lastName: updates.lastName,
+          email: updates.email,
+          password: updates.password,
+          porfilePic: updates.profilePic,
+          bio: updates.bio,
+          isAdmin: isAdmin,
+        });
+    let response = await makeRequest(
+      `/api/users/${currentUser.id}`,
+      "PUT",
+      body
+    );
+    alert(response);
+    setTimeout(() => {
+      window.location.reload(false);
+    }, 500);
+  };
+
   return (
     <AccountContext.Provider
-      value={{ isLoggedIn, signIn, signUp, signOut, currentUser }}
+      value={{
+        isLoggedIn,
+        signIn,
+        signUp,
+        signOut,
+        updateProfile,
+        deleteUser,
+        currentUser,
+      }}
     >
       {props.children}
     </AccountContext.Provider>
