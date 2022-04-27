@@ -389,6 +389,9 @@ const CreateRecipe = () => {
                   {recipe.direction.length &&
                     recipe.direction.map((direcive, index) => (
                       <TextField
+                        fullWidth
+                        multiline
+                        minRows={2}
                         key={index}
                         sx={formStyling}
                         id={"direction" + "[" + index + "]"}
