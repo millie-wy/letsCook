@@ -1,21 +1,20 @@
-import { ArrowBackIosNew, Edit, Delete } from "@mui/icons-material";
+import { ArrowBackIosNew, Delete, Edit } from "@mui/icons-material";
 import {
+  Avatar,
   Box,
   Button,
   Container,
+  IconButton,
   TextField,
   Typography,
-  IconButton,
-  Avatar,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import StarRatings from "react-star-ratings";
+import avatarpic from "../../../assets/images/avatarpic.png";
 import ingredient from "../../../assets/logoAndIcons/ingredient.svg";
 import portion from "../../../assets/logoAndIcons/portion.svg";
 import time from "../../../assets/logoAndIcons/time.svg";
-import userIcon from "../../../assets/logoAndIcons/usericon.svg";
-import avatarpic from "../../../assets/images/avatarpic.png";
 import { makeRequest } from "../../../helper.js";
 import { useAccount } from "../../context/AccountContext";
 
@@ -34,8 +33,6 @@ const RecipeDetailPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-
     const fetchData = async () => {
       let response = await makeRequest(`/api/recipes/${id}`, "GET");
       setRecipe(response);
@@ -73,9 +70,10 @@ const RecipeDetailPage = () => {
       comments: [
         ...existingComments,
         {
-          author: "To be fixed", // need to connect to the user database...
+          author: user.firstName + " " + user.lastName, // need to connect to the user database...
           content: comment,
           rated: individualRating,
+          profilePic: user.profilePic,
         },
       ],
     };
@@ -313,13 +311,13 @@ const RecipeDetailPage = () => {
                 }}
               >
                 <Avatar
-                  alt={user.firstName + " " + user.Lastname}
+                  alt={user.firstName + " " + user.lastName}
                   src={user.profilePic}
                   sx={{ bgcolor: "#B6D5D5", width: 70, height: 70 }}
                 />
                 <Box sx={{ p: "0 1rem" }}>
                   <Typography variant="h6" sx={{ color: "#0B814A" }}>
-                    {user.firstName + " " + user.Lastname}
+                    {user.firstName + " " + user.lastName}
                   </Typography>
                   <Typography
                     sx={{
@@ -405,11 +403,15 @@ const RecipeDetailPage = () => {
                   placeItems: "center",
                 }}
               >
-                <Box
-                  component="img"
-                  style={{ height: "45px", margin: "0.3rem 1rem 0 1rem" }}
-                  src={userIcon}
-                  alt="LetsCook"
+                <Avatar
+                  alt={comment.author}
+                  src={comment.profilePic}
+                  sx={{
+                    bgcolor: "#B6D5D5",
+                    width: 45,
+                    height: 45,
+                    margin: "0.3rem 1rem 0 1rem",
+                  }}
                 />
                 <Typography
                   variant="body2"
@@ -451,16 +453,6 @@ const RecipeDetailPage = () => {
                     alignSelf: "flex-end",
                   }}
                 >
-                  {/* think it looks cleaner without the word "rated?" :)  */}
-                  {/* <Typography
-                    sx={{
-                      fontFamily: "Poppins",
-                      display: "flex",
-                      fontSize: ".7rem",
-                    }}
-                  >
-                    Rated:
-                  </Typography> */}
                   <StarRatings
                     rating={comment.rated}
                     starDimension="20px"
