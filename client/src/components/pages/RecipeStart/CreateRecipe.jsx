@@ -85,7 +85,7 @@ const CreateRecipe = () => {
 
   const publishRecipe = async (values) => {
     let result = await makeRequest("/api/recipes", "POST", values);
-    alert(result); // for now it is showing an alert, change style if we have time!
+    alert("Recipe " + values.title + " has been added."); // for now it is showing an alert, change style if we have time!
     setTimeout(() => {
       navigate("/start");
     }, 1000);

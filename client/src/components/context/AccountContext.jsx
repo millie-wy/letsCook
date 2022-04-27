@@ -39,11 +39,13 @@ const AccountProvider = (props) => {
   const signUp = async (user) => {
     const { email, firstName, lastName, password } = user;
     const newUser = { email, firstName, lastName, password };
+    const logIn = { email, password };
     let result = await makeRequest("/api/users", "POST", newUser);
     alert(result);
+    await makeRequest("/api/users/account/login", "POST", logIn);
     setTimeout(() => {
-      window.location.reload(false);
       navigate("/start");
+      window.location.reload(false);
     }, 1000);
   };
 
@@ -76,7 +78,7 @@ const AccountProvider = (props) => {
           firstName: updates.firstName,
           lastName: updates.lastName,
           email: updates.email,
-          porfilePic: updates.profilePic,
+          profilePic: updates.profilePic,
           bio: updates.bio,
           isAdmin: isAdmin,
         })
@@ -85,7 +87,7 @@ const AccountProvider = (props) => {
           lastName: updates.lastName,
           email: updates.email,
           password: updates.password,
-          porfilePic: updates.profilePic,
+          profilePic: updates.profilePic,
           bio: updates.bio,
           isAdmin: isAdmin,
         });

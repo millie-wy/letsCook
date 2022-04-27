@@ -72,13 +72,24 @@ const RecipeDetailPage = () => {
             "GET"
           );
           setUser(result);
-          setIsLoading(false);
           console.log(result);
+          setIsLoading(false);
         };
         fetchUser();
       }
     }
   }, [recipe]);
+
+  useEffect(() => {
+    if (currentUser !== undefined) {
+      if (
+        currentUser.role === "admin" ||
+        (user && currentUser.id === recipe.author.id)
+      ) {
+        setCanEdit(true);
+      }
+    }
+  }, [currentUser, recipe, user]);
 
   const submitComment = async (existingComments) => {
     const allComments = {
@@ -200,33 +211,30 @@ const RecipeDetailPage = () => {
               >
                 {recipe.title}
               </Typography>
-              {currentUser !== undefined
-                ? currentUser.role === "admin" ||
-                  (currentUser.id === recipe.author.id && (
-                    <Box>
-                      <IconButton aria-label="delete" size="large">
-                        {" "}
-                        <Link
-                          to={"/recipe/edit"}
-                          state={{
-                            id: id,
-                          }}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <Edit fontSize="large" sx={{ color: "#2E4739" }} />
-                        </Link>
-                      </IconButton>
+              {canEdit ? (
+                <Box>
+                  <IconButton aria-label="delete" size="large">
+                    {" "}
+                    <Link
+                      to={"/recipe/edit"}
+                      state={{
+                        id: id,
+                      }}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Edit fontSize="large" sx={{ color: "#2E4739" }} />
+                    </Link>
+                  </IconButton>
 
-                      <IconButton
-                        onClick={handleOpen}
-                        aria-label="delete"
-                        size="large"
-                      >
-                        <Delete fontSize="large" sx={{ color: "#FF5858" }} />
-                      </IconButton>
-                    </Box>
-                  ))
-                : null}
+                  <IconButton
+                    onClick={handleOpen}
+                    aria-label="delete"
+                    size="large"
+                  >
+                    <Delete fontSize="large" sx={{ color: "#FF5858" }} />
+                  </IconButton>
+                </Box>
+              ) : null}
             </Box>
             <StarRatings
               rating={parseInt(rating)}
@@ -365,13 +373,13 @@ const RecipeDetailPage = () => {
                 }}
               >
                 <Avatar
-                  alt={user.firstName + " " + user.lastName}
+                  alt={recipe.author.firstName + " " + recipe.author.lastName}
                   src={user.profilePic}
                   sx={{ bgcolor: "#B6D5D5", width: 70, height: 70 }}
                 />
                 <Box sx={{ p: "0 1rem" }}>
                   <Typography variant="h6" sx={{ color: "#0B814A" }}>
-                    {user.firstName + " " + user.lastName}
+                    {recipe.author.firstName + " " + recipe.author.lastName}
                   </Typography>
                   <Typography
                     sx={{
