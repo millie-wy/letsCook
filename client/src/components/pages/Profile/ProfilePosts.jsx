@@ -35,8 +35,6 @@ const ProfilePosts = () => {
     }
   }, [currentUser]);
 
-  console.log(myPosts);
-
   return isLoading ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Box
