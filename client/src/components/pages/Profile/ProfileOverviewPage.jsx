@@ -18,7 +18,6 @@ const ProfileOverviewPage = () => {
   const [selectedContent, setSelectedContent] = useState("recipes");
   const { currentUser } = useAccount();
   const [user, setUser] = useState({});
-  const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {

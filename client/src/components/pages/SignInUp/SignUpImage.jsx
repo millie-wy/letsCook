@@ -1,5 +1,6 @@
 import { Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import threeFood from "../../../assets/images/threeFood.png";
 
 const SignUpImage = () => {
   return (
@@ -10,12 +11,7 @@ const SignUpImage = () => {
         paddingRight: "6rem",
       }}
     >
-      <img
-        // @ts-ignore
-        src={require("../../../assets/images/threeFood.png")}
-        alt="food"
-        style={{ height: "25vw" }}
-      />
+      <img src={threeFood} alt="food" style={{ height: "25vw" }} />
       <Typography
         sx={{
           color: "#2E4739",

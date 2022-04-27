@@ -12,7 +12,7 @@ import { makeRequest } from "../../../helper";
 import { useAccount } from "../../context/AccountContext";
 
 const EditAccountForm = () => {
-  const { currentUser } = useAccount();
+  const { currentUser, updateProfile } = useAccount();
   const [isLoading, setIsLoading] = useState();
   const [profile, setProfile] = useState({
     firstName: "",
@@ -62,7 +62,6 @@ const EditAccountForm = () => {
     password: yup
       .string("Enter your password")
       .min(8, "Password should be of minimum 8 characters length"),
-    // .required("Password is required"),
     passwordConfirmation: yup.lazy(() => {
       if (passwordChanged === undefined || passwordChanged === "") {
         return yup.string();
@@ -81,37 +80,21 @@ const EditAccountForm = () => {
 
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues: profile,
+    initialValues: {
+      firstName: profile.firstName || "",
+      lastName: profile.lastName || "",
+      email: profile.email || "",
+      profilePic: profile.profilePic || "",
+      password: profile.password || "",
+      passwordConfirmation: profile.passwordConfirmation || "",
+      bio: profile.bio || "",
+    },
     onSubmit: (values) => {
       updateProfile(values);
     },
     validationSchema: validationSchema,
     validateOnMount: true,
   });
-
-  const updateProfile = async (values) => {
-    const pw = !values.password ? "99999999" : values.password;
-    const isAdmin = currentUser.role === "user" ? false : true;
-    const body = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-      password: pw,
-      profilePic: values.profilePic,
-      bio: values.bio,
-      isAdmin: isAdmin,
-    };
-    console.log(body);
-    let response = await makeRequest(
-      `/api/users/${currentUser.id}`,
-      "PUT",
-      body
-    );
-    console.log(response);
-    // setTimeout(() => {
-    //   window.location.reload(false);
-    // }, 1000);
-  };
 
   return isLoading ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
@@ -127,152 +110,157 @@ const EditAccountForm = () => {
       </Box>
     </Container>
   ) : (
-    <Formik sx={{ margin: "auto" }}>
-      <Form
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          rowGap: ".8rem",
-          width: "500px",
-          alignSelf: "center",
-        }}
-        onSubmit={formik.handleSubmit}
-      >
-        <TextField
-          fullWidth
-          size="small"
-          sx={formStyling}
-          id="firstName"
-          name="firstName"
-          label="First Name"
-          value={formik.values.firstName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-          helperText={formik.touched.firstName && formik.errors.firstName}
-        />
-        <TextField
-          fullWidth
-          size="small"
-          sx={formStyling}
-          id="lastName"
-          name="lastName"
-          label="Last Name"
-          value={formik.values.lastName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-          helperText={formik.touched.lastName && formik.errors.lastName}
-        />
-        <TextField
-          fullWidth
-          size="small"
-          sx={formStyling}
-          id="email"
-          name="email"
-          label="Email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
-        <TextField
-          fullWidth
-          size="small"
-          type="password"
-          sx={formStyling}
-          id="password"
-          name="password"
-          label="Password"
-          value={formik.values.password}
-          onChange={(e) => {
-            formik.handleChange(e);
-            setPasswordChanged(e.currentTarget.value);
-          }}
-          onBlur={formik.handleBlur}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-        <TextField
-          fullWidth
-          disabled={passwordChanged === undefined || passwordChanged === ""}
-          size="small"
-          type="password"
-          sx={formStyling}
-          id="passwordConfirmation"
-          name="passwordConfirmation"
-          label="Confirm Password"
-          value={formik.values.passwordConfirmation}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.passwordConfirmation &&
-            Boolean(formik.errors.passwordConfirmation)
-          }
-          helperText={
-            formik.touched.passwordConfirmation &&
-            formik.errors.passwordConfirmation
-          }
-        />
-        <TextField
-          fullWidth
-          size="small"
-          type="profilePic"
-          sx={formStyling}
-          id="profilePic"
-          name="profilePic"
-          label="Profile Picture URL"
-          value={formik.values.profilePic}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.profilePic && Boolean(formik.errors.profilePic)}
-          helperText={formik.touched.profilePic && formik.errors.profilePic}
-          InputLabelProps={{ fontFamily: "Poppins" }}
-        />
-        <TextField
-          fullWidth
-          size="small"
-          multiline
-          rows={5}
-          type="bio"
-          sx={formStyling}
-          id="bio"
-          name="bio"
-          label="Bio"
-          value={formik.values.bio}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.bio && Boolean(formik.errors.bio)}
-          helperText={formik.touched.bio && formik.errors.bio}
-        />
-
-        <Button
-          type="submit"
-          disabled={!formik.isValid}
-          sx={{
-            backgroundColor: "#0B814A",
-            color: "#F1F8F6",
-            fontFamily: "Poppins",
-            borderRadius: "70px",
-            border: "none",
-            width: "fit-content",
-            fontSize: ".7rem",
-            marginBottom: "1rem",
-            px: "1rem",
-            transition: "all .15s ease-in-out",
-            textTransform: "none",
+    <Container>
+      <Formik>
+        <Form
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            rowGap: ".8rem",
+            maxWidth: "500px",
             alignSelf: "center",
-            "&:hover": {
-              background: "#0AA35C",
-              transform: "scale(1.01)",
-            },
+            margin: "auto",
           }}
+          onSubmit={formik.handleSubmit}
         >
-          Update Profile
-        </Button>
-      </Form>
-    </Formik>
+          <TextField
+            fullWidth
+            size="small"
+            sx={formStyling}
+            id="firstName"
+            name="firstName"
+            label="First Name"
+            value={formik.values.firstName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+            helperText={formik.touched.firstName && formik.errors.firstName}
+          />
+          <TextField
+            fullWidth
+            size="small"
+            sx={formStyling}
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            value={formik.values.lastName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+            helperText={formik.touched.lastName && formik.errors.lastName}
+          />
+          <TextField
+            fullWidth
+            size="small"
+            sx={formStyling}
+            id="email"
+            name="email"
+            label="Email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+          <TextField
+            fullWidth
+            size="small"
+            type="password"
+            sx={formStyling}
+            id="password"
+            name="password"
+            label="Password"
+            value={formik.values.password}
+            onChange={(e) => {
+              formik.handleChange(e);
+              setPasswordChanged(e.currentTarget.value);
+            }}
+            onBlur={formik.handleBlur}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+          <TextField
+            fullWidth
+            disabled={passwordChanged === undefined || passwordChanged === ""}
+            size="small"
+            type="password"
+            sx={formStyling}
+            id="passwordConfirmation"
+            name="passwordConfirmation"
+            label="Confirm Password"
+            value={formik.values.passwordConfirmation}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.passwordConfirmation &&
+              Boolean(formik.errors.passwordConfirmation)
+            }
+            helperText={
+              formik.touched.passwordConfirmation &&
+              formik.errors.passwordConfirmation
+            }
+          />
+          <TextField
+            fullWidth
+            size="small"
+            type="profilePic"
+            sx={formStyling}
+            id="profilePic"
+            name="profilePic"
+            label="Profile Picture URL"
+            value={formik.values.profilePic}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.profilePic && Boolean(formik.errors.profilePic)
+            }
+            helperText={formik.touched.profilePic && formik.errors.profilePic}
+            InputLabelProps={{ fontFamily: "Poppins" }}
+          />
+          <TextField
+            fullWidth
+            size="small"
+            multiline
+            rows={5}
+            type="bio"
+            sx={formStyling}
+            id="bio"
+            name="bio"
+            label="Bio"
+            value={formik.values.bio}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.bio && Boolean(formik.errors.bio)}
+            helperText={formik.touched.bio && formik.errors.bio}
+          />
+
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            sx={{
+              backgroundColor: "#0B814A",
+              color: "#F1F8F6",
+              fontFamily: "Poppins",
+              borderRadius: "70px",
+              border: "none",
+              width: "fit-content",
+              fontSize: ".7rem",
+              marginBottom: "1rem",
+              px: "1rem",
+              transition: "all .15s ease-in-out",
+              textTransform: "none",
+              alignSelf: "center",
+              "&:hover": {
+                background: "#0AA35C",
+                transform: "scale(1.01)",
+              },
+            }}
+          >
+            Update Profile
+          </Button>
+        </Form>
+      </Formik>
+    </Container>
   );
 };
 

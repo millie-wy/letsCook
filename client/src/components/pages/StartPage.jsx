@@ -9,6 +9,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 import ThreeLines from "../../assets/images/threeFood.png";
 
 const StartPage = () => {
@@ -97,29 +98,30 @@ const StartPage = () => {
             ) : null}
           </Box>
           <Box sx={{ textAlign: "center" }}>
-            <Button
-              sx={{
-                backgroundColor: "#0B814A",
-                color: "#F1F8F6",
-                fontFamily: "Poppins",
-                borderRadius: "70px",
-                fontWeight: "bold",
-                border: "none",
-                height: "4rem",
-                width: "100%",
-                fontSize: "1.2rem",
-                marginBottom: "1rem",
-                cursor: "pointer",
-                transition: "all .15s ease-in-out",
-                "&:hover": {
-                  background: "#0AA35C",
-                  transform: "scale(1.01)",
-                },
-              }}
-            >
-              Get started
-            </Button>
-
+            <Link to="/start" style={{ textDecoration: "none" }}>
+              <Button
+                sx={{
+                  backgroundColor: "#0B814A",
+                  color: "#F1F8F6",
+                  fontFamily: "Poppins",
+                  borderRadius: "70px",
+                  fontWeight: "bold",
+                  border: "none",
+                  height: "4rem",
+                  width: "100%",
+                  fontSize: "1.2rem",
+                  marginBottom: "1rem",
+                  cursor: "pointer",
+                  transition: "all .15s ease-in-out",
+                  "&:hover": {
+                    background: "#0AA35C",
+                    transform: "scale(1.01)",
+                  },
+                }}
+              >
+                Get started
+              </Button>
+            </Link>
             <Typography sx={{ color: "#989C9C" }}>
               Join over 1 000 000 others
             </Typography>

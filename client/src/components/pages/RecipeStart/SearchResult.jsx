@@ -1,14 +1,12 @@
-import { Search } from "@mui/icons-material";
-import { Box, Container, TextField, Typography } from "@mui/material";
+import { Add, Search } from "@mui/icons-material";
+import { Box, Container, TextField, Button, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import RecipeCard from "./RecipeCard";
 
 const SearchResult = () => {
   const [search, setSearch] = useState("");
   const searchInput = (e) => setSearch(e.target.value);
-
-  // not sure if we need this function?
-  const performSearch = () => console.log("clicked");
 
   return (
     <Container sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem" }}>
@@ -48,7 +46,6 @@ const SearchResult = () => {
             }}
           />
           <Search
-            onClick={performSearch}
             sx={{
               position: "absolute",
               color: "#989C9C",
@@ -85,6 +82,42 @@ const SearchResult = () => {
           />
         </Box>
       </Box>
+      {/* create recipe button  */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "end",
+        }}
+      >
+        <Link to="/recipe/create" style={{ textDecoration: "none" }}>
+          <Button
+            sx={{
+              backgroundColor: "#0B814A",
+              color: "#F1F8F6",
+              fontFamily: "Poppins",
+              borderRadius: "70px",
+              border: "none",
+              width: "fit-content",
+              fontSize: ".7rem",
+              marginBottom: "1rem",
+              px: "1rem",
+              transition: "all .15s ease-in-out",
+              textTransform: "none",
+              my: "2rem",
+              "&:hover": {
+                background: "#0AA35C",
+                transform: "scale(1.01)",
+              },
+            }}
+          >
+            <Add fontSize="small" sx={{ mr: ".2rem" }} />
+            Create new recipe
+          </Button>
+        </Link>
+      </Box>
+
+      {/* search header and cards  */}
       <Box
         sx={{
           display: "flex",
@@ -92,7 +125,7 @@ const SearchResult = () => {
           flexWrap: "wrap",
           gap: ".5rem",
           justifyContent: "center",
-          my: "3.5rem",
+          mb: "3.5rem",
         }}
       >
         <Typography
