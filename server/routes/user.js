@@ -79,8 +79,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// delete an user (admin only)
-router.delete("/:id", secureWithRole("admin"), async (req, res) => {
+// delete an user
+router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const removedUser = await userModel.findByIdAndRemove(id);
