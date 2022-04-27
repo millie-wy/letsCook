@@ -76,7 +76,7 @@ const AccountProvider = (props) => {
           firstName: updates.firstName,
           lastName: updates.lastName,
           email: updates.email,
-          porfilePic: updates.profilePic,
+          profilePic: updates.profilePic,
           bio: updates.bio,
           isAdmin: isAdmin,
         })
@@ -85,7 +85,7 @@ const AccountProvider = (props) => {
           lastName: updates.lastName,
           email: updates.email,
           password: updates.password,
-          porfilePic: updates.profilePic,
+          profilePic: updates.profilePic,
           bio: updates.bio,
           isAdmin: isAdmin,
         });
