@@ -18,7 +18,6 @@ const ProfileOverviewPage = () => {
   const [selectedContent, setSelectedContent] = useState("recipes");
   const { currentUser } = useAccount();
   const [user, setUser] = useState({});
-  const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {
@@ -31,13 +30,6 @@ const ProfileOverviewPage = () => {
         setIsLoading(false);
       };
       fetchUser();
-
-      const fetchUsersRecipes = async () => {
-        let response = await makeRequest("/api/recipes", "GET");
-        let author = response.map((recipe) => recipe.author);
-        console.log(author);
-      };
-      fetchUsersRecipes();
     }
   }, [currentUser]);
 
