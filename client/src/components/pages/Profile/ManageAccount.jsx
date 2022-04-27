@@ -1,11 +1,13 @@
-import { Container, Typography, Button, Modal, Box } from "@mui/material";
+import { Box, Button, Container, Modal, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { useAccount } from "../../context/AccountContext";
 import EditAccountForm from "./EditAccountForm";
 
 const ManageAccount = () => {
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+  const { deleteUser } = useAccount();
 
   return (
     <Container
@@ -32,7 +34,7 @@ const ManageAccount = () => {
       <EditAccountForm />
       <Button
         sx={{
-          // backgroundColor: "#DC143C",
+          backgroundColor: "#fff",
           color: "#DC143C",
           fontFamily: "Poppins",
           borderRadius: "70px",
@@ -67,11 +69,12 @@ const ManageAccount = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 400,
+            width: "90%",
+            maxWidth: 450,
             background: "#f1f8f6",
             borderRadius: "15px",
             boxShadow: 24,
-            p: "3rem",
+            py: "3rem",
             textAlign: "center",
           }}
         >
@@ -100,7 +103,7 @@ const ManageAccount = () => {
                 transform: "scale(1.01)",
               },
             }}
-            //onClick={deleteUser}
+            onClick={deleteUser}
           >
             Yes
           </Button>
