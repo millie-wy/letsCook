@@ -1,4 +1,9 @@
-import { AddModerator, Delete, Refresh } from "@mui/icons-material";
+import {
+  AddModerator,
+  Delete,
+  Refresh,
+  RemoveModerator,
+} from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -6,7 +11,6 @@ import {
   CircularProgress,
   Container,
   IconButton,
-  Link,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -32,6 +36,16 @@ const AdminUsers = () => {
     } else return;
   }, [currentUser]);
 
+  const promoteAdmin = (id) => {
+    console.log("User with id: " + id + " has been promoted to admin.");
+  };
+  const deleteAdmin = (id) => {
+    console.log("User with id: " + id + " is no longer admin.");
+  };
+  const deleteUser = (id) => {
+    console.log("User with id: " + id + " has now been deleted.");
+  };
+
   return isLoading ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
       <Box
@@ -53,6 +67,18 @@ const AdminUsers = () => {
         gap: "1rem",
       }}
     >
+      <Typography
+        variant="body1"
+        sx={{
+          fontFamily: "Poppins",
+          lineHeight: 1.5,
+          fontWeight: 600,
+          mx: ".5rem",
+        }}
+      >
+        Here you can change <span style={{ color: "#0B814A" }}>role</span> of,
+        or <span style={{ color: "#FF5858" }}>delete</span> users.
+      </Typography>
       <Container
         sx={{
           display: "flex",
@@ -101,14 +127,33 @@ const AdminUsers = () => {
               sx={{
                 w: 1,
                 display: "flex",
-                p: "1rem 0",
+                pt: "1rem",
                 justifyContent: "space-between",
               }}
             >
-              <IconButton aria-label="admin" size="large">
-                <AddModerator fontSize="large" sx={{ color: "##2E4739" }} />
-              </IconButton>
-              <IconButton aria-label="delete" size="large">
+              {" "}
+              {user.isAdmin ? (
+                <IconButton
+                  aria-label="removeAdmin"
+                  size="large"
+                  onClick={() => deleteAdmin(user._id)}
+                >
+                  <RemoveModerator fontSize="large" sx={{ color: "#0B814A" }} />
+                </IconButton>
+              ) : (
+                <IconButton
+                  aria-label="promoteAdmin"
+                  size="large"
+                  onClick={() => promoteAdmin(user._id)}
+                >
+                  <AddModerator fontSize="large" sx={{ color: "#0B814A" }} />
+                </IconButton>
+              )}
+              <IconButton
+                aria-label="delete"
+                size="large"
+                onClick={() => deleteUser(user._id)}
+              >
                 <Delete fontSize="large" sx={{ color: "#FF5858" }} />
               </IconButton>
             </Box>
