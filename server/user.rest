@@ -33,7 +33,7 @@ Content-Type: application/json
 "email":"milliecheung@outlook.com",
 "firstName": "Millie",
 "lastName": "Cheung",
-"password":"1234567",
+"password":"12345678",
 "isAdmin": false,
 "profilePic": "https://avatars.githubusercontent.com/u/89253350?v=4",
 "bio": "Hello from the other side"

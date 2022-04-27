@@ -17,7 +17,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logoAndIcons/logo.svg";
 import { useAccount } from "./context/AccountContext";
@@ -322,7 +322,7 @@ const Header = (props) => {
             sx={{
               color: "#B6D5D5",
               width: "100px",
-              display: "flex",
+              display: { xs: "none", sm: "none", md: "flex" },
               placeItems: "center",
               justifyContent: "space-between",
             }}
