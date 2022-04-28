@@ -24,7 +24,7 @@ import logo from "../assets/logoAndIcons/logo.svg";
 import { useAccount } from "./context/AccountContext";
 
 const Header = (props) => {
-  const { isLoggedIn, signOut, currentUser } = useAccount();
+  const { signOut, currentUser } = useAccount();
   const matches = useMediaQuery("(max-width:380px)");
 
   const [openMenu, setOpenMenu] = useState(false);
@@ -193,7 +193,7 @@ const Header = (props) => {
                 </Typography>
               </Link>
             </ListItem>
-            {isLoggedIn && currentUser.role === "admin" && (
+            {currentUser && currentUser.role === "admin" && (
               <ListItem>
                 <Link
                   style={{ textDecoration: "none" }}
@@ -217,7 +217,7 @@ const Header = (props) => {
               </ListItem>
             )}
             <ListItem>
-              {!isLoggedIn ? (
+              {!currentUser ? (
                 <Link
                   style={{ textDecoration: "none", marginTop: "1.5rem" }}
                   to="/signin"
@@ -289,7 +289,7 @@ const Header = (props) => {
             }}
           >
             <Link
-              to={!isLoggedIn ? "/signup" : "/"}
+              to={!currentUser ? "/signup" : "/"}
               style={{ textDecoration: "none" }}
             >
               <Button
@@ -322,9 +322,9 @@ const Header = (props) => {
                     boxShadow: "none",
                   },
                 }}
-                onClick={!isLoggedIn ? null : signOut}
+                onClick={!currentUser ? null : signOut}
               >
-                {!isLoggedIn ? "Sign Up/In" : "Logout"}
+                {!currentUser ? "Sign Up/In" : "Logout"}
               </Button>
             </Link>
             <Box

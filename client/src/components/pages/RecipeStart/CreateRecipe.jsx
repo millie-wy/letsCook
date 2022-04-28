@@ -16,7 +16,7 @@ import { useAccount } from "../../context/AccountContext";
 
 const CreateRecipe = () => {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAccount();
+  const { currentUser } = useAccount();
   const [recipe, setRecipe] = useState({
     title: "",
     description: "",
@@ -98,7 +98,7 @@ const CreateRecipe = () => {
     }, 1000);
   };
 
-  return !isLoggedIn ? (
+  return !currentUser ? (
     <Container
       sx={{ minHeight: "calc(100vh - 8rem)", mt: "2rem", textAlign: "center" }}
     >

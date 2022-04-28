@@ -7,7 +7,6 @@ export const AccountContext = createContext({});
 const AccountProvider = (props) => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState();
-  const isLoggedIn = Boolean(currentUser);
   const location = useLocation();
 
   useEffect(() => {
@@ -52,6 +51,7 @@ const AccountProvider = (props) => {
   /** Sign out an user */
   const signOut = async () => {
     await makeRequest("/api/users/account/logout", "DELETE");
+    setCurrentUser(undefined);
     setTimeout(() => {
       navigate("/start");
       window.location.reload(false);
@@ -105,7 +105,6 @@ const AccountProvider = (props) => {
   return (
     <AccountContext.Provider
       value={{
-        isLoggedIn,
         signIn,
         signUp,
         signOut,
