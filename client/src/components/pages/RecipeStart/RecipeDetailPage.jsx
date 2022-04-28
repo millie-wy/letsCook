@@ -23,7 +23,7 @@ import { makeRequest } from "../../../helper.js";
 import { useAccount } from "../../context/AccountContext";
 
 const RecipeDetailPage = () => {
-  const { isLoggedIn, currentUser } = useAccount();
+  const { currentUser } = useAccount();
   const [recipe, setRecipe] = useState([]);
   const [individualRating, setIndividualRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -531,7 +531,7 @@ const RecipeDetailPage = () => {
             </Box>
           ))
         )}
-        {!isLoggedIn ? (
+        {!currentUser ? (
           <Box
             sx={{
               background: "#F1F8F6",
