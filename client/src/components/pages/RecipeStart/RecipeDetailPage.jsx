@@ -96,7 +96,7 @@ const RecipeDetailPage = () => {
       comments: [
         ...existingComments,
         {
-          author: user.firstName + " " + user.lastName, // need to connect to the user database...
+          author: user.firstName + " " + user.lastName,
           content: comment,
           rated: individualRating,
           profilePic: user.profilePic,
@@ -449,7 +449,7 @@ const RecipeDetailPage = () => {
               sx={{
                 mt: "1rem",
                 background: "#F1F8F6",
-                maxWidth: "60%",
+                maxWidth: { xs: "100%", sm: "100%", md: "60%" },
                 m: "1rem auto",
                 borderRadius: "15px",
                 p: ".5rem",
@@ -458,7 +458,6 @@ const RecipeDetailPage = () => {
               }}
             >
               <Box
-                minWidth="200px"
                 sx={{
                   display: "flex",
                   flexDirection: "row",
