@@ -3,21 +3,20 @@ import {
   Box,
   Button,
   Container,
+  Paper,
   TextField,
   Typography,
-  Paper,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 import { makeRequest } from "../../../helper.js";
 import { useAccount } from "../../context/AccountContext";
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { useState, useEffect } from "react";
 
 const CreateRecipe = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAccount();
-  const location = useLocation();
   const [recipe, setRecipe] = useState({
     title: "",
     description: "",
@@ -66,26 +65,34 @@ const CreateRecipe = () => {
     validateOnMount: true,
   });
 
+  /** add an extra field for ingredient */
   const addIngredient = () => {
     setRecipe(formik.values, formik.values.ingredients.push(""));
     formik.setValues(formik.values);
   };
+
+  /** delete a field for ingredient */
   const removeIngredient = () => {
     setRecipe(formik.values, formik.values.ingredients.pop());
     formik.setValues(formik.values);
   };
+
+  /** add an extra field for direction */
   const addDirection = () => {
     setRecipe(formik.values, formik.values.direction.push(""));
     formik.setValues(formik.values);
   };
+
+  /** delete a field for direction */
   const removeDirection = () => {
     setRecipe(formik.values, formik.values.direction.pop());
     formik.setValues(formik.values);
   };
 
+  /** create a new recipe in the recipe db */
   const publishRecipe = async (values) => {
     let result = await makeRequest("/api/recipes", "POST", values);
-    alert("Recipe " + values.title + " has been added."); // for now it is showing an alert, change style if we have time!
+    alert(result); // for now it is showing an alert, change style if we have time!
     setTimeout(() => {
       navigate("/start");
     }, 1000);

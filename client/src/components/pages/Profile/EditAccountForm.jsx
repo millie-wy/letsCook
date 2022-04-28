@@ -29,6 +29,7 @@ const EditAccountForm = () => {
     if (currentUser === undefined) {
       setIsLoading(true);
     } else {
+      /** get a specific user from the user db */
       const fetchUser = async () => {
         let result = await makeRequest(`/api/users/${currentUser.id}`, "GET");
         setProfile(result);

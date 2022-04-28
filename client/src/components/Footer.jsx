@@ -20,20 +20,32 @@ const Footer = () => {
         }}
       >
         <Typography
-          variant="body2"
-          sx={{ cursor: "pointer", fontFamily: "Poppins" }}
+          sx={{
+            cursor: "pointer",
+            fontFamily: "Poppins",
+            fontSize: { xs: "10px", sm: "12px", md: "14px" },
+            wordWrap: "normal",
+          }}
         >
           Terms & Conditions
         </Typography>
         <Typography
           variant="body2"
-          sx={{ cursor: "pointer", fontFamily: "Poppins" }}
+          sx={{
+            cursor: "pointer",
+            fontFamily: "Poppins",
+            fontSize: { xs: "10px", sm: "12px", md: "14px" },
+          }}
         >
           Privacy Policy
         </Typography>
         <Typography
           variant="body2"
-          sx={{ cursor: "pointer", fontFamily: "Poppins" }}
+          sx={{
+            cursor: "pointer",
+            fontFamily: "Poppins",
+            fontSize: { xs: "10px", sm: "12px", md: "14px" },
+          }}
         >
           Contact
         </Typography>
@@ -41,7 +53,11 @@ const Footer = () => {
       <Box>
         <Typography
           variant="body2"
-          sx={{ cursor: "pointer", fontFamily: "Poppins" }}
+          sx={{
+            cursor: "pointer",
+            fontFamily: "Poppins",
+            fontSize: { xs: "10px", sm: "12px", md: "14px" },
+          }}
         >
           Lets Cook © 2022
         </Typography>

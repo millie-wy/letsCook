@@ -11,6 +11,7 @@ const AccountProvider = (props) => {
   const location = useLocation();
 
   useEffect(() => {
+    // get the cookie session details from backend
     const getCookieSession = async () => {
       try {
         let result = await makeRequest("/api/users/account/login", "GET");
@@ -23,7 +24,6 @@ const AccountProvider = (props) => {
     getCookieSession();
   }, [location]);
 
-  console.log(isLoggedIn);
   /** Sign in an user */
   const signIn = async (email, password) => {
     const user = { email, password };

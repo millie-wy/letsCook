@@ -9,27 +9,20 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import comment from "../../../assets/logoAndIcons/comment.svg";
-import { makeRequest } from "../../../helper";
+import { getAvgRating, makeRequest } from "../../../helper";
 
 const AdminRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   const matches = useMediaQuery("(max-width:500px)");
 
   useEffect(() => {
+    // get all recipes from the recipe db
     const fetchData = async () => {
       let response = await makeRequest("/api/recipes", "GET");
       setRecipes(response);
     };
     fetchData();
   }, []);
-
-  const getAvgRating = (comments) => {
-    let rated = [];
-    comments.map((comment) => rated.push(comment.rated));
-    let avg = rated.reduce((a, b) => a + b, 0) / comments.length || 0;
-    return avg.toFixed(1);
-  };
 
   return recipes.length < 1 ? (
     <Container sx={{ height: "calc(100vh - 8rem)", mt: "2rem" }}>
@@ -59,7 +52,6 @@ const AdminRecipes = () => {
         <span style={{ color: "#0B814A" }}>edit</span> or{" "}
         <span style={{ color: "#FF5858" }}>delete</span> them.
       </Typography>
-      {/* profile recipe card - delete the second card and fetch and map to be used here */}
       {recipes.map((recipe) => (
         <Container
           key={recipe._id}

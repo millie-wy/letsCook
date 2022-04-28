@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -10,26 +9,21 @@ import {
 import { useEffect, useState } from "react";
 import { makeRequest } from "../../../helper";
 import { useAccount } from "../../context/AccountContext";
-import ManageAccount from "../Profile/ManageAccount";
-import ProfilePosts from "../Profile/ProfilePosts";
-import RecipeLiked from "../Profile/RecipeLiked";
 import AdminRecipes from "./AdminRecipes";
 import AdminUsers from "./AdminUsers";
 
 const AdminPage = () => {
   const [selectedContent, setSelectedContent] = useState("users");
   const { currentUser } = useAccount();
-  const [user, setUser] = useState({});
-  const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {
     if (currentUser === undefined || currentUser.isAdmin === false) {
       setIsLoading(true);
     } else {
+      /** check if the current user is an admin */
       const fetchUser = async () => {
-        let result = await makeRequest(`/api/users/${currentUser.id}`, "GET");
-        setUser(result);
+        await makeRequest(`/api/users/${currentUser.id}`, "GET");
         setIsLoading(false);
       };
       fetchUser();

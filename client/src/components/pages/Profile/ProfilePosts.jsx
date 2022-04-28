@@ -21,6 +21,7 @@ const ProfilePosts = () => {
     if (currentUser === undefined) {
       setIsLoading(true);
     } else {
+      /** get the recipes created by the user from the recipe db */
       const fetchUsersRecipes = async () => {
         let response = await makeRequest("/api/recipes", "GET");
         let recipesWithAuthor = response.filter(

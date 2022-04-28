@@ -3,16 +3,15 @@ import {
   Box,
   Button,
   Container,
+  Paper,
   TextField,
   Typography,
-  Paper,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import { makeRequest } from "../../../helper.js";
-import { useAccount } from "../../context/AccountContext";
-import * as yup from "yup";
 import { useFormik } from "formik";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { makeRequest } from "../../../helper.js";
 
 const RecipeForm = () => {
   const navigate = useNavigate();
@@ -29,9 +28,9 @@ const RecipeForm = () => {
   });
 
   useEffect(() => {
+    /** get a specifc recipe by id from recipe db */
     const fetchData = async () => {
       let response = await makeRequest(`/api/recipes/${id}`, "GET");
-      console.log(response);
       setRecipe(response);
     };
     fetchData();
@@ -75,25 +74,32 @@ const RecipeForm = () => {
     validateOnMount: true,
   });
 
+  /** add an extra field for ingredient */
   const addIngredient = () => {
     setRecipe(recipe, recipe.ingredients.push("Empty ingredient"));
     formik.setValues(recipe);
   };
+
+  /** remove a field for ingredient */
   const removeIngredient = () => {
     setRecipe(recipe, recipe.ingredients.pop());
     formik.setValues(recipe);
   };
+
+  /** add an extra field for direction */
   const addDirection = () => {
     setRecipe(recipe, recipe.direction.push("Empty instruction"));
     formik.setValues(recipe);
   };
+
+  /** remove a field for direction */
   const removeDirection = () => {
     setRecipe(recipe, recipe.direction.pop());
     formik.setValues(recipe);
   };
 
+  /** update a recipe */
   const updateRecipe = async (values) => {
-    console.log(values); // to be deleted
     let result = await makeRequest(`/api/recipes/${id}`, "PUT", values);
     alert(result); // for now it is showing an alert, change style if we have time!
     setTimeout(() => {
