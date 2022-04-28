@@ -106,7 +106,7 @@ const RecipeForm = () => {
     let result = await makeRequest(`/api/recipes/${id}`, "PUT", values);
     alert(result); // for now it is showing an alert, change style if we have time!
     setTimeout(() => {
-      navigate("/start");
+      navigate("/search");
     }, 1000);
   };
 

@@ -101,7 +101,7 @@ const RecipeDetailPage = () => {
       comments: [
         ...existingComments,
         {
-          author: user.firstName + " " + user.lastName,
+          author: currentUser.firstName + " " + currentUser.lastName,
           content: comment,
           rated: individualRating,
           profilePic: user.profilePic,
@@ -117,12 +117,12 @@ const RecipeDetailPage = () => {
   /** delete a recipe */
   const deleteRecipe = async (id, title) => {
     setIsDeletingRecipe(true);
-    let response = await makeRequest(`/api/recipes/${id}`, "DELETE");
+    await makeRequest(`/api/recipes/${id}`, "DELETE");
     setTimeout(() => {
-      alert(response);
+      alert("Recipe with title " + title + " has been removed.");
       setIsDeletingRecipe(false);
       handleClose();
-      navigate("/start");
+      navigate("/search");
     }, 1000);
   };
 
@@ -459,6 +459,8 @@ const RecipeDetailPage = () => {
                 p: ".5rem",
                 display: "flex",
                 flexDirection: "row",
+                overflowWrap: "break-word",
+                gap: "1rem",
               }}
             >
               <Box
@@ -466,6 +468,7 @@ const RecipeDetailPage = () => {
                   display: "flex",
                   flexDirection: "row",
                   placeItems: "center",
+                  minWidth: 150,
                 }}
               >
                 <Avatar
@@ -496,15 +499,20 @@ const RecipeDetailPage = () => {
                   display: "flex",
                   flexDirection: "column",
                   p: ".5rem .8rem 0 0",
-                  width: "100%",
+                  maxWidth: 1,
+                  overflowWrap: "break-word",
+                  overflowX: "clip",
                 }}
               >
                 <Typography
+                  overflowWrap
                   sx={{
                     textAlign: "start",
                     fontFamily: "Poppins",
                     display: "flex",
                     fontSize: ".8rem",
+                    overflowWrap: "break-word",
+                    maxWidth: "100%",
                   }}
                 >
                   {comment.content}

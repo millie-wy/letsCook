@@ -1,20 +1,19 @@
 # User Based Content - LetsCook
 
-Something to write <br/>
-Something to write
+This is a mocked recipe website called LetsCook, a user-based platform where a visitor can sign up an account, sign in, create recipe and edit/remove it. The user is also able to edit or even remove his/her own profile. An admin can perform all CRUD actions on recipes and promote/demote or delete an user. 
 
-[To repo](https://github.com/millie-wy/XXXX "User Based Content - LetsCook")
+This project is created with React JS and MUI in frontend, and Express, MongoDB and Mongoose in backend. 
+
+[To repo](https://github.com/millie-wy/letsCook "User Based Content - LetsCook")
 
 ### Developers
 
-William Saar (https://github.com/Willen17)
-Millie Cheung (https://github.com/millie-wy/)
+William Saar (https://github.com/Willen17) </br>
+Millie Cheung (https://github.com/millie-wy)
 
 ### Getting started
 
-Download the ZIP, open 2 terminals in your code editor and write the below commands separately:
-
-1. Run the **server** on [http://localhost:8080](http://localhost:8080)
+1. Run the **server** on [http://localhost:3002](http://localhost:3002)
 
    ```
    cd server
@@ -22,7 +21,13 @@ Download the ZIP, open 2 terminals in your code editor and write the below comma
    npm start
    ```
 
-2. Run the **client** on [http://localhost:3000](http://localhost:3000)
+2. Import the dummy recipe data (found in server/data folder) in your mongoDB compass
+
+3. Create an admin account from the backend: </br>
+   i.  Send a POST request (line 16 in server/user.rest) </br>
+   ii. Refresh your MongoDB compass and adjust `isAdmin` to `true` under the users collection
+   
+4. In a separate terminal, run the **client** on [http://localhost:3000](http://localhost:3000)
    ```
    cd client
    npm i
@@ -36,15 +41,15 @@ Download the ZIP, open 2 terminals in your code editor and write the below comma
 Krav för godkänt:
 
 - [x] 1. Git & GitHub har använts.
-- [ ] 2. Projektmappen innehåller en README.md fil.
-- [ ] 3. Uppgiften lämnas in i tid!
-- [ ] 4. Det ska finnas minst två stycken resurser med CRUD-Endpoints.
-- [ ] 5. Det ska gå att registrera sig, logga in och skapa innehåll som är kopplat till inloggad användare.
-- [ ] 6. Endast den inloggade användaren får lov att utföra C_UD actions på sitt innehåll.
-- [ ] 7. Allt innehåll ska sparas i en MongoDB databas.
+- [x] 2. Projektmappen innehåller en README.md fil.
+- [x] 3. Uppgiften lämnas in i tid!
+- [x] 4. Det ska finnas minst två stycken resurser med CRUD-Endpoints.
+- [x] 5. Det ska gå att registrera sig, logga in och skapa innehåll som är kopplat till inloggad användare.
+- [x] 6. Endast den inloggade användaren får lov att utföra C_UD actions på sitt innehåll.
+- [x] 7. Allt innehåll ska sparas i en MongoDB databas.
 
 Krav för väl godkänt:
 
-- [ ] 1. Alla punkter för godkänt är uppfyllda.
-- [ ] 2. Det ska finnas en adminroll i systemet där man som inloggad admin har rättigheten att utföra CRUD operationer på allt innehåll.
-- [ ] 3. Admins ska ha tillgång till ett gränssnitt som listar alla användare och deras roller. En admin ska från gränssnittet kunna ta bort användare eller ändra dess roll.
+- [x] 1. Alla punkter för godkänt är uppfyllda.
+- [x] 2. Det ska finnas en adminroll i systemet där man som inloggad admin har rättigheten att utföra CRUD operationer på allt innehåll.
+- [x] 3. Admins ska ha tillgång till ett gränssnitt som listar alla användare och deras roller. En admin ska från gränssnittet kunna ta bort användare eller ändra dess roll.
