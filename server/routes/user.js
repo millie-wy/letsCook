@@ -25,9 +25,9 @@ const secureWithRole = (role) => {
 router.get("/", secureWithRole("admin"), async (req, res) => {
   try {
     const users = await userModel.find({});
-    return res.json(users);
+    return res.status(200).json(users);
   } catch (err) {
-    res.json("Other error");
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -36,10 +36,10 @@ router.get("/:id", secure, async (req, res) => {
   try {
     const { id } = req.params;
     const currentUser = await userModel.findById(id);
-    if (!currentUser) return res.json("No user found with this id");
-    return res.json(currentUser);
+    if (!currentUser) return res.status(401).json("No user found with this id");
+    return res.status(200).json(currentUser);
   } catch (err) {
-    res.json("Other error");
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -75,13 +75,13 @@ router.put("/:id", async (req, res) => {
     if (updates.profilePic) user.profilePic = updates.profilePic;
     if (updates.bio) user.bio = updates.bio;
 
-    return res.json("Your profile has been updated!");
+    return res.status(200).json("Your profile has been updated!");
   } catch (err) {
     if (err.code == 11000) {
-      res.send("Email already exists");
+      res.status(401).send("Email already exists");
       return;
     }
-    res.send("Other error", err);
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -91,9 +91,11 @@ router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     const removedUser = await userModel.findByIdAndRemove(id);
     if (!removedUser) return res.json("No user found with this email");
-    return res.json(`User with email '${removedUser.email}' has been deleted.`);
+    return res
+      .status(200)
+      .json(`User with email '${removedUser.email}' has been deleted.`);
   } catch (err) {
-    res.json("Other error");
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -114,8 +116,8 @@ router.post("/", async (req, res) => {
     return res.json(`New account with email '${user.email}' has been created.`);
   } catch (err) {
     if (err.code == 11000)
-      return res.json("Email already exists. Try sign in instead?");
-    res.json("Other error");
+      return res.status(401).json("Email already exists. Try sign in instead?");
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -138,24 +140,24 @@ router.post("/account/login", async (req, res) => {
     lastName: user.lastName,
     role: user.isAdmin ? "admin" : "user",
   };
-  res.json("You have logged in!");
+  res.status(200).json("You have logged in!");
 });
 
 // log out an user
 router.delete("/account/logout", (req, res) => {
   if (!req.session.user.id)
     return res
-      .status(401)
+      .status(403)
       .json("You cannot log out when you are not logged in.");
   req.session = null;
-  res.json("You are now logged out.");
+  res.status(200).json("You are now logged out.");
 });
 
 /** return the information stored in the cookie - for testing, will be deleted */
 router.get("/account/login", (req, res) => {
   if (!req.session.user.id)
     return res.status(401).send("You are not logged in.");
-  res.json(req.session);
+  res.status(200).json(req.session);
 });
 
 export default router;

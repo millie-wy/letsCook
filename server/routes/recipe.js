@@ -7,9 +7,9 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const recipes = await recipeModel.find({});
-    res.json(recipes);
+    return res.status(200).json(recipes);
   } catch (err) {
-    res.send("Other error");
+    return res.status(500).json({ message: err.message });
   }
 });
 
@@ -18,12 +18,11 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
     const currentRecipe = await recipeModel.findById(id).populate("author");
     if (!currentRecipe) {
-      res.json("No recipe found with this id");
-      return;
+      return res.status(404).json("No recipe found with this id");
     }
-    res.json(currentRecipe);
+    return res.status(200).json(currentRecipe);
   } catch (err) {
-    res.send("Other error");
+    return res.status(500).json({ message: err.message });
   }
 });
 
@@ -52,13 +51,12 @@ router.post("/", secure, async (req, res) => {
     recipe.author = req.session.user;
     recipe.comments = [];
     await recipe.save();
-    res.json(recipe);
+    return res.status(200).json(recipe);
   } catch (err) {
     if (err.code == 11000) {
-      res.send("Recipe name already exists");
-      return;
+      return res.status(403).json("Recipe name already exists.");
     }
-    res.send("Other error " + err);
+    return res.status(500).json({ message: err.message });
   }
 });
 
@@ -87,13 +85,14 @@ router.put("/:id", async (req, res) => {
     if (direction) recipe.direction = direction;
     if (tags) recipe.tags = tags;
 
-    res.json(`Recipe with title '${recipe.title}' has been updated.`);
+    res
+      .status(200)
+      .json(`Recipe with title '${recipe.title}' has been updated.`);
   } catch (err) {
     if (err.code == 11000) {
-      res.send("Recipe already exists");
-      return;
+      return res.status(403).json("Recipe already exists");
     }
-    res.send("Other error");
+    return res.status(500).json({ message: err.message });
   }
 });
 
@@ -102,12 +101,12 @@ router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     const removedRecipe = await recipeModel.findByIdAndRemove(id);
     if (!removedRecipe) {
-      res.json("No recipe found with this id");
+      res.status(404).json("No recipe found with this id");
       return;
     }
-    res.json(removedRecipe);
+    res.status(200).json(removedRecipe);
   } catch (err) {
-    res.send("Other error");
+    return res.status(500).json({ message: err.message });
   }
 });
 
