@@ -16,27 +16,22 @@ DELETE http://localhost:3002/api/users/626280e3bd6aa838b7b033c2
 POST http://localhost:3002/api/users
 Content-Type: application/json
 
-{ 
-  "email": "newuser@letscook.com",
-  "firstName": "Sven",
-  "lastName": "Svensson",
-  "password": "qwertyui"
-}
+  {
+    "email": "admin@letscook.com",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "password": "87654321"
+  }
 
 ###
 
 // Update user details
-PUT http://localhost:3002/api/users/62629bd1d7835660d5953a66
+PUT http://localhost:3002/api/users/626abef7494fc820d4ad1e52
 Content-Type: application/json
 
 {
-"email":"milliecheung@outlook.com",
-"firstName": "Millie",
-"lastName": "Cheung",
-"password":"12345678",
-"isAdmin": false,
-"profilePic": "https://avatars.githubusercontent.com/u/89253350?v=4",
-"bio": "Hello from the other side"
+    "firstName": "John",
+    "lastName": "Doe"
 }
 
 ###
@@ -45,27 +40,10 @@ Content-Type: application/json
 POST http://localhost:3002/api/users/account/login
 Content-Type: application/json
 
-  #  {
-  #    "email": "admin@letscook.com", 
-  #    "password": "admin"
-  #  }
-
-// some templates for testing (to be deleted)
-
-# {
-#     "email": "user@letscook.com", 
-#     "password": "user"
-# }
-
-   {
-     "email": "milliecheung@outlook.com", 
-     "password": "1234567"
-   }
-
-#   {
-#     "email": "williamsaar@outlook.com", 
-#     "password": "1234"
-#   }
+ {
+   "email": "admin@letscook.com", 
+   "password": "87654321"
+ }
 
 ###
 
