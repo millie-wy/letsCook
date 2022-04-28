@@ -4,15 +4,13 @@
     "firstName": "John",
     "lastName": "Doe",
     "password": "12345678",
-    "isAdmin": false,
-    "profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
+    "isAdmin": false
   },
   {
     "email": "admin@letscook.com",
     "firstName": "Jane",
     "lastName": "Doe",
     "password": "87654321",
-    "isAdmin": true,
-    "profilePic": "https://user-images.githubusercontent.com/89253350/164979203-98afd15c-e3db-419e-b37d-9bc714dccc30.svg"
+    "isAdmin": true
   }
 ]
