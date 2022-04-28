@@ -16,6 +16,7 @@ const RecipeCard = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    /** get all recipes from recipe db */
     const fetchData = async () => {
       let response = await makeRequest("/api/recipes", "GET");
       setData(response);

@@ -1,3 +1,4 @@
+// make data fetching request
 export const makeRequest = async (url, method, body) => {
   let response = await fetch(url, {
     method,
@@ -9,6 +10,7 @@ export const makeRequest = async (url, method, body) => {
   return await response.json();
 };
 
+// get average star ratings of the recipe
 export const getAvgRating = (comments) => {
   let rated = [];
   comments.map((comment) => rated.push(comment.rated));

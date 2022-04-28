@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import comment from "../../../assets/logoAndIcons/comment.svg";
 import star from "../../../assets/logoAndIcons/star.svg";
-import { makeRequest, getAvgRating } from "../../../helper.js";
+import { getAvgRating, makeRequest } from "../../../helper.js";
 
 const RandomRecipeCard = () => {
   const [recipe, setRecipe] = useState();
@@ -21,6 +21,7 @@ const RandomRecipeCard = () => {
     if (recipe === undefined) {
       setIsLoading(true);
     }
+    /** get a random recipe from the recipe db */
     const fetchRandomRecipe = async () => {
       let response = await makeRequest("/api/recipes", "GET");
       let random = response[Math.floor(Math.random() * response.length)];

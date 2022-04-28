@@ -24,19 +24,13 @@ const ProfileOverviewPage = () => {
     if (currentUser === undefined) {
       setIsLoading(true);
     } else {
+      /** get a specific user from the user db */
       const fetchUser = async () => {
         let result = await makeRequest(`/api/users/${currentUser.id}`, "GET");
         setUser(result);
         setIsLoading(false);
       };
       fetchUser();
-
-      const fetchUsersRecipes = async () => {
-        let response = await makeRequest("/api/recipes", "GET");
-        let author = response.map((recipe) => recipe.author);
-        console.log(author);
-      };
-      fetchUsersRecipes();
     }
   }, [currentUser]);
 

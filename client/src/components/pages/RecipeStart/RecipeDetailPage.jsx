@@ -38,6 +38,7 @@ const RecipeDetailPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    /** fetch the specific recipe */
     const fetchData = async () => {
       let response = await makeRequest(`/api/recipes/${id}`, "GET");
       setRecipe(response);
@@ -45,11 +46,13 @@ const RecipeDetailPage = () => {
     };
     fetchData();
 
+    /** disable comment button */
     comment.length > 4 && individualRating >= 1
       ? setDisabledButton(false)
       : setDisabledButton(true);
   }, [comment.length, id, individualRating]);
 
+  /** check if an object is empty */
   function isObjectEmpty(object) {
     var isEmpty = true;
     for (let keys in object) {
@@ -59,9 +62,9 @@ const RecipeDetailPage = () => {
     return isEmpty;
   }
 
+  /** Since the mocked data doesn't have an author, we have to check if the autor object is empty */
   useEffect(() => {
     if (!isLoading) {
-      // Since the mocked data doesn't have an author, we have to check if the autor object is empty
       if (isObjectEmpty(recipe.author)) {
         setIsLoading(false);
         return;
@@ -80,6 +83,7 @@ const RecipeDetailPage = () => {
     }
   }, [recipe]);
 
+  /** defines which type of users can edit a post */
   useEffect(() => {
     if (currentUser !== undefined) {
       if (
@@ -91,6 +95,7 @@ const RecipeDetailPage = () => {
     }
   }, [currentUser, recipe, user]);
 
+  /** add a comment to the recipe db under comments */
   const submitComment = async (existingComments) => {
     const allComments = {
       comments: [
@@ -109,19 +114,22 @@ const RecipeDetailPage = () => {
     }, 1000);
   };
 
+  /** delete a recipe */
   const deleteRecipe = async (id, title) => {
     setIsDeletingRecipe(true);
     let response = await makeRequest(`/api/recipes/${id}`, "DELETE");
     setTimeout(() => {
-      alert(`Recipe ${title} has been deleted`);
-
+      alert(response);
       setIsDeletingRecipe(false);
       handleClose();
       navigate("/start");
     }, 1000);
   };
 
-  // modal
+  /** for the modal that shows up when use deletes a recipe */
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const modalStyle = {
     position: "absolute",
@@ -138,10 +146,6 @@ const RecipeDetailPage = () => {
     rowGap: "1rem",
     textAlign: "center",
   };
-
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   return recipe.length < 1 ? (
     <Container

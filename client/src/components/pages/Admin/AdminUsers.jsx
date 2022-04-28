@@ -17,9 +17,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useAccount } from "../../context/AccountContext";
-import { makeRequest } from "../../../helper";
 import { useNavigate } from "react-router-dom";
+import { makeRequest } from "../../../helper";
+import { useAccount } from "../../context/AccountContext";
 
 const AdminUsers = () => {
   const { currentUser } = useAccount();
@@ -46,6 +46,7 @@ const AdminUsers = () => {
     if (currentUser === undefined) {
       setIsLoading(true);
     } else if (currentUser.role === "admin") {
+      /** get all users from the user db */
       const fetchUser = async () => {
         let result = await makeRequest(`/api/users`, "GET");
         setUsers(result);
@@ -56,9 +57,9 @@ const AdminUsers = () => {
     } else return;
   }, [currentUser]);
 
+  /** set user state for different user modals */
   const prepareUser = (id, firstName, lastName, assignment) => {
     setUserInFocus({ id, firstName, lastName });
-
     if (assignment === "removeUser") {
       handleOpen();
     } else if (assignment === "promoteUser") {
@@ -68,9 +69,10 @@ const AdminUsers = () => {
     }
   };
 
+  /** remove an user from the user db */
   const deleteUser = async (id, firstName, lastName) => {
     setIsUpdating(true);
-    let response = await makeRequest(`/api/users/${id}`, "DELETE");
+    await makeRequest(`/api/users/${id}`, "DELETE");
     setTimeout(() => {
       alert(`User: ${firstName} ${lastName} has been deleted`);
 
@@ -80,28 +82,27 @@ const AdminUsers = () => {
     }, 1000);
   };
 
+  /** promote an user to admin */
   const promoteUser = async (id, firstName, lastName) => {
     setIsUpdating(true);
 
     let adminObject = { isAdmin: true };
-    let response = await makeRequest(`/api/users/${id}`, "PUT", adminObject);
+    await makeRequest(`/api/users/${id}`, "PUT", adminObject);
     setTimeout(() => {
       alert(`User: ${firstName} ${lastName} has been promoted to admin`);
-
       setIsUpdating(false);
       handlePromoteClose();
       navigate("/admin");
     }, 1000);
   };
 
+  /** demote an admin to user */
   const demoteUser = async (id, firstName, lastName) => {
     setIsUpdating(true);
-
     let adminObject = { isAdmin: false };
-    let response = await makeRequest(`/api/users/${id}`, "PUT", adminObject);
+    await makeRequest(`/api/users/${id}`, "PUT", adminObject);
     setTimeout(() => {
       alert(`User: ${firstName} ${lastName} has been demoted to admin`);
-
       setIsUpdating(false);
       handleDemoteClose();
       navigate("/admin");
