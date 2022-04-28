@@ -12,6 +12,7 @@ import StartPage from "./components/pages/StartPage";
 import RecipeForm from "./components/pages/RecipeStart/RecipeForm";
 import CreateRecipe from "./components/pages/RecipeStart/CreateRecipe";
 import AdminPage from "./components/pages/Admin/AdminPage";
+import NotFound from "./components/pages/NotFound";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<StartPage />} />
+            <Route path="*" element={<NotFound />} />
             <Route path="/start" element={<RecipeStartPage />} />
             <Route path="/recipe/:recipe" element={<RecipeDetailPage />} />
             <Route path="/recipe/edit" element={<RecipeForm />} />
