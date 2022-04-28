@@ -16,6 +16,7 @@ import {
   ListItem,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -24,6 +25,7 @@ import { useAccount } from "./context/AccountContext";
 
 const Header = (props) => {
   const { isLoggedIn, signOut, currentUser } = useAccount();
+  const matches = useMediaQuery("(max-width:380px)");
 
   const [openMenu, setOpenMenu] = useState(false);
   const handleMenuOpen = () => {
@@ -278,81 +280,89 @@ const Header = (props) => {
         </Drawer>
 
         {/* below is header right  */}
-        <Box sx={{ display: "flex", gap: "1.5rem", flexDirection: "row" }}>
-          <Link
-            to={!isLoggedIn ? "/signup" : "/"}
-            style={{ textDecoration: "none" }}
-          >
-            <Button
-              variant="contained"
-              size="small"
-              sx={{
-                fontFamily: "Poppins",
-                letterSpacing: "none",
-                fontSize: {
-                  xs: ".7rem",
-                  sm: ".7rem",
-                  md: ".8rem",
-                  lg: ".9rem",
-                  xl: ".9rem",
-                },
-                fontWeight: "600",
-                bgcolor: "white",
-                color: "#2E4739",
-                textTransform: "capitalize",
-                borderRadius: 10,
-                boxShadow: "none",
-                paddingX: {
-                  xs: ".5rem",
-                  sm: "1rem",
-                  md: "1.5rem",
-                },
-                "&:hover": {
-                  backgroundColor: "#E5C687",
-                  color: "white",
-                  boxShadow: "none",
-                },
-              }}
-              onClick={!isLoggedIn ? null : signOut}
-            >
-              {!isLoggedIn ? "Sign Up/In" : "Logout"}
-            </Button>
-          </Link>
+        {!matches && (
           <Box
             sx={{
-              color: "#B6D5D5",
-              width: "100px",
-              display: { xs: "none", sm: "none", md: "flex" },
-              placeItems: "center",
-              justifyContent: "space-between",
+              display: "flex",
+              gap: "1.5rem",
+              flexDirection: "row",
             }}
           >
-            <Instagram
-              sx={{
-                cursor: "pointer",
-                "&:hover": {
+            <Link
+              to={!isLoggedIn ? "/signup" : "/"}
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                variant="contained"
+                size="small"
+                sx={{
+                  fontFamily: "Poppins",
+                  letterSpacing: "none",
+                  fontSize: {
+                    xs: ".7rem",
+                    sm: ".7rem",
+                    md: ".8rem",
+                    lg: ".9rem",
+                    xl: ".9rem",
+                  },
+                  fontWeight: "600",
+                  bgcolor: "white",
                   color: "#2E4739",
-                },
-              }}
-            />
-            <FacebookRounded
+                  textTransform: "capitalize",
+                  borderRadius: 10,
+                  boxShadow: "none",
+                  paddingX: {
+                    xs: ".5rem",
+                    sm: "1rem",
+                    md: "1.5rem",
+                  },
+                  "&:hover": {
+                    backgroundColor: "#E5C687",
+                    color: "white",
+                    boxShadow: "none",
+                  },
+                }}
+                onClick={!isLoggedIn ? null : signOut}
+              >
+                {!isLoggedIn ? "Sign Up/In" : "Logout"}
+              </Button>
+            </Link>
+            <Box
               sx={{
-                cursor: "pointer",
-                "&:hover": {
-                  color: "#2E4739",
-                },
+                color: "#B6D5D5",
+                width: "100px",
+                display: { xs: "none", sm: "none", md: "flex" },
+                placeItems: "center",
+                justifyContent: "space-between",
               }}
-            />
-            <Twitter
-              sx={{
-                cursor: "pointer",
-                "&:hover": {
-                  color: "#2E4739",
-                },
-              }}
-            />
+            >
+              <Instagram
+                sx={{
+                  cursor: "pointer",
+                  "&:hover": {
+                    color: "#2E4739",
+                  },
+                }}
+              />
+              <FacebookRounded
+                sx={{
+                  cursor: "pointer",
+                  "&:hover": {
+                    color: "#2E4739",
+                  },
+                }}
+              />
+              <Twitter
+                sx={{
+                  cursor: "pointer",
+                  "&:hover": {
+                    color: "#2E4739",
+                  },
+                }}
+              />
+            </Box>
           </Box>
-        </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
