@@ -94,7 +94,7 @@ const CreateRecipe = () => {
     let result = await makeRequest("/api/recipes", "POST", values);
     alert(result); // for now it is showing an alert, change style if we have time!
     setTimeout(() => {
-      navigate("/start");
+      navigate("/search");
     }, 1000);
   };
 
