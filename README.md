@@ -13,8 +13,6 @@ Millie Cheung (https://github.com/millie-wy)
 
 ### Getting started
 
-Download the ZIP, open 2 terminals in your code editor and write the below commands separately:
-
 1. Run the **server** on [http://localhost:3002](http://localhost:3002)
 
    ```
@@ -23,14 +21,18 @@ Download the ZIP, open 2 terminals in your code editor and write the below comma
    npm start
    ```
 
-2. Run the **client** on [http://localhost:3000](http://localhost:3000)
+2. Import the dummy recipe data (found in server/data folder) in your mongoDB compass
+
+3. Create an admin account from the backend: </br>
+   i.  Send a POST request (line 16 in server/user.rest) </br>
+   ii. Refresh your MongoDB compass and adjust `isAdmin` to `true` under the users collection
+   
+4. In a separate terminal, run the **client** on [http://localhost:3000](http://localhost:3000)
    ```
    cd client
    npm i
    npm start
    ```
-
-3. Import the dummy data (found in server/data folder) in your mongoDB compass respectively. 
 
 ---
 
