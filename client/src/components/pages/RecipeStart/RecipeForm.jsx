@@ -76,7 +76,7 @@ const RecipeForm = () => {
 
   /** add an extra field for ingredient */
   const addIngredient = () => {
-    setRecipe(recipe, recipe.ingredients.push("Empty ingredient"));
+    setRecipe(recipe, recipe.ingredients.push(""));
     formik.setValues(recipe);
   };
 
@@ -88,7 +88,7 @@ const RecipeForm = () => {
 
   /** add an extra field for direction */
   const addDirection = () => {
-    setRecipe(recipe, recipe.direction.push("Empty instruction"));
+    setRecipe(recipe, recipe.direction.push(""));
     formik.setValues(recipe);
   };
 
@@ -103,7 +103,7 @@ const RecipeForm = () => {
     let result = await makeRequest(`/api/recipes/${id}`, "PUT", values);
     alert(result); // for now it is showing an alert, change style if we have time!
     setTimeout(() => {
-      navigate("/start");
+      navigate("/search");
     }, 1000);
   };
 
