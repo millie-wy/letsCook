@@ -51,10 +51,12 @@ router.post("/", secure, async (req, res) => {
     recipe.author = req.session.user;
     recipe.comments = [];
     await recipe.save();
-    return res.status(200).json(recipe);
+    return res
+      .status(200)
+      .json(`Recipe with title '${recipe.title}' has been created!`);
   } catch (err) {
     if (err.code == 11000) {
-      return res.status(403).json("Recipe name already exists.");
+      return res.status(403).json("Recipe title already exists.");
     }
     return res.status(500).json({ message: err.message });
   }
