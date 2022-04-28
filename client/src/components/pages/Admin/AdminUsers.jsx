@@ -155,7 +155,7 @@ const AdminUsers = () => {
               background: "white",
               borderRadius: 5,
               py: "1.5rem",
-              width: "fit-content",
+              width: 400,
             }}
           >
             <Box
