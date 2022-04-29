@@ -76,25 +76,28 @@ const RecipeForm = () => {
 
   /** add an extra field for ingredient */
   const addIngredient = () => {
-    setRecipe(recipe, recipe.ingredients.push(""));
+    setRecipe(
+      formik.values,
+      formik.values.ingredients.push("Empty ingredient")
+    );
     formik.setValues(recipe);
   };
 
   /** remove a field for ingredient */
   const removeIngredient = () => {
-    setRecipe(recipe, recipe.ingredients.pop());
+    setRecipe(formik.values, formik.values.ingredients.pop());
     formik.setValues(recipe);
   };
 
   /** add an extra field for direction */
   const addDirection = () => {
-    setRecipe(recipe, recipe.direction.push(""));
+    setRecipe(formik.values, formik.values.direction.push("Empty instruction"));
     formik.setValues(recipe);
   };
 
   /** remove a field for direction */
   const removeDirection = () => {
-    setRecipe(recipe, recipe.direction.pop());
+    setRecipe(formik.values, formik.values.direction.pop());
     formik.setValues(recipe);
   };
 
