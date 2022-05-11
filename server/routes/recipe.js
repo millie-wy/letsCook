@@ -64,13 +64,15 @@ router.post("/", secure, async (req, res) => {
 });
 
 router.put("/:id", secure, async (req, res) => {
-  const currentRecipe = await recipeModel.findById(id).populate("author");
-
+  const { id } = req.params;
+  const currentRecipe = await recipeModel.findById(id);
+  const recipeAuthorId = currentRecipe.author.id
+    .toString()
+    .replace(/ObjectId\("(.*)"\)/, "$1");
   if (
-    currentRecipe.author === req.session.user.id ||
+    recipeAuthorId === req.session.user.id ||
     req.session.user.role === "admin"
   ) {
-    const { id } = req.params;
     if (req.session.user.id)
       try {
         let {
@@ -110,14 +112,16 @@ router.put("/:id", secure, async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const currentRecipe = await recipeModel.findById(id).populate("author");
-
+  const { id } = req.params;
+  const currentRecipe = await recipeModel.findById(id);
+  const recipeAuthorId = currentRecipe.author.id
+    .toString()
+    .replace(/ObjectId\("(.*)"\)/, "$1");
   if (
-    currentRecipe.author === req.session.user.id ||
+    recipeAuthorId === req.session.user.id ||
     req.session.user.role === "admin"
   ) {
     try {
-      const { id } = req.params;
       const removedRecipe = await recipeModel.findByIdAndRemove(id);
       if (!removedRecipe) {
         res.status(404).json("No recipe found with this id");

@@ -46,9 +46,9 @@ router.get("/:id", secure, async (req, res) => {
 // update an user
 /** for now the put wouldnt show error if an user is not found */
 router.put("/:id", secure, async (req, res) => {
+  const { id } = req.params;
   if (req.session.user.id === id || req.session.user.role === "admin") {
     try {
-      const { id } = req.params;
       let updatedUser = {
         email: req.body.email,
         firstName: req.body.firstName,
