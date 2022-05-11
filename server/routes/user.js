@@ -6,7 +6,7 @@ const router = express.Router();
 
 // check if the user is logged in
 export const secure = (req, res, next) => {
-  req.session.user ? next() : res.status(403).json("You must log in first.");
+  req.session.user ? next() : res.status(401).json("You must log in first.");
 };
 
 // check the role of a logged in user
@@ -45,57 +45,65 @@ router.get("/:id", secure, async (req, res) => {
 
 // update an user
 /** for now the put wouldnt show error if an user is not found */
-router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    let updatedUser = {
-      email: req.body.email,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      password: req.body.password,
-      isAdmin: req.body.isAdmin,
-      profilePic: req.body.profilePic,
-      bio: req.body.bio,
-    };
-    let updates;
-    if (!req.body.password) {
-      updates = updatedUser;
-    } else {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      updates = { ...updatedUser, password: hashedPassword };
-    }
-    const user = await userModel.findByIdAndUpdate(id, updates, {
-      useFindAndModify: false,
-    });
-    if (updates.email) user.email = updates.email;
-    if (updates.firstName) user.firstName = updates.firstName;
-    if (updates.lastName) user.lastName = updates.lastName;
-    if (updates.password) user.lastName = updates.password;
-    if (updates.isAdmin) user.isAdmin = updates.isAdmin;
-    if (updates.profilePic) user.profilePic = updates.profilePic;
-    if (updates.bio) user.bio = updates.bio;
+router.put("/:id", secure, async (req, res) => {
+  const { id } = req.params;
+  if (req.session.user.id === id || req.session.user.role === "admin") {
+    try {
+      let updatedUser = {
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        password: req.body.password,
+        isAdmin: req.body.isAdmin,
+        profilePic: req.body.profilePic,
+        bio: req.body.bio,
+      };
+      let updates;
+      if (!req.body.password) {
+        updates = updatedUser;
+      } else {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        updates = { ...updatedUser, password: hashedPassword };
+      }
+      const user = await userModel.findByIdAndUpdate(id, updates, {
+        useFindAndModify: false,
+      });
+      if (updates.email) user.email = updates.email;
+      if (updates.firstName) user.firstName = updates.firstName;
+      if (updates.lastName) user.lastName = updates.lastName;
+      if (updates.password) user.lastName = updates.password;
+      if (updates.isAdmin) user.isAdmin = updates.isAdmin;
+      if (updates.profilePic) user.profilePic = updates.profilePic;
+      if (updates.bio) user.bio = updates.bio;
 
-    return res.status(200).json("Your profile has been updated!");
-  } catch (err) {
-    if (err.code == 11000) {
-      res.status(401).send("Email already exists");
-      return;
+      return res.status(200).json("Your profile has been updated!");
+    } catch (err) {
+      if (err.code == 11000) {
+        res.status(401).send("Email already exists");
+        return;
+      }
+      res.status(500).json({ message: err.message });
     }
-    res.status(500).json({ message: err.message });
+  } else {
+    res.status(403).json("You are not permitted.");
   }
 });
 
 // delete an user
-router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const removedUser = await userModel.findByIdAndRemove(id);
-    if (!removedUser) return res.json("No user found with this email");
-    return res
-      .status(200)
-      .json(`User with email '${removedUser.email}' has been deleted.`);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+router.delete("/:id", secure, async (req, res) => {
+  const { id } = req.params;
+  if (req.session.user.id === id || req.session.user.role === "admin") {
+    try {
+      const removedUser = await userModel.findByIdAndRemove(id);
+      if (!removedUser) return res.json("No user found with this email");
+      return res
+        .status(200)
+        .json(`User with email '${removedUser.email}' has been deleted.`);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  } else {
+    res.status(403).json("You are not permitted.");
   }
 });
 
